@@ -1,0 +1,7 @@
+security_login:
+    path: /login
+    controller: App\Controller\SecurityController::loginAction
+
+security_registration:
+    path: /registration
+    controller: App\Controller\SecurityController::registrationAction

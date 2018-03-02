@@ -1,0 +1,38 @@
+version: "2"
+services:
+    www:
+        build: ./docker/php-apache
+        ports: 
+            - ${APP_PORT_MAP}
+        volumes:
+            - ./www:/var/www/html/
+            - ./docker/php-apache/conf.d:/usr/local/etc/php/conf.d
+            - ./docker/php-apache/sites-enabled:/etc/apache2/sites-enabled
+        links:
+            - db
+        networks:
+            - default
+    db:
+        image: mysql:5.7.20
+        ports: 
+            - ${MYSQL_PORT_MAP}
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DB_NAME}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - ./docker/mysql/dump:/docker-entrypoint-initdb.d
+            - blog:/var/lib/mysql
+        networks:
+            - default
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links: 
+            - db:db
+        ports:
+            - ${PHPMYADMIN_PORT_MAP}
+        environment:
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+volumes:
+    blog:
