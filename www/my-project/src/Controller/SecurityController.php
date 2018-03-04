@@ -25,13 +25,13 @@ class SecurityController extends Controller
 
     public function registrationAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $dbh = new \PDO('mysql:host=db:3306;dbname=symfony_price_tracker', 'root', 'root');
-        foreach($dbh->query('SELECT 12') as $row) {
-            print_r($row);
-        }
-        $dbh = null;
-        phpinfo();
-        die();
+//        $dbh = new \PDO('mysql:host=db:3306;dbname=symfony_price_tracker', 'root', 'root');
+//        foreach($dbh->query('SELECT 12') as $row) {
+//            print_r($row);
+//        }
+//        $dbh = null;
+//        phpinfo();
+//        die();
         // 1) build the form
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -52,7 +52,7 @@ class SecurityController extends Controller
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirectToRoute('replace_with_some_route');
+            return $this->redirectToRoute('security_registration');
         }
 
         return $this->render(

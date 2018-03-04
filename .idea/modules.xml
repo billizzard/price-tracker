@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/priceTracker.iml" filepath="$PROJECT_DIR$/.idea/priceTracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/profitable.iml" filepath="$PROJECT_DIR$/.idea/profitable.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/profitable.local.iml" filepath="$PROJECT_DIR$/.idea/profitable.local.iml" />
     </modules>

@@ -21,9 +21,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="username", message="Username already taken")
+ * @ORM\HasLifecycleCallbacks()
  */
-class User123
+class User implements UserInterface
 {
+    const USER_STATUS_DEFAULT = 1;
+
+    const USER_ROLE_DEFAULT = 1;
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -44,11 +48,6 @@ class User123
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=30, unique=true)
-     */
-    private $nickname;
-
-    /**
      * @Assert\NotBlank()
      * @Assert\Length(max=50)
      */
@@ -57,7 +56,7 @@ class User123
     /**
      * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
-    private $status;
+    private $status = self::USER_STATUS_DEFAULT;
 
     /**
      * @var \DateTime
@@ -68,9 +67,9 @@ class User123
     /**
      * @var array
      *
-     * @ORM\Column(type="json")
+     * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
-    private $roles = [];
+    private $role;
 
     /**
      * The below length depends on the "algorithm" you use for encoding
@@ -105,19 +104,9 @@ class User123
         return $this->username;
     }
 
-    public function setUsername($email)
+    public function setUsername($username)
     {
-        $this->username = $email;
-    }
-
-    public function getNickname()
-    {
-        return $this->nickname;
-    }
-
-    public function setNickname($nickname)
-    {
-        $this->nickname = $nickname;
+        $this->username = $username;
     }
 
     public function getPlainPassword()
@@ -145,19 +134,18 @@ class User123
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $role = $this->roles;
 
-        // guarantees that a user always has at least one role for security
-        if (empty($roles)) {
-            $roles[] = 'ROLE_USER';
+        if (empty($role)) {
+            $role = self::USER_ROLE_DEFAULT;
         }
 
-        return array_unique($roles);
+        return array_unique($role);
     }
 
-    public function setRoles(array $roles): void
+    public function setRoles($role): void
     {
-        $this->roles = $roles;
+        $this->role = $role;
     }
 
     /**
