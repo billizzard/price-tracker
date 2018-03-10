@@ -1,0 +1,104 @@
+{#
+   This is the base template used as the application layout which contains the
+   common elements and decorates all the other templates.
+   See https://symfony.com/doc/current/book/templating.html#template-inheritance-and-layouts
+#}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block title %}Symfony Demo application{% endblock %}</title>
+    <link rel="alternate" type="application/rss+xml" title="{{ 'rss.title'|trans }}" >
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('build/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/main.css') }}">
+    {% endblock %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+
+<body id="{% block body_id %}{% endblock %}">
+    {% block header %}
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand" href="{{ path('homepage') }}">Price</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ path('homepage') }}">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('security_logout') }}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('security_login') }}">Login</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('tracker_add') }}">Add</a>
+                        </li>
+                        {#<li class="nav-item dropdown">#}
+                            {#<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                                {#Dropdown#}
+                            {#</a>#}
+                            {#<div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
+                                {#<a class="dropdown-item" href="#">Action</a>#}
+                                {#<a class="dropdown-item" href="#">Another action</a>#}
+                                {#<div class="dropdown-divider"></div>#}
+                                {#<a class="dropdown-item" href="#">Something else here</a>#}
+                            {#</div>#}
+                        {#</li>#}
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+        </header>
+    {% endblock %}
+
+    <div class="container body-container">
+        {% block body %}
+            <div class="row">
+                <div id="main" class="col-sm-9">
+                    {#{{ include('default/_flash_messages.html.twig') }}#}
+
+                    {% block main %}{% endblock %}
+                </div>
+
+                <div id="sidebar" class="col-sm-3">
+                    {% block sidebar %}
+                        {#{{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {#}
+                            {#'template': 'blog/about.html.twig',#}
+                            {#'sharedAge': 600,#}
+                            {#'_locale': app.request.locale#}
+                        {#})) }}#}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    {% block flash %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message flash-{{ label }}">
+                    {{ message|trans }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+
+    {% block javascripts %}
+        <script src="{{ asset('build/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('build/js/bootstrap.min.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

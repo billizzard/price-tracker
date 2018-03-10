@@ -1,0 +1,8 @@
+tracker_list:
+    path: /trackers
+    controller: App\Controller\Admin\TrackerController::listAction
+
+tracker_add:
+    path: /trackers/add
+    controller: App\Controller\Admin\TrackerController::addAction
+
