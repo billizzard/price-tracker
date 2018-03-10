@@ -1,0 +1,17 @@
+.flash-message {
+  position:fixed;
+  bottom:50px;
+  height:20px;
+  width: 100%;
+  text-align: center;
+  z-index: 850;
+}
+.flash-message.flash-error {
+  background-color: #ef6c6c9e;
+}
+.flash-message.flash-info {
+  background-color: #6f76d885;
+}
+.flash-message.flash-success {
+  background-color: #42924885;
+}
