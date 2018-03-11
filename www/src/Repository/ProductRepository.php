@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Service\HVFGridView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -13,9 +14,12 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function createIfNotExist($url)
-    {
 
+    public function getTableData(HVFGridView $gridView, array $models): array
+    {
+        $result = $gridView->getGridData($models);
+
+        return $result;
     }
 
     /*

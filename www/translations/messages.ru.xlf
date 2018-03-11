@@ -396,6 +396,11 @@
                 <target>Успешно добавлено</target>
             </trans-unit>
 
+            <trans-unit id="s.url">
+                <source>s.url</source>
+                <target>Url</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

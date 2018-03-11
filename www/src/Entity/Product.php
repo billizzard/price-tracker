@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Annotations\HVFGrid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -22,6 +23,7 @@ class Product
      * @ORM\Column(type="string", length=500, unique=true)
      * @Assert\Url(message="v.url.invalid")
      * @Assert\NotBlank()
+     * @HVFGrid(sort=true)
      */
     private $url = '';
 

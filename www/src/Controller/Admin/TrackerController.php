@@ -18,6 +18,7 @@ use App\Form\AddProductType;
 use App\Repository\PriceTrackerRepository;
 use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
+use App\Service\HVFGridView;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,11 +37,12 @@ use Symfony\Component\HttpFoundation\Request;
 class TrackerController extends AbstractController
 {
 
-    public function listAction()
+    public function listAction(HVFGridView $gridView, ProductRepository $pr)
     {
+        $products = $pr->findAll();
+        $products = $pr->getTableData($gridView, $products);
         return $this->render('trackers/list.html.twig', [
-            'last_username' => '1111',
-            'error' => [],
+            'products' => $products,
         ]);
     }
 
