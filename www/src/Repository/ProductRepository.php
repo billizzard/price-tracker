@@ -5,7 +5,12 @@ namespace App\Repository;
 use App\Entity\Product;
 use App\Service\HVFGridView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductRepository extends ServiceEntityRepository
 {
@@ -15,12 +20,31 @@ class ProductRepository extends ServiceEntityRepository
     }
 
 
-    public function getTableData(HVFGridView $gridView, array $models): array
+//    public function getTableData(HVFGridView $gridView, QueryBuilder $queryBuilder): array
+//    {
+//        $result = $gridView->getGridData($queryBuilder, $page, $onPage);
+//        return $result;
+//    }
+//
+    public function findByRequestQueryBuilder(Request $request)
     {
-        $result = $gridView->getGridData($models);
+        $sortColumn = $request->get('sort', 'id');
+        $sortDirection = $sortColumn[0] === '-' ? 'DESC' : 'ASC';
 
-        return $result;
+        $queryBuilder = $this->createQueryBuilder('p');
+        $queryBuilder->addOrderBy('p.' . $sortColumn, $sortDirection);
+        return $queryBuilder;
+        return (array) $this->createPaginator($queryBuilder,$page)->getCurrentPageResults();
     }
+//
+//    private function createPaginator(QueryBuilder $query, int $page): Pagerfanta
+//    {
+//        $paginator = new Pagerfanta(new DoctrineORMAdapter($query));
+//        $paginator->setMaxPerPage(Product::DEFAULT_LIST_ITEMS);
+//        $paginator->setCurrentPage($page);
+//
+//        return $paginator;
+//    }
 
     /*
     public function findBySomething($value)

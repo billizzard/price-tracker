@@ -19,6 +19,8 @@ use App\Repository\PriceTrackerRepository;
 use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
 use App\Service\HVFGridView;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,10 +39,13 @@ use Symfony\Component\HttpFoundation\Request;
 class TrackerController extends AbstractController
 {
 
-    public function listAction(HVFGridView $gridView, ProductRepository $pr)
+    public function listAction(Request $request, ProductRepository $pr)
     {
-        $products = $pr->findAll();
-        $products = $pr->getTableData($gridView, $products);
+        $qb = $pr->findByRequestQueryBuilder($request);
+        $grid = new HVFGridView($request, $qb, ['perPage' => 5]);
+        $products = $grid->getGridData();
+
+
         return $this->render('trackers/list.html.twig', [
             'products' => $products,
         ]);
@@ -106,5 +111,7 @@ class TrackerController extends AbstractController
 
         return $this->render('trackers/add.html.twig', ['form' => $form->createView()]);
     }
+
+
 
 }

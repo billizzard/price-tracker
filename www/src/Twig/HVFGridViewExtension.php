@@ -1,10 +1,7 @@
 <?php
 namespace App\Twig;
 
-use App\Entity\Product;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class HVFGridViewExtension extends AbstractExtension
@@ -13,7 +10,7 @@ class HVFGridViewExtension extends AbstractExtension
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
+        //$this->requestStack = $requestStack;
     }
 
     public function getFunctions()
@@ -29,8 +26,6 @@ class HVFGridViewExtension extends AbstractExtension
 
     public function gridView(\Twig_Environment $environment, $models)
     {
-        //$request = $this->requestStack->getCurrentRequest();
-
         echo $environment->render('grid_view/table.html.twig', ['models' => $models]);
     }
 }

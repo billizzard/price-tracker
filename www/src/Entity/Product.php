@@ -12,6 +12,8 @@ use App\Annotations\HVFGrid;
  */
 class Product
 {
+    const DEFAULT_LIST_ITEMS = 5;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
