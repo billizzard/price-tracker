@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -28,6 +30,11 @@ class User implements UserInterface
 
     const USER_ROLE_DEFAULT = 'ROLE_USER';
     const USER_ROLE_ADMIN = 'ROLE_ADMIN';
+
+    public function __construct()
+    {
+        $this->watchers = new ArrayCollection();
+    }
 
     /**
      * @ORM\Id
@@ -60,6 +67,11 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Watcher", mappedBy="user")
+     */
+    private $watchers;
 
     /**
      * @var array
@@ -143,6 +155,14 @@ class User implements UserInterface
     public function setRoles($roles): void
     {
         $this->roles = $roles;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getWatchers()
+    {
+        return $this->watchers;
     }
 
     /**

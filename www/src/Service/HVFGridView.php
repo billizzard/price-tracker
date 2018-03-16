@@ -32,7 +32,7 @@ class HVFGridView
 
     public function getGridData()
     {
-        $result = [];
+        $result = ['pagination' => [], 'columns' => [], 'data' => []];
         $models = $this->getModels($result);
 
         if (count($models)) {
@@ -48,6 +48,8 @@ class HVFGridView
     /**
      * Читает конфигурацию из аннотаций
      * @param $models
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
     private function getConf($models)
     {
@@ -95,8 +97,10 @@ class HVFGridView
     {
         foreach ($models as $model) {
             foreach ($result['columns'] as $key => $column) {
+                $value = $this->refClass->hasMethod('get' . $key) ? $model->{'get' . $key}() : '';
+                if (is_object($value)) $value = 'object';
                 $result['data'][$model->getId()][$key] = [
-                    'value' => $this->refClass->hasMethod('get' . $key) ? $model->{'get' . $key}() : '',
+                    'value' => $value,
                 ];
             }
         }
@@ -142,10 +146,12 @@ class HVFGridView
         $result['pagination']['total'] = $pager->getNbResults();
         $result['pagination']['totalPage'] = ceil($result['pagination']['total']/$result['pagination']['perPage']);
         $result['pagination']['url'] = $this->urlBuilder->resetUrl()->removeParam('page')->addParam('page', '')->getUrl();
-        $result['pagination']['prevClass'] = $result['pagination']['curPage'] == 1 ? 'disabled' : '';
-        $result['pagination']['nextClass'] = $result['pagination']['curPage'] == $result['pagination']['totalPage'] ? 'disabled' : '';
-        $result['pagination']['startPage'] = $result['pagination']['curPage'] > 4 ? $result['pagination']['curPage'] - 3 : 1;
-        $result['pagination']['endPage'] = (($result['pagination']['curPage'] + 3) > $result['pagination']['totalPage']) ? $result['pagination']['totalPage'] : ($result['pagination']['curPage'] + 3);
+        if ($result['pagination']['totalPage'] > 0) {
+            $result['pagination']['prevClass'] = $result['pagination']['curPage'] == 1 ? 'disabled' : '';
+            $result['pagination']['nextClass'] = $result['pagination']['curPage'] == $result['pagination']['totalPage'] ? 'disabled' : '';
+            $result['pagination']['startPage'] = $result['pagination']['curPage'] > 4 ? $result['pagination']['curPage'] - 3 : 1;
+            $result['pagination']['endPage'] = (($result['pagination']['curPage'] + 3) > $result['pagination']['totalPage']) ? $result['pagination']['totalPage'] : ($result['pagination']['curPage'] + 3);
+        }
 
         return $currentResults;
     }

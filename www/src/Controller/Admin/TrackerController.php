@@ -41,20 +41,20 @@ class TrackerController extends AbstractController
 
     public function listAction(Request $request, ProductRepository $pr)
     {
-        $qb = $pr->findByRequestQueryBuilder($request);
+        $qb = $pr->findByRequestQueryBuilder($request, $this->getUser());
         $grid = new HVFGridView($request, $qb, ['perPage' => 5]);
         $products = $grid->getGridData();
 
-
         return $this->render('trackers/list.html.twig', [
             'products' => $products,
+            'activeMenu' => 'trackers-list'
         ]);
     }
 
     public function addAction(Request $request)
     {
         $model = new Product();
-        $form = $this->createForm(AddProductType::class, $model);
+        $form = $this->createForm(AddProductType::class, $model, ['attr' => ['novalidate' => 'novalidate']]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -85,13 +85,13 @@ class TrackerController extends AbstractController
 
             /** @var WatcherRepository $repository */
             $repository = $this->getDoctrine()->getRepository(Watcher::class);
-            $watcher = $repository->findOneBy(['productId' => $product->getId(), 'userId' => $this->getUser()->getId()]);
+            $watcher = $repository->findOneBy(['product' => $product->getId(), 'user' => $this->getUser()]);
 
             if (!$watcher) {
                 $watcher = new Watcher();
                 $watcher->setTitle($form['title']->getData());
-                $watcher->setProductId($product->getId());
-                $watcher->setUserId($this->getUser()->getId());
+                $watcher->setProduct($product);
+                $watcher->setUser($this->getUser());
                 $watcher->setStartPrice($form['price']->getData());
                 $watcher->setPercent($form['percent']->getData());
                 $entityManager->persist($watcher);
@@ -109,7 +109,15 @@ class TrackerController extends AbstractController
             break;
         }
 
-        return $this->render('trackers/add.html.twig', ['form' => $form->createView()]);
+        return $this->render('trackers/add.html.twig', [
+            'form' => $form->createView(),
+            'activeMenu' => 'trackers-add',
+        ]);
+    }
+
+    public function editAction(Request $request, Product $product)
+    {
+        die('edit');
     }
 
 

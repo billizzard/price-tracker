@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="{{ asset('build/css/AdminLTE.min.css') }}">
         <link rel="stylesheet" href="{{ asset('build/css/skin-blue.min.css') }}">
         <link rel="stylesheet" href="{{ asset('build/css/dataTables.bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/css/main.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/main.css?v=2') }}">
     {% endblock %}
 
     <!-- Google Font -->
@@ -120,7 +120,7 @@
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree" data-active="trackers-add">
+            <ul class="sidebar-menu" data-widget="tree" data-active="{{ activeMenu }}">
                 {#<li class="header">MAIN NAVIGATION</li>#}
                 <li class="treeview">
                     <a href="#">
@@ -131,7 +131,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="trackers-list"><a href="{{ path('tracker_list') }}"><i class="fa fa-circle-o"></i>List</a></li>
-                        <li class="active" id="trackers-add"><a href="{{ path('tracker_add') }}"><i class="fa fa-circle-o"></i>Add</a></li>
+                        <li id="trackers-add"><a href="{{ path('tracker_add') }}"><i class="fa fa-circle-o"></i>Add</a></li>
                     </ul>
                 </li>
                 <li class="treeview">

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -13,6 +15,11 @@ use App\Annotations\HVFGrid;
 class Product
 {
     const DEFAULT_LIST_ITEMS = 5;
+
+    public function __construct()
+    {
+        $this->watchers = new ArrayCollection();
+    }
 
     /**
      * @ORM\Id
@@ -28,6 +35,11 @@ class Product
      * @HVFGrid(sort=true)
      */
     private $url = '';
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Watcher", mappedBy="product")
+     */
+    private $watchers;
 
     /**
      * @return mixed
@@ -60,5 +72,14 @@ class Product
     {
         $this->id = $id;
     }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getWatchers()
+    {
+        return $this->watchers;
+    }
+
 
 }

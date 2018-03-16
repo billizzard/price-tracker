@@ -15,6 +15,11 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
 
 class AddProductType extends AbstractType
 {
@@ -23,16 +28,27 @@ class AddProductType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'mapped' => false,
+                'constraints' => array(
+                    new NotBlank(),
+                ),
             ])
-            ->add('url', UrlType::class, [
-                'error_bubbling' => true,
-            ])
+            ->add('url', UrlType::class)
             ->add('percent', IntegerType::class, [
                 'mapped' => false,
-                'attr' => ['min' => 1, 'max' => 99],
+                'constraints' => array(
+                    new NotBlank(),
+                    new Range(['min' => 1, 'max' => 99]),
+                ),
             ])
-            ->add('price', NumberType::class, [
+            ->add('price', TextType::class, [
                 'mapped' => false,
+                'constraints' => array(
+                    new NotBlank,
+                    new Regex([
+                        'pattern' => "/^([1-9][0-9]*|0)(\.[0-9]{2})?$/",
+                        'message' => 'v.number.invalid'
+                    ]),
+                ),
             ]);
     }
 

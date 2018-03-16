@@ -15,3 +15,7 @@
 .flash-message.flash-success {
   background-color: #42924885;
 }
+
+.form-group.has-error .help-block {
+  display:none;
+}

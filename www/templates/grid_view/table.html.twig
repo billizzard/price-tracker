@@ -6,6 +6,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+                {% if models.columns and models.data %}
                 <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                     <div class="row">
                         <div class="col-sm-12">
@@ -23,14 +24,23 @@
                                         style="width: 231px;">{{ column.label|trans }}
                                     </th>
                                     {% endfor %}
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for rows in models.data %}
+                                {% for id, rows in models.data %}
                                     <tr role="row" class="odd">
                                         {% for row in rows %}
                                             <td>{{ row.value }}</td>
                                         {% endfor %}
+                                        <td class="td-actions">
+                                            <a href="{{ id }}/edit/" class="btn btn-action">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="delete/?id={{ id }}" class="btn btn-action">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -39,6 +49,7 @@
                                     {% for column in models.columns %}
                                     <th rowspan="1" colspan="1">{{ column.label|trans }}</th>
                                     {% endfor %}
+                                    <th>Actions</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -47,6 +58,7 @@
                     <div class="row">
                         <div class="col-sm-7">
                             <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                                {% if models.pagination.totalPage > 1 %}
                                 <ul class="pagination">
                                     <li class="paginate_button previous {{ models.pagination.prevClass }}" id="example1_previous">
                                         <a
@@ -74,10 +86,14 @@
                                         </a>
                                     </li>
                                 </ul>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
+                {% else %}
+                No data
+                {% endif %}
             </div>
             <!-- /.box-body -->
         </div>
@@ -102,3 +118,21 @@
     document.addEventListener("DOMContentLoaded", tableInit);
 
 </script>
+<style>
+    .btn.btn-action {
+        border-radius: 3px;
+        position: relative;
+        padding: 0 0 0 2px;
+        /* margin: 0 0 10px 10px; */
+        min-width: 30px;
+        height: 30px;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #f4f4f4;
+        font-size: 21px;
+    }
+    .table>tbody>tr>td.td-actions {
+        padding:3px 8px 0 8px;
+    }
+</style>

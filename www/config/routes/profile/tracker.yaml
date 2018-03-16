@@ -1,8 +1,14 @@
 tracker_list:
-    path: /trackers
+    path: /trackers/
     controller: App\Controller\Admin\TrackerController::listAction
 
 tracker_add:
-    path: /trackers/add
+    path: /trackers/add/
     controller: App\Controller\Admin\TrackerController::addAction
+
+tracker_edit:
+    path: /trackers/{id}/edit/
+    requirements:
+      id: '\d+'
+    controller: App\Controller\Admin\TrackerController::editAction
 

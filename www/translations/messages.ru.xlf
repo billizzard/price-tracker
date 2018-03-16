@@ -390,10 +390,19 @@
                 <source>v.username.taken</source>
                 <target>Username занят</target>
             </trans-unit>
+            <trans-unit id="v.number.invalid">
+                <source>v.number.invalid</source>
+                <target>Значение должно быть числом</target>
+            </trans-unit>
 
             <trans-unit id="m.success.added">
                 <source>m.success.added</source>
                 <target>Успешно добавлено</target>
+            </trans-unit>
+
+            <trans-unit id="w.actions">
+                <source>w.actions</source>
+                <target>Действия</target>
             </trans-unit>
 
             <trans-unit id="s.url">

@@ -25,16 +25,10 @@ class Watcher
     private $title;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="watchers")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $productId;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
@@ -59,6 +53,12 @@ class Watcher
      * @Assert\NotBlank()
      */
     private $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="watchers")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $product;
 
     /**
      * @return int
@@ -87,33 +87,14 @@ class Watcher
     /**
      * @return int
      */
-    public function getProductId(): int
+    public function getUser()
     {
-        return $this->prodctId;
+        return $this->user;
     }
 
-    /**
-     * @param int $productId
-     */
-    public function setProductId($productId): void
+    public function setUser($user)
     {
-        $this->productId = $productId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId): void
-    {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 
     /**
@@ -170,5 +151,15 @@ class Watcher
     public function onPrePersist()
     {
         $this->createdAt = time();
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(Product $product)
+    {
+        $this->product = $product;
     }
 }

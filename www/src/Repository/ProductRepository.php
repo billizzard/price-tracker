@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Entity\User;
 use App\Service\HVFGridView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
@@ -26,14 +27,19 @@ class ProductRepository extends ServiceEntityRepository
 //        return $result;
 //    }
 //
-    public function findByRequestQueryBuilder(Request $request)
+    public function findByRequestQueryBuilder(Request $request, User $user)
     {
         $sortColumn = $request->get('sort', 'id');
         $sortDirection = $sortColumn[0] === '-' ? 'DESC' : 'ASC';
 
         $queryBuilder = $this->createQueryBuilder('p');
+        $queryBuilder->leftJoin('p.watchers', 'w', 'WITH', 'w.product = p.id');
+        $queryBuilder->where("w.user = " . $user->getId());
+
         $queryBuilder->addOrderBy('p.' . $sortColumn, $sortDirection);
+
         return $queryBuilder;
+
         return (array) $this->createPaginator($queryBuilder,$page)->getCurrentPageResults();
     }
 //
