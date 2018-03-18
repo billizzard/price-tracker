@@ -14,7 +14,8 @@ use App\Annotations\HVFGrid;
  */
 class Product
 {
-    const DEFAULT_LIST_ITEMS = 5;
+    const STATUS_TRACKED = 2;
+    const STATUS_NOT_TRACKED = 1;
 
     public function __construct()
     {
@@ -40,6 +41,58 @@ class Product
      * @ORM\OneToMany(targetEntity="App\Entity\Watcher", mappedBy="product")
      */
     private $watchers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PriceTracker", mappedBy="product")
+     */
+    private $priceTrackers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Host", inversedBy="products")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $host;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2)
+     * @Assert\NotBlank()
+     */
+    private $currentPrice = 0;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $status = 1;
+
+    public function getHost(): Host
+    {
+        return $this->host;
+    }
+
+    public function setHost(Host $host)
+    {
+        $this->host = $host;
+    }
+
+    public function setCurrentPrice(float $price)
+    {
+        $this->currentPrice = $price;
+    }
+
+    public function getCurrentPrice(): float
+    {
+        return $this->currentPrice;
+    }
+
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
 
     /**
      * @return mixed
@@ -74,11 +127,19 @@ class Product
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Collection|Watcher[]
      */
     public function getWatchers()
     {
         return $this->watchers;
+    }
+
+    /**
+     * @return Collection|PriceTracker[]
+     */
+    public function getPriceTrackers()
+    {
+        return $this->priceTrackers;
     }
 
 

@@ -21,8 +21,9 @@ class Watcher
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
-    private $title;
+    private $title = '';
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="watchers")
@@ -34,7 +35,7 @@ class Watcher
      * @ORM\Column(type="decimal", scale=2)
      * @Assert\NotBlank()
      */
-    private $startPrice;
+    private $startPrice = 0;
 
     /**
      * @ORM\Column(type="integer")
@@ -46,13 +47,13 @@ class Watcher
      *      maxMessage = "v.percent.range"
      * )
      */
-    private $percent;
+    private $percent = 0;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
      */
-    private $createdAt;
+    private $createdAt = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="watchers")

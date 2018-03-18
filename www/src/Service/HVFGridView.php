@@ -3,8 +3,10 @@ namespace App\Service;
 
 use App\Entity\Product;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -13,11 +15,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class HVFGridView
 {
-    private $refClass;
     private $request;
     private $conf;
     private $qb;
     private $urlBuilder;
+    private $columns;
 
     public function __construct(Request $request, QueryBuilder $qb, $conf = [])
     {
@@ -30,13 +32,18 @@ class HVFGridView
         $this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
     }
 
+    public function addColumn($name, $options)
+    {
+        $this->columns[$name] = $options;
+        return $this;
+    }
+
     public function getGridData()
     {
         $result = ['pagination' => [], 'columns' => [], 'data' => []];
         $models = $this->getModels($result);
 
-        if (count($models)) {
-            $this->getConf($models);
+        if ($models) {
             $this->getColumns($result);
             $this->getData($models, $result);
             $this->getSort($result);
@@ -45,71 +52,6 @@ class HVFGridView
         return $result;
     }
 
-    /**
-     * Читает конфигурацию из аннотаций
-     * @param $models
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
-     */
-    private function getConf($models)
-    {
-        $reader = new AnnotationReader();
-        $this->refClass = new \ReflectionClass(get_class($models[0]));
-        $props = $this->refClass->getProperties();
-        foreach ($props as $prop) {
-            $annotations = $reader->getPropertyAnnotation($prop, 'App\Annotations\HVFGrid');
-            if ($annotations) {
-                $this->conf[mb_strtolower($prop->getName())] = [
-                    'sort' => (bool)$annotations->sort,
-                ];
-            }
-        }
-    }
-
-    /**
-     * Создает атрибуты колонок из аннотаций
-     * @param $result
-     */
-    private function getColumns(&$result)
-    {
-        $result['columns'] = [];
-        $props = $this->refClass->getProperties();
-
-        if ($props) {
-            foreach ($props as $prop) {
-                $name = mb_strtolower($prop->getName());
-                $isSortable = (isset($this->conf[$name]['sort']) && $this->conf[$name]['sort'] == true) ? true : false;
-                $result['columns'][$name] = [
-                    'label' => $prop->getName(),
-                    'sortClass' => $isSortable ? 'sorting' : '',
-                    'sortUrl' => $isSortable ? $this->urlBuilder->addParam('sort', $name)->getUrl() : ''
-                ];
-            }
-        }
-    }
-
-    /**
-     * Наполняет данными для таблицы
-     * @param $models
-     * @param $result
-     */
-    private function getData($models, &$result)
-    {
-        foreach ($models as $model) {
-            foreach ($result['columns'] as $key => $column) {
-                $value = $this->refClass->hasMethod('get' . $key) ? $model->{'get' . $key}() : '';
-                if (is_object($value)) $value = 'object';
-                $result['data'][$model->getId()][$key] = [
-                    'value' => $value,
-                ];
-            }
-        }
-    }
-
-    /**
-     * Формирует данные для сортировки
-     * @param $result
-     */
     private function getSort(&$result)
     {
         if ($sortColumn = $this->request->get('sort')) {
@@ -120,7 +62,7 @@ class HVFGridView
                 $sortDirection = 'desc';
             }
 
-            if (isset($this->conf[$sortColumn]['sort']) && $this->conf[$sortColumn]['sort']) {
+            if (isset($this->columns[$sortColumn]['sort']) && $this->columns[$sortColumn]['sort']) {
                 if (isset($result['columns'][$sortColumn])) {
                     $result['columns'][$sortColumn]['sortClass'] = 'sorting_' . $sortDirection;
                     $result['columns'][$sortColumn]['sortUrl'] = $this->urlBuilder->addParam(
@@ -131,6 +73,33 @@ class HVFGridView
         }
     }
 
+    private function getColumns(&$result)
+    {
+        foreach ($this->columns as $name => $options) {
+            $isSortable = isset($options['sort']) ? (bool)$options['sort'] : false;
+            $result['columns'][$name] = [
+                'label' => isset($options['label']) ? $options['label'] : $name,
+                'sortClass' => $isSortable ? 'sorting' : '',
+                'sortUrl' => $isSortable ? $this->urlBuilder->removeParam('page')->addParam('sort', $name)->getUrl() : ''
+            ];
+        }
+    }
+
+    private function getData($models, &$result)
+    {
+        foreach ($models as $model) {
+            foreach ($result['columns'] as $key => $column) {
+                if (isset($model[$key])) {
+                    $result['data'][$model[0]->getId()][$key] = [
+                        'value' => $model[$key],
+                    ];
+                } else {
+                    throw new Exception('Not found column with name ' . $key);
+                }
+            }
+        }
+    }
+    
     /**
      * Получает нужные модели в зависимости от страницы
      * @param $result
@@ -138,10 +107,11 @@ class HVFGridView
      */
     private function getModels(&$result): array
     {
-        $pager = new Pagerfanta(new DoctrineORMAdapter($this->qb));
+        $pager = new Pagerfanta(new DoctrineORMAdapter($this->qb->getQuery()));
         $pager->setMaxPerPage($this->conf['pagination']['perPage']);
         $pager->setCurrentPage($this->conf['pagination']['curPage']);
         $result['pagination'] = $this->conf['pagination'];
+
         $currentResults = (array)$pager->getCurrentPageResults();
         $result['pagination']['total'] = $pager->getNbResults();
         $result['pagination']['totalPage'] = ceil($result['pagination']['total']/$result['pagination']['perPage']);
@@ -155,5 +125,93 @@ class HVFGridView
 
         return $currentResults;
     }
+
+//    /**
+//     * Читает конфигурацию из аннотаций
+//     * @param $models
+//     * @throws \Doctrine\Common\Annotations\AnnotationException
+//     * @throws \ReflectionException
+//     */
+//    private function getConf($models)
+//    {
+//        $reader = new AnnotationReader();
+//        $this->refClass = new \ReflectionClass(get_class($models[0]));
+//        $props = $this->refClass->getProperties();
+//        foreach ($props as $prop) {
+//            $annotations = $reader->getPropertyAnnotation($prop, 'App\Annotations\HVFGrid');
+//            if ($annotations) {
+//                $this->conf[mb_strtolower($prop->getName())] = [
+//                    'sort' => (bool)$annotations->sort,
+//                ];
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Создает атрибуты колонок из аннотаций
+//     * @param $result
+//     */
+//    private function getColumns(&$result)
+//    {
+//        $result['columns'] = [];
+//        $props = $this->refClass->getProperties();
+//
+//        if ($props) {
+//            foreach ($props as $prop) {
+//                $name = mb_strtolower($prop->getName());
+//                $isSortable = (isset($this->conf[$name]['sort']) && $this->conf[$name]['sort'] == true) ? true : false;
+//                $result['columns'][$name] = [
+//                    'label' => $prop->getName(),
+//                    'sortClass' => $isSortable ? 'sorting' : '',
+//                    'sortUrl' => $isSortable ? $this->urlBuilder->removeParam('page')->addParam('sort', $name)->getUrl() : ''
+//                ];
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Наполняет данными для таблицы
+//     * @param $models
+//     * @param $result
+//     */
+//    private function getData($models, &$result)
+//    {
+//        foreach ($models as $model) {
+//            foreach ($result['columns'] as $key => $column) {
+//                $value = $this->refClass->hasMethod('get' . $key) ? $model->{'get' . $key}() : '';
+//                if (is_object($value)) $value = 'object';
+//                $result['data'][$model->getId()][$key] = [
+//                    'value' => $value,
+//                ];
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Формирует данные для сортировки
+//     * @param $result
+//     */
+//    private function getSort(&$result)
+//    {
+//        if ($sortColumn = $this->request->get('sort')) {
+//            $sortDirection = 'asc';
+//
+//            if ($sortColumn[0] === '-') {
+//                $sortColumn = mb_substr($sortColumn, 1);
+//                $sortDirection = 'desc';
+//            }
+//
+//            if (isset($this->conf[$sortColumn]['sort']) && $this->conf[$sortColumn]['sort']) {
+//                if (isset($result['columns'][$sortColumn])) {
+//                    $result['columns'][$sortColumn]['sortClass'] = 'sorting_' . $sortDirection;
+//                    $result['columns'][$sortColumn]['sortUrl'] = $this->urlBuilder->addParam(
+//                        'sort', $sortDirection === 'desc' ? $sortColumn : '-' . $sortColumn
+//                    )->getUrl();
+//                }
+//            }
+//        }
+//    }
+//
+
 
 }

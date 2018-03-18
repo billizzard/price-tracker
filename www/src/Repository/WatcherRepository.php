@@ -2,15 +2,40 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Watcher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class WatcherRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Watcher::class);
+    }
+
+    public function findByRequestQueryBuilder(Request $request, User $user)
+    {
+        $sortColumn = $request->get('sort', 'id');
+        $sortDirection = 'ASC';
+
+        if ($sortColumn[0] === '-') {
+            $sortDirection = 'DESC';
+            $sortColumn = mb_substr($sortColumn, 1);
+        }
+
+        $queryBuilder = $this->createQueryBuilder('w');
+        $queryBuilder->addSelect('w.id as id');
+        $queryBuilder->addSelect('p.url as url');
+        $queryBuilder->addSelect('w.title as title');
+        $queryBuilder->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
+        $queryBuilder->where("w.user = " . $user->getId());
+
+
+        $queryBuilder->addOrderBy($sortColumn, $sortDirection);
+
+        return $queryBuilder;
     }
 
     /*

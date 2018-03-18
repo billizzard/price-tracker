@@ -6,6 +6,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.6",
         "knplabs/knp-paginator-bundle": "^2.7",
+        "paquettg/php-html-parser": "^1.7",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^4.0",

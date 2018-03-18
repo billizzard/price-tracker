@@ -19,10 +19,10 @@ class PriceTracker
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="priceTrackers")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $productId;
+    private $product;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
@@ -46,17 +46,14 @@ class PriceTracker
     /**
      * @return mixed
      */
-    public function getProductId(): int
+    public function getProduct(): Product
     {
-        return $this->productId;
+        return $this->product;
     }
 
-    /**
-     * @param mixed $productId
-     */
-    public function setProductId($productId): void
+    public function setProductId(Product $product): void
     {
-        $this->productId = $productId;
+        $this->product = $product;
     }
 
     /**

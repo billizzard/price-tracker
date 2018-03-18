@@ -1,0 +1,3 @@
+price_checker:
+    path: /price-checker/
+    controller: App\Controller\CronController::priceCheckerAction

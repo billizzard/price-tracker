@@ -25,6 +25,11 @@ homepage:
         template: index/index.html.twig
         _locale: '%locale%'
 
+cron:
+    resource: routes/cron/
+    type: directory
+    prefix: /cron/
+
 #security_login:
 #    path: /login
 #    controller: App\Controller\SecurityController::loginAction
