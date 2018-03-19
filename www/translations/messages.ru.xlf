@@ -410,6 +410,11 @@
                 <target>Url</target>
             </trans-unit>
 
+            <trans-unit id="m.watcherPrice.wrong">
+                <source>m.watcherPrice.wrong</source>
+                <target>Указана неверная цена продука. Вы указали: %userPrice%. Цена продукта: %productPrice%</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

@@ -12,6 +12,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Watcher
 {
+    const STATUS_NEW = 1;
+    const STATUS_PRICE_NOT_CONFIRMED = 2;
+    const STATUS_PRICE_CONFIRMED = 3;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -56,6 +60,11 @@ class Watcher
     private $createdAt = 0;
 
     /**
+     * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
+     */
+    private $status = self::STATUS_PRICE_NOT_CONFIRMED;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="watchers")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -83,6 +92,16 @@ class Watcher
     public function setTitle($title): void
     {
         $this->title = $title;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
     }
 
     /**

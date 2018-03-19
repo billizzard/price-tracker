@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PriceTrackerRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class PriceTracker
 {
@@ -51,7 +52,7 @@ class PriceTracker
         return $this->product;
     }
 
-    public function setProductId(Product $product): void
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
@@ -86,5 +87,14 @@ class PriceTracker
     public function setDate($date): void
     {
         $this->date = $date;
+    }
+
+    /**
+     * Triggered on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->date = time();
     }
 }
