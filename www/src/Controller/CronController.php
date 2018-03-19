@@ -18,8 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CronController extends Controller
 {
+    private $entityManager;
+
     public function priceCheckerAction(HostRepository $hr)
     {
+        $this->entityManager = $this->getDoctrine()->getManager();
         $hosts = $hr->findAll();
         if ($hosts) {
             /** @var Host $host */
@@ -32,7 +35,6 @@ class CronController extends Controller
                             if ($price) {
                                 $this->changeCurrentPrice($product, $price);
                                 $this->changeWatcherStatus($product);
-
                             }
                         }
                     }
@@ -44,18 +46,16 @@ class CronController extends Controller
 
     private function changeCurrentPrice(Product $product, $price)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         if (!$product->getCurrentPrice() || $product->getCurrentPrice() != $price) {
             $priceTracker = new PriceTracker();
             $priceTracker->setPrice($price);
             $priceTracker->setProduct($product);
-            $entityManager->persist($priceTracker);
-            $entityManager->flush();
+            $this->entityManager->persist($priceTracker);
+            $this->entityManager->flush();
 
             $product->setCurrentPrice($price);
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
         }
     }
 
@@ -67,12 +67,24 @@ class CronController extends Controller
         if ($watchers) {
             /** @var Watcher $watcher */
             foreach ($watchers as $watcher) {
+                $user = $watcher->getUser();
+                $watcher->setStatus(Watcher::STATUS_PRICE_CONFIRMED);
                 if ($product->getCurrentPrice() != $watcher->getStartPrice()) {
-                    $watcher->setStatus(Watcher::STATUS_PRICE_CONFIRMED);
                     $message = new Message();
                     $message->setMessage('m.watcherPrice.wrong');
-                    $message->setUser();
-                    die();
+                    $message->setUser($user);
+                    $this->entityManager->persist($message);
+                    $this->entityManager->flush();
+                }
+
+                if ($watcher->getEndPrice() >= $product->getCurrentPrice()) {
+                    $message = new Message();
+                    $message->setMessage('');
+                    $message->setUser($user);
+                    //$message->setType(Message::TYPE_SUCCESS);
+                    $this->entityManager->persist($message);
+                    $this->entityManager->flush();
+                    die('sendMessage');
                 }
             }
         }

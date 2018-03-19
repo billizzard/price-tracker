@@ -88,6 +88,11 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="user")
+     */
+    private $messages;
+
     public function getId(): int
     {
         return $this->id;
@@ -158,11 +163,19 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Collection|Watcher[]
      */
     public function getWatchers()
     {
         return $this->watchers;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
     /**

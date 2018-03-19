@@ -14,6 +14,10 @@ class Message
     const STATUS_DELETED = 2;
     const STATUS_READ = 3;
 
+    const TYPE_SUCCESS = 10;
+    const TYPE_INFO = 20;
+    const TYPE_WARNING = 30;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,6 +34,17 @@ class Message
      * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
     private $status = self::STATUS_NOT_READ;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="messages")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $type = self::TYPE_INFO;
 
     /**
      * @ORM\Column(type="integer")
@@ -68,20 +83,24 @@ class Message
         $this->message = $message;
     }
 
-    /**
-     * @return mixed
-     */
     public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * @param mixed $status
-     */
     public function setStatus($status): void
     {
         $this->status = $status;
+    }
+
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    public function setType($type): void
+    {
+        $this->type = $type;
     }
 
     /**
@@ -101,4 +120,13 @@ class Message
         $this->createdAt = time();
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
 }

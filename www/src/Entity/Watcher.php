@@ -13,7 +13,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Watcher
 {
     const STATUS_NEW = 1;
-    const STATUS_PRICE_NOT_CONFIRMED = 2;
     const STATUS_PRICE_CONFIRMED = 3;
 
     /**
@@ -62,7 +61,7 @@ class Watcher
     /**
      * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
-    private $status = self::STATUS_PRICE_NOT_CONFIRMED;
+    private $status = self::STATUS_NEW;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="watchers")
@@ -104,10 +103,7 @@ class Watcher
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -123,6 +119,11 @@ class Watcher
     public function getStartPrice(): float
     {
         return $this->startPrice;
+    }
+
+    public function getEndPrice(): float
+    {
+        return round($this->startPrice - ($this->startPrice * $this->percent / 100), 2);
     }
 
     /**
