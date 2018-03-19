@@ -1,5 +1,5 @@
 <?php
-namespace App\HVF\PriceChecker\Parsers;
+namespace App\HVF\PriceChecker\PriceParsers;
 
 interface PriceParser
 {

@@ -145,7 +145,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
 
-        if (empty($role)) {
+        if (empty($roles)) {
             $roles[] = self::USER_ROLE_DEFAULT;
         }
 

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\HVF\PriceChecker\Parsers\OnlinerCatalogParser;
-use App\HVF\PriceChecker\Parsers\PriceParser;
+use App\HVF\PriceChecker\PriceParsers\OnlinerCatalogParser;
+use App\HVF\PriceChecker\PriceParsers\PriceParser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
