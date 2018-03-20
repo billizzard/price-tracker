@@ -14,6 +14,7 @@ class Watcher
 {
     const STATUS_NEW = 1;
     const STATUS_PRICE_CONFIRMED = 3;
+    const STATUS_SUCCESS = 2;
 
     /**
      * @ORM\Id

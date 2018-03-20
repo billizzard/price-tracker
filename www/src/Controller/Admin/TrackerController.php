@@ -25,6 +25,7 @@ use App\Repository\WatcherRepository;
 use App\Service\HVFGridView;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,20 +45,34 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class TrackerController extends AbstractController
 {
 
-    public function listAction(Request $request, WatcherRepository $wr)
+    public function listAction(LoggerInterface $logger, Request $request, WatcherRepository $wr)
     {
+        //$logger->error('Cannot find price', ['product_id' => 1]);
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
         $grid = new HVFGridView($request, $qb, ['perPage' => 5]);
 
         $grid->addColumn('id', [
             'sort' => false,
-        ])->addColumn('url', [
-            'label' => 'Урл',
-            'sort' => true
         ])->addColumn('title', [
             'sort' => true,
             'label' => 'Tiittllee'
+        ])->addColumn('status', [
+            'label' => 'Статус',
+            'sort' => true,
+            'raw' => true,
+            'callback' => function($model) {
+                $result = '';
+                if ($model['status'] == Product::STATUS_NOT_TRACKED) {
+                    $result = 'Not tracked';
+                } else if ($model['status'] == Product::STATUS_TRACKED) {
+                    $result = "<a href='google.by'>Tracked</a>";
+                } else if ($model['status'] == Product::STATUS_ERROR_TRACKED) {
+                    $result = 'Error';
+                }
+                return $result;
+            }
         ]);
+
         $products = $grid->getGridData();
 
         return $this->render('trackers/list.html.twig', [

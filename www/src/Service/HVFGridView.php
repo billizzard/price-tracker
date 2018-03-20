@@ -80,7 +80,8 @@ class HVFGridView
             $result['columns'][$name] = [
                 'label' => isset($options['label']) ? $options['label'] : $name,
                 'sortClass' => $isSortable ? 'sorting' : '',
-                'sortUrl' => $isSortable ? $this->urlBuilder->removeParam('page')->addParam('sort', $name)->getUrl() : ''
+                'sortUrl' => $isSortable ? $this->urlBuilder->removeParam('page')->addParam('sort', $name)->getUrl() : '',
+                'raw' => isset($options['raw']) ? (bool)$options['raw'] : false,
             ];
         }
     }
@@ -91,13 +92,23 @@ class HVFGridView
             foreach ($result['columns'] as $key => $column) {
                 if (isset($model[$key])) {
                     $result['data'][$model[0]->getId()][$key] = [
-                        'value' => $model[$key],
+                        'value' => $this->getValue($model, $key),
+                        'raw' => $column['raw']
                     ];
                 } else {
                     throw new Exception('Not found column with name ' . $key);
                 }
             }
         }
+    }
+
+    private function getValue($model, $columnName)
+    {
+        $value = $model[$columnName];
+        if (isset($this->columns[$columnName]['callback'])) {
+            $value = call_user_func($this->columns[$columnName]['callback'], $model);
+        }
+        return $value;
     }
     
     /**

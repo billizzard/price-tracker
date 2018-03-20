@@ -31,7 +31,11 @@
                                 {% for id, rows in models.data %}
                                     <tr role="row" class="odd">
                                         {% for row in rows %}
-                                            <td>{{ row.value }}</td>
+                                            {% if row.raw %}
+                                                <td>{{ row.value|raw }}</td>
+                                            {% else %}
+                                                <td>{{ row.value }}</td>
+                                            {% endif %}
                                         {% endfor %}
                                         <td class="td-actions">
                                             <a href="{{ id }}/edit/" class="btn btn-action">

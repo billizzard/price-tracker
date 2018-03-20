@@ -1,0 +1,31 @@
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: critical
+            handler:      grouped
+        grouped:
+            type:    group
+            members: [streamed, deduplicated, info]
+        streamed:
+            type:  stream
+            path:  '%kernel.logs_dir%/app.log'
+            level: warning
+            max_files: 10
+        info:
+            type:  stream
+            path:  '%kernel.logs_dir%/app_info.log'
+            level: debug
+            max_files: 10
+        deduplicated:
+            type:    deduplication
+            time: 60
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: 'price-logger@mail.ru'
+            to_email:   '88billizzard@gmail.com'
+            subject:    'An Error Occurred! %%message%%'
+            level:      debug
+            formatter:  monolog.formatter.html
+            content_type: text/html

@@ -16,6 +16,7 @@ class Product
 {
     const STATUS_TRACKED = 2;
     const STATUS_NOT_TRACKED = 1;
+    const STATUS_ERROR_TRACKED = 3;
 
     public function __construct()
     {

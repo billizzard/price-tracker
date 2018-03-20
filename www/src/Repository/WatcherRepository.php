@@ -27,7 +27,7 @@ class WatcherRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->createQueryBuilder('w');
         $queryBuilder->addSelect('w.id as id');
-        $queryBuilder->addSelect('p.url as url');
+        $queryBuilder->addSelect('p.status as status');
         $queryBuilder->addSelect('w.title as title');
         $queryBuilder->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
         $queryBuilder->where("w.user = " . $user->getId());
@@ -36,6 +36,12 @@ class WatcherRepository extends ServiceEntityRepository
         $queryBuilder->addOrderBy($sortColumn, $sortDirection);
 
         return $queryBuilder;
+    }
+
+    public function findActive()
+    {
+        $qb = $this->createQueryBuilder('w')->where('w.status != ' . Watcher::STATUS_SUCCESS);
+        return $qb->getQuery()->getResult();
     }
 
     /*
