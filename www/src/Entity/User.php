@@ -46,10 +46,14 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=60, unique=true)
      * @Assert\Email()
-     * @Assert\Email()
      * @Assert\NotBlank()
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=30, unique=true)
+     */
+    private $nickName = '';
 
     /**
      * @Assert\NotBlank()
@@ -96,6 +100,19 @@ class User implements UserInterface
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getNickName(): string
+    {
+        if (empty($this->nickName)) {
+            $this->nickName = 'User ' . $this->getId();
+        }
+        return $this->nickName;
+    }
+
+    public function setNickName(string $nickName)
+    {
+        $this->nickName = $nickName;
     }
 
     public function getEmail()

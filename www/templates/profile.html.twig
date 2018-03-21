@@ -120,7 +120,7 @@
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree" data-active="{{ activeMenu }}">
+            <ul class="sidebar-menu" data-widget="tree" data-active="{% if activeMenu is defined %} {{ activeMenu }} {% endif %}">
                 {#<li class="header">MAIN NAVIGATION</li>#}
                 <li class="treeview">
                     <a href="#">
