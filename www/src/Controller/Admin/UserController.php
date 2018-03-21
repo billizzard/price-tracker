@@ -14,11 +14,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use stringEncode\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -36,7 +38,7 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class UserController extends MainController
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = $this->getUser();
 
@@ -47,7 +49,7 @@ class UserController extends MainController
 
             $response = $this->getJsonSuccessResponse(['message' => 'v.Данные успешно обновлены']);
             if ($form->isSubmitted() && $form->isValid()) {
-                $error = $this->editUser($user, $form->getData());
+                $error = $this->editUser($user, $form->getData(), $encoder);
                 if ($error) {
                     $response = $this->getJsonErrorResponse($error);
                 }
@@ -67,7 +69,7 @@ class UserController extends MainController
         ]);
     }
 
-    private function editUser(User $user, $data)
+    private function editUser(User $user, $data, UserPasswordEncoderInterface $encoder)
     {
         $result = [];
         /** @var UserRepository $repository */
@@ -75,29 +77,20 @@ class UserController extends MainController
         $userAlready = $repository->findOtherByEmailOrNick($data['email'], $data['nickName'], $user->getId());
 
         if ($userAlready) {
-            if ($user->getEmail() == $data['email']) {
+            if ($userAlready->getEmail() == $data['email']) {
                 $result = ['field' => 'email', 'message' => 'v.email alredy'];
             } else {
                 $result = ['field' => 'nickName', 'message' => 'v.nickName alredy'];
             }
-        }
-
-        if (!$result) {
-            if ($data['newPassword'] && $data['oldPassword']) {
-                if ($data['newPassword'] != $data['repeatPassword']) {
-                    $result = ['field' => 'repeatPassword', 'message' => 'v.repeatPassword не совпадают'];
-                }
+        } else {
+            try {
+                $user->changeByData($data, $encoder);
+            } catch (\Exception $e) {
+                $result = ['field' => 'newPassword', 'message' => $e->getMessage()];
             }
-
-            
         }
-        
+
         return $result;
-        $user->setEmail($data['email']);
-        $user->setNickName($data['nickName']);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
     }
 
     private function createEditUserForm(User $user)
@@ -118,14 +111,16 @@ class UserController extends MainController
                     ]),
                 ),
             ])
-            ->add('oldPassword', PasswordType::class, [
-                'mapped' => false,
-            ])
+            ->add('oldPassword', PasswordType::class)
             ->add('newPassword', PasswordType::class, [
-                'mapped' => false,
+                'constraints' => array(
+                    new Length([
+                        'min' => 6,
+                        'max' => 50
+                    ]),
+                )
             ])
-            ->add('repeatPassword', PasswordType::class, [
-                'mapped' => false,
-            ])->getForm();
+            ->add('repeatPassword', PasswordType::class)
+            ->getForm();
     }
 }

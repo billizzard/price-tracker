@@ -80,9 +80,14 @@ ProfileUserForm = function(message) {
                 data : form_data
             }).done(function(response){
                 if (response) {
-                    console.log(response);
                     if (!response.success) {
-                        $('#form_' + response.data.field).closest('.form-group').addClass('has-error');
+                        if (response.data.field === 'newPassword') {
+                            $('#form_' + response.data.field).closest('.form-group').addClass('has-error');
+                            $('#form_oldPassword').closest('.form-group').addClass('has-error');
+                            $('#form_repeatPassword').closest('.form-group').addClass('has-error');
+                        } else {
+                            $('#form_' + response.data.field).closest('.form-group').addClass('has-error');
+                        }
                         messenger.errorMessage(response.data.message);
                     } else {
                         messenger.successMessage(response.data.message);

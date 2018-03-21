@@ -15,6 +15,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +35,9 @@ class User implements UserInterface
     public function __construct()
     {
         $this->watchers = new ArrayCollection();
+        if (empty($this->nickName)) {
+            $this->nickName = 'User ' . uniqid();
+        }
     }
 
     /**
@@ -104,9 +108,6 @@ class User implements UserInterface
 
     public function getNickName(): string
     {
-        if (empty($this->nickName)) {
-            $this->nickName = 'User ' . $this->getId();
-        }
         return $this->nickName;
     }
 
@@ -226,7 +227,30 @@ class User implements UserInterface
     public function serialize(): string
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        return serialize([$this->id, $this->username, $this->password]);
+        return serialize([$this->id, $this->nickName, $this->password]);
+    }
+
+    public function changeByData(array $data, UserPasswordEncoderInterface $encoder)
+    {
+        if ($data['newPassword'] || $data['oldPassword'] || $data['repeatPassword']) {
+            if ($data['newPassword'] && $data['oldPassword'] && $data['repeatPassword']) {
+                if ($data['newPassword'] == $data['repeatPassword']) {
+                    $oldPassword = $encoder->encodePassword($this, $data['oldPassword']);
+                    if ($oldPassword != $this->getPassword()) {
+                        throw new \Exception('v.неверный старый пароль');
+                    } else {
+                        $this->setPassword($encoder->encodePassword($this, $data['newPassword']));
+                    }
+                } else {
+                    throw new \Exception('v.repeatPassword не совпадают');
+                }
+            } else {
+                throw new \Exception('v. при изменении пароля нужно заполнить все три поля');
+            }
+        }
+
+        $this->setEmail($data['email']);
+        $this->setNickName($data['nickName']);
     }
 
     /**
@@ -235,7 +259,7 @@ class User implements UserInterface
     public function unserialize($serialized): void
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        [$this->id, $this->nickName, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     /**
