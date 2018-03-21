@@ -81,13 +81,11 @@ ProfileUserForm = function(message) {
             }).done(function(response){
                 if (response) {
                     console.log(response);
-                    if (response.errors.length) {
-                        $('#form_' + response.errors[0].key).closest('.form-group').addClass('has-error');
-                        messenger.errorMessage(response.errors[0].value);
-                    }
-                    
-                    if (response.success.length) {
-                        messenger.successMessage(response.success[0].value);
+                    if (!response.success) {
+                        $('#form_' + response.data.field).closest('.form-group').addClass('has-error');
+                        messenger.errorMessage(response.data.message);
+                    } else {
+                        messenger.successMessage(response.data.message);
                     }
                 }
                 

@@ -13,6 +13,7 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,7 +34,7 @@ use Symfony\Component\Validator\Constraints\Length;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class UserController extends AbstractController
+class UserController extends MainController
 {
     public function indexAction(Request $request)
     {
@@ -44,15 +45,16 @@ class UserController extends AbstractController
         if($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
 
-            $response = ['errors' => [], 'success' => []];
+            $response = $this->getJsonSuccessResponse(['message' => 'v.Данные успешно обновлены']);
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->editUser($user, $form->getData());
-                $response['success'][]['value'] = 'v.Данные успешно обновлены';
+                $error = $this->editUser($user, $form->getData());
+                if ($error) {
+                    $response = $this->getJsonErrorResponse($error);
+                }
             } else {
                 foreach ($form as $fieldName => $formField) {
                     foreach ($formField->getErrors() as $error) {
-                        $message = $error->getMessage();
-                        $response['errors'][] = ['key' => $fieldName, 'value' => $message];
+                        $response = $this->getJsonErrorResponse(['field' => $fieldName, 'message' => $error->getMessage()]);
                         break 2;
                     }
                 }
@@ -67,6 +69,30 @@ class UserController extends AbstractController
 
     private function editUser(User $user, $data)
     {
+        $result = [];
+        /** @var UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $userAlready = $repository->findOtherByEmailOrNick($data['email'], $data['nickName'], $user->getId());
+
+        if ($userAlready) {
+            if ($user->getEmail() == $data['email']) {
+                $result = ['field' => 'email', 'message' => 'v.email alredy'];
+            } else {
+                $result = ['field' => 'nickName', 'message' => 'v.nickName alredy'];
+            }
+        }
+
+        if (!$result) {
+            if ($data['newPassword'] && $data['oldPassword']) {
+                if ($data['newPassword'] != $data['repeatPassword']) {
+                    $result = ['field' => 'repeatPassword', 'message' => 'v.repeatPassword не совпадают'];
+                }
+            }
+
+            
+        }
+        
+        return $result;
         $user->setEmail($data['email']);
         $user->setNickName($data['nickName']);
         $entityManager = $this->getDoctrine()->getManager();

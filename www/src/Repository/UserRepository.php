@@ -31,4 +31,13 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findOtherByEmailOrNick(string $email, string $nickName, int $id): ?User
+    {
+        return $this->createQueryBuilder('u')->select('u')->where('(u.email = :email OR u.nickName = :nickName) AND u.id != :id')
+            ->setParameter('email', $email)
+            ->setParameter('nickName', $nickName)
+            ->setParameter('id', $id)
+            ->getQuery()->getOneOrNullResult();
+    }
 }

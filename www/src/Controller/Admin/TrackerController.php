@@ -42,7 +42,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class TrackerController extends AbstractController
+class TrackerController extends MainController
 {
 
     public function listAction(LoggerInterface $logger, Request $request, WatcherRepository $wr)
@@ -121,21 +121,6 @@ class TrackerController extends AbstractController
             }
             $entityManager->persist($product);
             $entityManager->flush();
-
-//            /** @var PriceTrackerRepository $repository */
-//            $repository = $this->getDoctrine()->getRepository(PriceTracker::class);
-//            $priceTracker = $repository->findOneBy(['productId' => $product->getId()]);
-//
-//            if (!$priceTracker) {
-//                $priceTracker = new PriceTracker();
-//                $priceTracker->setProductId($product->getId());
-//                $priceTracker->setPrice($watcher->getStartPrice());
-//                $priceTracker->setDate(time());
-//                $entityManager->persist($priceTracker);
-//                $entityManager->flush();
-//            }
-
-
 
             /** @var WatcherRepository $repository */
             $repository = $this->getDoctrine()->getRepository(Watcher::class);
