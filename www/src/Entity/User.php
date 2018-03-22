@@ -82,6 +82,11 @@ class User implements UserInterface
     private $watchers;
 
     /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $avatar = '';
+
+    /**
      * @var array
      *
      * @ORM\Column(type="json")
@@ -114,6 +119,19 @@ class User implements UserInterface
     public function setNickName(string $nickName)
     {
         $this->nickName = $nickName;
+    }
+
+    public function getAvatar(): string
+    {
+        if (!$this->avatar) {
+            $this->avatar = '1.jpg';
+        }
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): void
+    {
+        $this->avatar = $avatar;
     }
 
     public function getEmail()

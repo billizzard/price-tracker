@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
@@ -69,6 +70,40 @@ class UserController extends MainController
         ]);
     }
 
+    public function avatarsAction(Request $request)
+    {
+        $user = $this->getUser();
+        if($request->isXmlHttpRequest()) {
+            if ($basename = basename($request->get('src'))) {
+                $user->setAvatar($basename);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->json($this->getJsonSuccessResponse(['message' => 'v.Данные успешно обновлены']));
+            }
+        }
+
+        /** @var UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $avatars = $repository->getAllAvatars();
+
+        $perPage = 24;
+        $total = count($avatars);
+        $curPage = (int)$request->get('page') ? abs((int)$request->get('page')) : 1;
+        $totalPages = ceil($total/$perPage);
+        if ($curPage > $totalPages) {
+            throw new NotFoundHttpException();
+        }
+
+        $avatars = array_slice($avatars, ($curPage - 1) * $perPage, $perPage);
+
+        return $this->render('user/avatars.html.twig', [
+            'avatars' => $avatars,
+            'currentAvatar' => $user->getAvatar(),
+            'paginationData' => ['total' => $totalPages]
+        ]);
+    }
+
     private function editUser(User $user, $data, UserPasswordEncoderInterface $encoder)
     {
         $result = [];
@@ -85,6 +120,9 @@ class UserController extends MainController
         } else {
             try {
                 $user->changeByData($data, $encoder);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
             } catch (\Exception $e) {
                 $result = ['field' => 'newPassword', 'message' => $e->getMessage()];
             }

@@ -12,6 +12,7 @@ $(function () {
 
   var message = new Message();
   new ProfileUserForm(message);
+  new SelectAvatar(message);
 
 });
 
@@ -50,6 +51,38 @@ Message = function() {
             oldMessage.remove();
         }
     }
+}
+
+SelectAvatar = function(message) {
+
+    var messenger;
+
+    var init = function() {
+        addEvents();
+        messenger = message;
+    }
+
+    var addEvents = function() {
+        $('.avatar-items .js-avatar').on('click', function() {
+            var avatarItems = $(this).closest('.avatar-items');
+            var avatarItem = $(this).closest('.avatar-item');
+            var src = avatarItem.find('img').attr('src');
+            $.ajax({
+                type: 'get',
+                data : {src: src}
+            }).done(function(response){
+                if (response) {
+                    if (response.success) {
+                        messenger.successMessage(response.data.message);
+                        avatarItems.find('.avatar-item').removeClass('current');
+                        avatarItem.addClass('current')
+                    }
+                }
+            });
+        })
+    }
+
+    init(message);
 }
 
 /**

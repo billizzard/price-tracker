@@ -1,0 +1,74 @@
+{% extends 'profile.html.twig' %}
+
+{% block contentTitle %}
+    v.Avatars
+{% endblock %}
+
+{% block content %}
+
+    {{ pagination(paginationData) }}
+
+    <div class="avatar-items">
+        {% for avatar in avatars %}
+            {% set current = false %}
+            {% if currentAvatar == avatar %}
+                {% set current = true %}
+            {% endif %}
+            <div class="avatar-item {% if current %} current {% endif %}">
+                <div class="avatar-hover"></div>
+                {% if not current %}
+                <button class="btn btn-success js-avatar">Выбрать</button>
+                {% endif %}
+                <img src="/build/images/avatars/{{ avatar }}" alt="avatar">
+            </div>
+        {% endfor %}
+    </div>
+<style>
+    .avatar-items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .avatar-item {
+        position: relative;
+        cursor:pointer;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        border:5px solid #fff;
+        margin:3px;
+        background-color: #fff;
+    }
+    .avatar-item.current {
+        border:5px solid #eef139;
+    }
+    .avatar-hover {
+        width:100%;
+        height:100%;
+        position: absolute;
+        background-color: #000;
+        z-index: 10;
+        opacity: 0;
+        transition: 0.4s;
+        text-align: center;
+    }
+    .avatar-item:hover .avatar-hover {
+        opacity: 0.4;
+    }
+    .avatar-item:hover button {
+        opacity: 1;
+    }
+    .avatar-item button {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90px;
+        z-index: 11;
+        opacity: 0;
+    }
+    .avatar-item img {
+        z-index: 5;
+    }
+</style>
+{% endblock %}

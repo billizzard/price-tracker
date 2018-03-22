@@ -14,6 +14,8 @@ if (!isset($_SERVER['APP_ENV'])) {
     (new Dotenv())->load(__DIR__.'/../.env');
 }
 
+define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
+
 $env = $_SERVER['APP_ENV'] ?? 'dev';
 $debug = $_SERVER['APP_DEBUG'] ?? ('prod' !== $env);
 

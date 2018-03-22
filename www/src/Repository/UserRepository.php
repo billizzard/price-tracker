@@ -40,4 +40,14 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()->getOneOrNullResult();
     }
+
+    public function getAllAvatars(): array
+    {
+        $avatars = scandir(DOCUMENT_ROOT . '/build/images/avatars/');
+        if ($avatars) {
+            array_shift($avatars);
+            array_shift($avatars);
+        }
+        return $avatars;
+    }
 }

@@ -2,3 +2,6 @@ user_index:
     path: /user/
     controller: App\Controller\Admin\UserController:indexAction
 
+user_avatars:
+    path: /user/avatars/
+    controller: App\Controller\Admin\UserController:avatarsAction

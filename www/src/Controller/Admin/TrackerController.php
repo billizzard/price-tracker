@@ -49,7 +49,7 @@ class TrackerController extends MainController
     {
         //$logger->error('Cannot find price', ['product_id' => 1]);
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
-        $grid = new HVFGridView($request, $qb, ['perPage' => 5]);
+        $grid = new HVFGridView($request, $qb, ['perPage' => 1]);
 
         $grid->addColumn('id', [
             'sort' => false,
