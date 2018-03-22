@@ -72,7 +72,7 @@ class Host
         $this->host = $host;
     }
 
-    public function getParser(): PriceParser
+    public function getParser(): ?PriceParser
     {
         switch($this->getHost()) {
             case 'catalog.onliner.by': return new OnlinerCatalogParser();

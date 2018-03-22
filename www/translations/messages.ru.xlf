@@ -415,6 +415,8 @@
                 <target>Указана неверная цена продука. Вы указали: %userPrice%. Цена продукта: %productPrice%</target>
             </trans-unit>
 
+
+
         </body>
     </file>
 </xliff>
