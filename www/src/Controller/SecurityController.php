@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class SecurityController extends Controller
 {
@@ -48,7 +49,7 @@ class SecurityController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('security_registration');
+            return $this->redirectToRoute('security_login');
         }
 
         foreach ($form->getErrors(true, true) as $error) {

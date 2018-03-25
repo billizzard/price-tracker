@@ -1,0 +1,27 @@
+default:
+    suites:
+#        default:
+#            contexts:
+#                - FeatureContext:
+#                    kernel: '@kernel'
+#                - Behat\MinkExtension\Context\MinkContext
+
+        authorization:
+            paths:
+                - '%paths.base%/features/authorization'
+            contexts:
+                - Behat\MinkExtension\Context\MinkContext
+                - WebContext
+                - AuthenticationContext
+
+
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+
+        Behat\MinkExtension:
+                    sessions:
+                        default:
+                            symfony2: ~

@@ -13,7 +13,7 @@ class HVFPaginationExtension extends AbstractExtension
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
-        $this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
+        //$this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
     }
 
     public function getFunctions()
