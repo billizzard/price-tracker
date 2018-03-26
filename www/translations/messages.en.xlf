@@ -27,6 +27,23 @@
                 <source>l.registration</source>
                 <target>Registration</target>
             </trans-unit>
+
+                                             <!-- e: errors -->
+            <trans-unit id="e.pass_confirm">
+                <source>e.pass_confirm</source>
+                <target>Passwords do not match</target>
+            </trans-unit>
+            <trans-unit id="e.email_taken">
+                <source>e.email_taken</source>
+                <target>Email already in use</target>
+            </trans-unit>
+            <trans-unit id="e.login_invalid">
+                <source>e.login_invalid</source>
+                <target>Incorrect data</target>
+            </trans-unit>
+
+
+
         </body>
     </file>
 </xliff>

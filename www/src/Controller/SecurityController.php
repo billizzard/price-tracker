@@ -17,6 +17,9 @@ class SecurityController extends Controller
 {
     public function loginAction(AuthenticationUtils $helper): Response
     {
+        if ($error = $helper->getLastAuthenticationError()) {
+            $this->addFlash('error', 'e.login_invalid');
+        }
         return $this->render('security/login.html.twig', [
             // last username entered by the user (if any)
             'last_username' => $helper->getLastUsername(),

@@ -82,12 +82,12 @@ class WebContext extends DefaultContext
     {
         $classesMap = [
             'success' => 'success',
-            'error' => 'danger',
+            'error' => 'error',
             'info' => 'info',
             'warning' => 'warning',
         ];
         $class = $classesMap[$type];
         
-        $this->assertSession()->elementTextContains('xpath', '//div[@class="alert alert-' . $class . '"]', $this->fixStepArgument($message));
+        $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 }

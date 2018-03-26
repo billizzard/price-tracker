@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields="email", message="v.email.taken")
+ * @UniqueEntity(fields="email", message="e.email_taken")
  * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface

@@ -26,6 +26,23 @@
                 <source>l.registration</source>
                 <target>Регистрация</target>
             </trans-unit>
+
+                                             <!-- e: errors -->
+            <trans-unit id="e.pass_confirm">
+                <source>e.pass_confirm</source>
+                <target>Пароли не совпадают</target>
+            </trans-unit>
+            <trans-unit id="e.email_taken">
+                <source>e.email_taken</source>
+                <target>Email занят</target>
+            </trans-unit>
+            <trans-unit id="e.login_invalid">
+                <source>e.login_invalid</source>
+                <target>Неверные данные</target>
+            </trans-unit>
+
+
+
         </body>
     </file>
 </xliff>

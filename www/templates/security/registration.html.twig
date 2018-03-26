@@ -2,11 +2,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('build/js/login.js') }}"></script>
 {% endblock %}
 
 {% block main %}
-    {{ form_start(form) }}
+    {{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
 <fieldset>
     <legend><i class="fa fa-lock" aria-hidden="true"></i> {{ 'l.registration'|trans }}</legend>
     {{ form_row(form.email) }}
