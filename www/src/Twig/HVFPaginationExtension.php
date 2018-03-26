@@ -13,7 +13,7 @@ class HVFPaginationExtension extends AbstractExtension
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
-        $this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
+        //$this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
     }
 
     public function getFunctions()
@@ -52,7 +52,7 @@ class HVFPaginationExtension extends AbstractExtension
             }
             $data['prevClass'] = $data['current'] == 1 ? 'disabled' : '';
             $data['nextClass'] = $data['current'] == $data['total'] ? 'disabled' : '';
-            $data['url'] = $this->urlBuilder->removeParam('page')->addParam('page', '')->getUrl();
+            //$data['url'] = $this->urlBuilder->removeParam('page')->addParam('page', '')->getUrl();
         }
 
         echo $environment->render('grid_view/pagination.html.twig', ['data' => $data]);
