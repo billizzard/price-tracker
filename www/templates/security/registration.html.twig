@@ -7,10 +7,13 @@
 
 {% block main %}
     {{ form_start(form) }}
+<fieldset>
+    <legend><i class="fa fa-lock" aria-hidden="true"></i> {{ 'l.registration'|trans }}</legend>
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
 
-    <button type="submit">Register!</button>
+    <button type="submit" title=" {{ 'l.registration'|trans }}"> {{ 'l.registration'|trans }}</button>
+</fieldset>
     {{ form_end(form) }}
 {% endblock %}

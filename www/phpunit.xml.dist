@@ -14,23 +14,18 @@
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SHELL_VERBOSITY" value="-1" />
-        <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1/symfony_price_tracker_test" />
         <!-- define your env variables for the test env here -->
     </php>
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests/</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./src/</directory>
+            <directory>src</directory>
         </whitelist>
     </filter>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 </phpunit>
