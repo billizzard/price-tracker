@@ -17,8 +17,16 @@ class AuthenticationContext extends DefaultContext
     */
     public function thereAreFollowingUsers(TableNode $table) {
         foreach ($table->getHash() as $row) {
-            $user = new \App\Entity\User();
             $entityManager = $this->kernel->getContainer()->get('doctrine')->getManager();
+            /** @var \App\Repository\UserRepository $repository */
+            $repository = $this->kernel->getContainer()->get('doctrine')->getRepository(\App\Entity\User::class);
+            /** @var \App\Entity\User $user */
+            $user = $repository->findOneBy(['email' => $row['email']]);
+            if ($user) {
+                $entityManager->remove($user);
+                $entityManager->flush();
+            }
+            $user = new \App\Entity\User();
             $user->setEmail($row['email']);
             $user->setPassword($row['password']);
             $user->setNickName($row['nickName']);
@@ -30,16 +38,19 @@ class AuthenticationContext extends DefaultContext
     /**
      * @Given /^I am authenticated as "([^"]+)"$/
      */
-    public function iAmAuthenticatedAs($username) {
-        if (!isset($this->users[$username]['password'])) {
-            throw new \OutOfBoundsException('Invalid user ' . $username);
+    public function iAmAuthenticatedAs($email) {
+        /** @var \App\Repository\UserRepository $repository */
+        $repository = $this->kernel->getContainer()->get('doctrine')->getRepository(\App\Entity\User::class);
+        /** @var \App\Entity\User $user */
+        $user = $repository->findOneBy(['email' => $email]);
+        if (!$user) {
+            throw new \OutOfBoundsException('Invalid user ' . $email);
         }
         
-        $this->visitPath('/login');
-        $this->fillField('_username', $username);
-        $this->fillField('_password', $this->users[$username]['password']);
-        $this->checkField('remember_me');
-        $this->pressButton('_submit');
+        $this->visitPath('/en/login/');
+        $this->fillField('username', $user->getEmail());
+        $this->fillField('password', 'qqqqqq');
+        $this->pressButton('Login');
     }
     
     /**

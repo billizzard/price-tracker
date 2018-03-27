@@ -8,15 +8,12 @@
     "behat/mink": {
         "version": "v1.7.1"
     },
-<<<<<<< HEAD
-=======
     "behat/mink-browserkit-driver": {
         "version": "v1.3.2"
     },
     "behat/mink-extension": {
         "version": "2.3.1"
     },
->>>>>>> a4a7d0bce766351b1ab85dbe1947a05dd0bc7aaa
     "behat/symfony2-extension": {
         "version": "2.1",
         "recipe": {
@@ -115,9 +112,6 @@
     },
     "fig/link-util": {
         "version": "1.0.0"
-    },
-    "friends-of-behat/symfony-extension": {
-        "version": "v1.2.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"

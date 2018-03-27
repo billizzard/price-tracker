@@ -1,4 +1,4 @@
-@authorizationLogin
+@authorization @registration
 Feature: Registration form
     Anonymous users should have a possibility to register in properly.
     I need to be able to register in properly when I fill proper credential
@@ -30,22 +30,22 @@ Feature: Registration form
 #          And I press "Registration"
 #         Then I should see error message "Email already"
 
-    Scenario: Registration incorrect data
-        Given I am on "/en/registration/"
-          And I fill in "registration_email" with "not email"
-          And I press "Registration"
-         Then I should see error message "email"
-         Then I fill in "registration_email" with ""
-          And I press "Registration"
-         Then I should see error message "not be blank"
-         Then I fill in "registration_email" with "qww@ww.ww"
-          And I fill in "registration_plainPassword_first" with "qwerty"
-          And I fill in "registration_plainPassword_second" with "ytrewq"
-          And I press "Registration"
-         Then I should see error message "not match"
-         Then I fill in "registration_email" with "qww@ww.ww"
-          And I fill in "registration_plainPassword_first" with "qwe"
-          And I fill in "registration_plainPassword_second" with "qwe"
-          And I press "Registration"
-         Then I should see error message "too short"
+#    Scenario: Registration incorrect data
+#        Given I am on "/en/registration/"
+#          And I fill in "registration_email" with "not email"
+#          And I press "Registration"
+#         Then I should see error message "email"
+#         Then I fill in "registration_email" with ""
+#          And I press "Registration"
+#         Then I should see error message "not be blank"
+#         Then I fill in "registration_email" with "qww@ww.ww"
+#          And I fill in "registration_plainPassword_first" with "qwerty"
+#          And I fill in "registration_plainPassword_second" with "ytrewq"
+#          And I press "Registration"
+#         Then I should see error message "not match"
+#         Then I fill in "registration_email" with "qww@ww.ww"
+#          And I fill in "registration_plainPassword_first" with "qwe"
+#          And I fill in "registration_plainPassword_second" with "qwe"
+#          And I press "Registration"
+#         Then I should see error message "too short"
 

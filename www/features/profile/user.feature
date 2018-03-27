@@ -1,8 +1,6 @@
-@authorization @login
-Feature: Login form
-    Anonymous users should have a possibility to log in properly.
-    As a anonymous user
-    I need to be able to log in propetly when I fill proper credential
+@profile @user
+Feature: User form
+    User should have a possibility change email, nickName, password.
 
 #    Scenario: See login form
 #        Given there are following users:
@@ -20,13 +18,24 @@ Feature: Login form
 #          And I press "Login"
 #         Then I should be on "/en/profile/trackers/"
 
-#    Scenario: Login incorrect data
-#        Given I am on "/en/login/"
-#        Given there are following users:
-#            | email | password | nickName |
-#            | log@log.qq | $2y$12$UiZ.0/etZd87PmdU1fGYs.6cRPLUX.WPHAGAkkeHedSJNlN6clIAm | User_Log |
-#        And I fill in "username" with "reg@reg.qq"
-#        And I fill in "password" with "123321"
+    Scenario: Profile change user data
+        Given there are following users:
+            | email | password | nickName |
+            | user@user.qq | $2y$12$UiZ.0/etZd87PmdU1fGYs.6cRPLUX.WPHAGAkkeHedSJNlN6clIAm | User_User |
+        And I am authenticated as "user@user.qq"
+       Then I go to the "/en/profile/user/"  url
+        And I should see "User_User" in the ".widget-user-username" element
+        And I fill in "form_nickName" with "aa"
+        And I press "save"
+       Then I should see error message "too short" after ajax
+       Then I fill in "form_nickName" with "Some name"
+        And I fill in "form_email" with "qqqq"
+        And I press "save"
+       Then I should see error message "email"
+
+#    Scenario: Profile user change password
+#
+#
 #        And I press "Login"
 #       Then I should see error message "Incorrect"
 #       Then I fill in "username" with ""

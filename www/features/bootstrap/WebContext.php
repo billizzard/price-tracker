@@ -16,6 +16,14 @@ class WebContext extends DefaultContext
     {
         $this->getSession()->visit('/');
     }
+
+    /**
+     * @When /^I go to the "([^"]+)"  url?$/
+     */
+    public function iGoToTheUrl($url)
+    {
+        $this->getSession()->visit($url);
+    }
     
     /**
      * @Given /^I am on the "([^"]+)"  page?$/
@@ -89,5 +97,60 @@ class WebContext extends DefaultContext
         $class = $classesMap[$type];
         
         $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
+    }
+
+    public function spin ($lambda, $tries = 30, $sleep = 2)
+    {
+        for ($i = 0; $i < $tries; $i++)
+        {
+            try
+            {
+                if ($lambda($this))
+                {
+                    return true;
+                }
+            }
+            catch (Exception $e)
+            {
+                // do nothing
+            }
+
+            sleep($sleep);
+        }
+
+        $backtrace = debug_backtrace();
+//		throw new BehatException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
+        //throw new \Behat\Mink\Exception\ExpectationException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
+//		throw new Exception(
+//			"Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n" .
+//			"With the following arguments: " . print_r($backtrace[1]['args'], true)
+//		);
+    }
+
+    /**
+     * @Then /^(?:|I )should see (?P<type>[(error|success|info|warning)]+) message "(?P<message>[^"]+)" after ajax$/
+     */
+    public function iShouldSeeMessageAfterAjax($type, $message)
+    {
+        $this->spin(function() use ($message) {
+            try
+            {
+                $this->assertSession()->pageTextContains($this->fixStepArgument($message));
+                return true;
+            }
+            catch(Exception $e)
+            {}
+            return false;
+        });
+
+//        $classesMap = [
+//            'success' => 'success',
+//            'error' => 'error',
+//            'info' => 'info',
+//            'warning' => 'warning',
+//        ];
+//        $class = $classesMap[$type];
+//
+//        $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 }
