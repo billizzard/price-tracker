@@ -253,17 +253,16 @@ class User implements UserInterface
         if ($data['newPassword'] || $data['oldPassword'] || $data['repeatPassword']) {
             if ($data['newPassword'] && $data['oldPassword'] && $data['repeatPassword']) {
                 if ($data['newPassword'] == $data['repeatPassword']) {
-                    $oldPassword = $encoder->encodePassword($this, $data['oldPassword']);
-                    if ($oldPassword != $this->getPassword()) {
-                        throw new \Exception('v.неверный старый пароль');
-                    } else {
+                    if ($encoder->isPasswordValid($this, $data['oldPassword'])) {
                         $this->setPassword($encoder->encodePassword($this, $data['newPassword']));
+                    } else {
+                        throw new \Exception('e.change_password');
                     }
                 } else {
-                    throw new \Exception('v.repeatPassword не совпадают');
+                    throw new \Exception('e.change_password');
                 }
             } else {
-                throw new \Exception('v. при изменении пароля нужно заполнить все три поля');
+                throw new \Exception('e.change_password');
             }
         }
 

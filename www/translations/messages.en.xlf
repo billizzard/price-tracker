@@ -66,6 +66,24 @@
                 <source>e.login_invalid</source>
                 <target>Incorrect data</target>
             </trans-unit>
+            <trans-unit id="e.change_password">
+                <source>e.change_password</source>
+                <target>Incorrect data</target>
+            </trans-unit>
+            <trans-unit id="e.nickName_busy">
+                <source>e.nickName_busy</source>
+                <target>Nick name already exist</target>
+            </trans-unit>
+            <trans-unit id="e.email_busy">
+                <source>e.email_busy</source>
+                <target>Email already exist</target>
+            </trans-unit>
+
+                                             <!-- s: success -->
+            <trans-unit id="s.data_updated">
+                <source>s.data_updated</source>
+                <target>Data successfully updated</target>
+            </trans-unit>
 
 
 

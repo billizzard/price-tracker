@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -39,6 +40,13 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class UserController extends MainController
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = $this->getUser();
@@ -57,7 +65,7 @@ class UserController extends MainController
             } else {
                 foreach ($form as $fieldName => $formField) {
                     foreach ($formField->getErrors() as $error) {
-                        $response = $this->getJsonErrorResponse(['field' => $fieldName, 'message' => $error->getMessage()]);
+                        $response = $this->getJsonErrorResponse(['field' => $fieldName, 'message' => $this->translator->trans($error->getMessage())]);
                         break 2;
                     }
                 }
@@ -79,7 +87,7 @@ class UserController extends MainController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
-                return $this->json($this->getJsonSuccessResponse(['message' => 'v.Данные успешно обновлены']));
+                return $this->json($this->getJsonSuccessResponse(['message' => $this->translator->trans('s.data_updated')]));
             }
         }
 
@@ -113,9 +121,9 @@ class UserController extends MainController
 
         if ($userAlready) {
             if ($userAlready->getEmail() == $data['email']) {
-                $result = ['field' => 'email', 'message' => 'v.email alredy'];
+                $result = ['field' => 'email', 'message' => $this->translator->trans('e.email_busy')];
             } else {
-                $result = ['field' => 'nickName', 'message' => 'v.nickName alredy'];
+                $result = ['field' => 'nickName', 'message' => $this->translator->trans('e.nickName_busy')];
             }
         } else {
             try {
@@ -124,7 +132,7 @@ class UserController extends MainController
                 $entityManager->persist($user);
                 $entityManager->flush();
             } catch (\Exception $e) {
-                $result = ['field' => 'newPassword', 'message' => $e->getMessage()];
+                $result = ['field' => 'newPassword', 'message' => $this->translator->trans($e->getMessage())];
             }
         }
 

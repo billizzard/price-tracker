@@ -99,7 +99,7 @@ class WebContext extends DefaultContext
         $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 
-    public function spin ($lambda, $tries = 3, $sleep = 1)
+    public function spin ($lambda, $tries = 1, $sleep = 1)
     {
         for ($i = 0; $i < $tries; $i++)
         {
@@ -119,13 +119,7 @@ class WebContext extends DefaultContext
             sleep($sleep);
         }
 
-//        $backtrace = debug_backtrace();
-//		throw new BehatException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
-        //throw new \Behat\Mink\Exception\ExpectationException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
-//		throw new Exception(
-//			"Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n" .
-//			"With the following arguments: " . print_r($backtrace[1]['args'], true)
-//		);
+		//throw new Exception ("Wait time limit of ". $tries*$sleep ." seconds exceeded.");
     }
 
 // NEW
@@ -144,34 +138,35 @@ class WebContext extends DefaultContext
         }
     }
 
-    /**
-     * Attaches file to field with specified id|name|label|value
-     * Example: When I attach "bwayne_profile.png" to "profileImageUpload"
-     * Example: And I attach "bwayne_profile.png" to "profileImageUpload"
-     *
-     * @When /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
-     */
-    public function attachFileToField($field, $path)
-    {
-        $field = $this->fixStepArgument($field);
+//    /**
+//     * Attaches file to field with specified id|name|label|value
+//     * Example: When I attach "bwayne_profile.png" to "profileImageUpload"
+//     * Example: And I attach "bwayne_profile.png" to "profileImageUpload"
+//     *
+//     * @When /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
+//     */
+//    public function attachFileToField($field, $path)
+//    {
+//        $field = $this->fixStepArgument($field);
+//
+//        if ($this->getMinkParameter('files_path')) {
+//            $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$path;
+//            if (is_file($fullPath)) {
+//                $path = $fullPath;
+//            }
+//        }
+//
+//        $this->getSession()->getPage()->attachFileToField($field, $path);
+//    }
 
-        if ($this->getMinkParameter('files_path')) {
-            $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$path;
-            if (is_file($fullPath)) {
-                $path = $fullPath;
-            }
-        }
 
-        $this->getSession()->getPage()->attachFileToField($field, $path);
-    }
-
-    /**
-     * @Then /^I wait for "(?P<sec>\d+)" seconds$/
-     */
-    public function iWaitForSeconds($sec)
-    {
-        $this->getSession()->wait($sec * 1000);
-    }
+//    /**
+//     * @Then /^I wait for "(?P<sec>\d+)" seconds$/
+//     */
+//    public function iWaitForSeconds($sec)
+//    {
+//        $this->getSession()->wait($sec * 1000);
+//    }
 
     // END NEW
 

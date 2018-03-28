@@ -64,6 +64,23 @@
                 <source>e.login_invalid</source>
                 <target>Неверные данные</target>
             </trans-unit>
+            <trans-unit id="e.change_password">
+                <source>e.change_password</source>
+                <target>Неверные данные</target>
+            </trans-unit>
+            <trans-unit id="e.nickName_busy">
+                <source>e.nickName_busy</source>
+                <target>Ник занят</target>
+            </trans-unit>
+            <trans-unit id="e.email_busy">
+                <source>e.email_busy</source>
+                <target>Email занят</target>
+            </trans-unit>
+                                             <!-- s: success -->
+            <trans-unit id="s.data_updated">
+                <source>s.data_updated</source>
+                <target>Данные успешно обновлены</target>
+            </trans-unit>
 
 
 

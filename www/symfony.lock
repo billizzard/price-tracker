@@ -29,6 +29,12 @@
     "container-interop/container-interop": {
         "version": "1.2.0"
     },
+    "dmore/behat-chrome-extension": {
+        "version": "1.1.0"
+    },
+    "dmore/chrome-mink-driver": {
+        "version": "2.6.2"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -508,6 +514,9 @@
     },
     "symfony/yaml": {
         "version": "v4.0.4"
+    },
+    "textalk/websocket": {
+        "version": "1.2.0"
     },
     "theseer/tokenizer": {
         "version": "1.1.0"
