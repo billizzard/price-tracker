@@ -99,7 +99,7 @@ class WebContext extends DefaultContext
         $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 
-    public function spin ($lambda, $tries = 30, $sleep = 2)
+    public function spin ($lambda, $tries = 3, $sleep = 1)
     {
         for ($i = 0; $i < $tries; $i++)
         {
@@ -108,6 +108,7 @@ class WebContext extends DefaultContext
                 if ($lambda($this))
                 {
                     return true;
+                    break;
                 }
             }
             catch (Exception $e)
@@ -118,7 +119,7 @@ class WebContext extends DefaultContext
             sleep($sleep);
         }
 
-        $backtrace = debug_backtrace();
+//        $backtrace = debug_backtrace();
 //		throw new BehatException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
         //throw new \Behat\Mink\Exception\ExpectationException ("Wait time limit of ". $tries*$sleep ." seconds exceeded. Text \"" .$backtrace[1]['args' ][0]. "\" not found", $this->getSession());
 //		throw new Exception(
@@ -127,30 +128,67 @@ class WebContext extends DefaultContext
 //		);
     }
 
+// NEW
+    /**
+     * @Then /^I switch to iframe "([^"]*)"$/
+     */
+    public function iSwitchToIframe($iframeName)
+    {
+        if($iframeName == "")
+        {
+            $this->getSession()->switchToIFrame(null);
+        }
+        else
+        {
+            $this->getSession()->switchToIFrame($iframeName);
+        }
+    }
+
+    /**
+     * Attaches file to field with specified id|name|label|value
+     * Example: When I attach "bwayne_profile.png" to "profileImageUpload"
+     * Example: And I attach "bwayne_profile.png" to "profileImageUpload"
+     *
+     * @When /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
+     */
+    public function attachFileToField($field, $path)
+    {
+        $field = $this->fixStepArgument($field);
+
+        if ($this->getMinkParameter('files_path')) {
+            $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$path;
+            if (is_file($fullPath)) {
+                $path = $fullPath;
+            }
+        }
+
+        $this->getSession()->getPage()->attachFileToField($field, $path);
+    }
+
+    /**
+     * @Then /^I wait for "(?P<sec>\d+)" seconds$/
+     */
+    public function iWaitForSeconds($sec)
+    {
+        $this->getSession()->wait($sec * 1000);
+    }
+
+    // END NEW
+
     /**
      * @Then /^(?:|I )should see (?P<type>[(error|success|info|warning)]+) message "(?P<message>[^"]+)" after ajax$/
      */
     public function iShouldSeeMessageAfterAjax($type, $message)
     {
-        $this->spin(function() use ($message) {
+        $this->spin(function() use ($type, $message) {
             try
             {
-                $this->assertSession()->pageTextContains($this->fixStepArgument($message));
+                $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $type . '"]', $this->fixStepArgument($message));
                 return true;
             }
             catch(Exception $e)
             {}
             return false;
         });
-
-//        $classesMap = [
-//            'success' => 'success',
-//            'error' => 'error',
-//            'info' => 'info',
-//            'warning' => 'warning',
-//        ];
-//        $class = $classesMap[$type];
-//
-//        $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 }

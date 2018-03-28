@@ -27,6 +27,31 @@
                 <source>l.registration</source>
                 <target>Registration</target>
             </trans-unit>
+            <trans-unit id="l.settings">
+                <source>l.settings</source>
+                <target>Settings</target>
+            </trans-unit>
+            <trans-unit id="l.nickName">
+                <source>l.nickName</source>
+                <target>Nick name</target>
+            </trans-unit>
+            <trans-unit id="l.oldPassword">
+                <source>l.oldPassword</source>
+                <target>Old password</target>
+            </trans-unit>
+            <trans-unit id="l.newPassword">
+                <source>l.newPassword</source>
+                <target>New password</target>
+            </trans-unit>
+            <trans-unit id="l.repeatPassword">
+                <source>l.repeatPassword</source>
+                <target>Repeat password</target>
+            </trans-unit>
+            <trans-unit id="l.save">
+                <source>l.save</source>
+                <target>Save</target>
+            </trans-unit>
+
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">
