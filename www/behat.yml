@@ -8,25 +8,25 @@ default:
 
         authorization:
             paths:
-                - '%paths.base%/features/authorization'
+                - '%paths.base%/tests/behat/features/authorization'
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
-                - WebContext
+                - App\Tests\Behat\Com\WebContext
                 - AuthenticationContext
 
-        profile:
-            paths:
-                - '%paths.base%/features/profile'
-            contexts:
-                - Behat\MinkExtension\Context\MinkContext
-                - WebContext
-                - AuthenticationContext
+#        profile:
+#            paths:
+#                - '%paths.base%/tests/behat/features/profile'
+#            contexts:
+#                - Behat\MinkExtension\Context\MinkContext
+#                - WebContext
+#                - AuthenticationContext
 
 
     extensions:
         Behat\Symfony2Extension:
             kernel:
-                bootstrap: features/bootstrap/bootstrap.php
+                bootstrap: tests/behat/features/bootstrap/bootstrap.php
                 class: App\Kernel
 
         Behat\MinkExtension:
