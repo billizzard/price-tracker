@@ -48,7 +48,15 @@
             </trans-unit>
             <trans-unit id="l.save">
                 <source>l.save</source>
-                <target>Save</target>
+                <target>Сохранить</target>
+            </trans-unit>
+            <trans-unit id="l.profile">
+                <source>l.profile</source>
+                <target>Профиль</target>
+            </trans-unit>
+            <trans-unit id="l.logout">
+                <source>l.logout</source>
+                <target>Выйти</target>
             </trans-unit>
 
                                              <!-- e: errors -->

@@ -18,7 +18,6 @@ Feature: Registration form
 #          And I press "Registration"
 #         Then I should be redirected to the "security_login" page
 
-
 #    Scenario: Registration email taken
 #        Given I am on "/en/registration/"
 #        Given there are following users:

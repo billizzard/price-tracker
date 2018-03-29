@@ -51,6 +51,14 @@
                 <source>l.save</source>
                 <target>Save</target>
             </trans-unit>
+            <trans-unit id="l.profile">
+                <source>l.profile</source>
+                <target>Profile</target>
+            </trans-unit>
+            <trans-unit id="l.logout">
+                <source>l.logout</source>
+                <target>Logout</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->
