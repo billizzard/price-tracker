@@ -14,7 +14,8 @@ default:
                 - App\Tests\Behat\Com\WebContext
                 - AuthenticationContext
 
-#        profile:
+#composer dump-autoload
+#profile:
 #            paths:
 #                - '%paths.base%/tests/behat/features/profile'
 #            contexts:
