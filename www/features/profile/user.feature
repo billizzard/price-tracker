@@ -22,6 +22,7 @@ Feature: User form
         Given there are following users:
             | email | password | nickName |
             | user@user.qq | $2y$12$UiZ.0/etZd87PmdU1fGYs.6cRPLUX.WPHAGAkkeHedSJNlN6clIAm | User_User |
+#       Then I go to the "/en/login/"  url
         And I am authenticated as "user@user.qq"
        Then I go to the "/en/profile/user/"  url
         And I should see "User_User" in the ".widget-user-username" element

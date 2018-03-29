@@ -14,6 +14,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 use stringEncode\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -41,9 +42,11 @@ use Symfony\Component\Validator\Constraints\Length;
 class UserController extends MainController
 {
     private $translator;
+    private $logger;
 
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->translator = $translator;
     }
 
@@ -56,7 +59,7 @@ class UserController extends MainController
         if($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
 
-            $response = $this->getJsonSuccessResponse(['message' => 'v.Данные успешно обновлены']);
+            $response = $this->getJsonSuccessResponse(['message' => $this->translator->trans('s.data_updated')]);
             if ($form->isSubmitted() && $form->isValid()) {
                 $error = $this->editUser($user, $form->getData(), $encoder);
                 if ($error) {

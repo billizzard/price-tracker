@@ -58,6 +58,42 @@
                 <source>l.logout</source>
                 <target>Выйти</target>
             </trans-unit>
+            <trans-unit id="l.avatars">
+                <source>l.avatars</source>
+                <target>Аватарки</target>
+            </trans-unit>
+            <trans-unit id="l.set">
+                <source>l.set</source>
+                <target>Установить</target>
+            </trans-unit>
+            <trans-unit id="l.online">
+                <source>l.online</source>
+                <target>Онлайн</target>
+            </trans-unit>
+            <trans-unit id="l.previous">
+                <source>l.previous</source>
+                <target>Предыдущая</target>
+            </trans-unit>
+            <trans-unit id="l.next">
+                <source>l.next</source>
+                <target>Следующая</target>
+            </trans-unit>
+            <trans-unit id="l.trackers">
+                <source>l.trackers</source>
+                <target>Трекеры</target>
+            </trans-unit>
+            <trans-unit id="l.list">
+                <source>l.list</source>
+                <target>Список</target>
+            </trans-unit>
+            <trans-unit id="l.add">
+                <source>l.add</source>
+                <target>Добавить</target>
+            </trans-unit>
+            <trans-unit id="l.home">
+                <source>l.home</source>
+                <target>Главная</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

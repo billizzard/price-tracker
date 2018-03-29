@@ -1,12 +1,14 @@
 {% extends 'profile.html.twig' %}
 
 {% block contentTitle %}
-    v.Avatars
+    {{ 'l.avatars'|trans }}
+{% endblock %}
+
+{% block breadcrumbAfter %}
+    <li class="active">Avatars</li>
 {% endblock %}
 
 {% block content %}
-
-    {{ pagination(paginationData) }}
 
     <div class="avatar-items">
         {% for avatar in avatars %}
@@ -17,13 +19,19 @@
             <div class="avatar-item {% if current %} current {% endif %}">
                 <div class="avatar-hover"></div>
                 {% if not current %}
-                <button class="btn btn-success js-avatar">Выбрать</button>
+                <button class="btn btn-success js-avatar">{{ 'l.set'|trans }}</button>
                 {% endif %}
                 <img src="/build/images/avatars/{{ avatar }}" alt="avatar">
             </div>
         {% endfor %}
     </div>
+    <div class="pagination-container">
+        {{ pagination(paginationData) }}
+    </div>
 <style>
+    .pagination-container {
+        text-align:center;
+    }
     .avatar-items {
         display: flex;
         flex-wrap: wrap;

@@ -1,35 +1,29 @@
 {% if data.total > 1 %}
-<div class="row">
-    <div class="col-sm-7">
-        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-            <ul class="pagination">
-                <li class="paginate_button previous {{ data.prevClass }}" id="example1_previous">
-                    <a
-                        {% if  data.prevClass %}
-                            href="#/"
-                        {% else %}
-                            href="{{ data.url }}{{ data.current - 1 }}"
-                        {% endif %}>
-                        Previous
-                    </a>
-                </li>
-                {% for i in data.start..data.end %}
-                    <li class="paginate_button {% if data.current == i %} active {% endif %}">
-                        <a href="{{ data.url }}{{ i }}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{ i }}</a>
-                    </li>
-                {% endfor %}
-                <li class="paginate_button next {{ data.nextClass }}" id="example1_next">
-                    <a
-                        {% if  data.nextClass %}
-                            href="#/"
-                        {% else %}
-                            href="{{ data.url }}{{ data.current + 1 }}"
-                        {% endif %}>
-                        Next
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<ul class="pagination">
+    <li class="paginate_button previous {{ data.prevClass }}">
+        <a
+            {% if  data.prevClass %}
+                href="#/"
+            {% else %}
+                href="{{ data.url }}{{ data.current - 1 }}"
+            {% endif %}>
+            {{ 'l.previous'|trans }}
+        </a>
+    </li>
+    {% for i in data.start..data.end %}
+        <li class="paginate_button {% if data.current == i %} active {% endif %}">
+            <a href="{{ data.url }}{{ i }}">{{ i }}</a>
+        </li>
+    {% endfor %}
+    <li class="paginate_button next {{ data.nextClass }}">
+        <a
+            {% if  data.nextClass %}
+                href="#/"
+            {% else %}
+                href="{{ data.url }}{{ data.current + 1 }}"
+            {% endif %}>
+            {{ 'l.next'|trans }}
+        </a>
+    </li>
+</ul>
 {% endif %}

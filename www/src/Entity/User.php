@@ -270,6 +270,11 @@ class User implements UserInterface
         $this->setNickName($data['nickName']);
     }
 
+    public function getAvatarFull()
+    {
+        return '/build/images/avatars/' . $this->getAvatar();
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -59,6 +59,42 @@
                 <source>l.logout</source>
                 <target>Logout</target>
             </trans-unit>
+            <trans-unit id="l.avatars">
+                <source>l.avatars</source>
+                <target>Avatars</target>
+            </trans-unit>
+            <trans-unit id="l.set">
+                <source>l.set</source>
+                <target>Set</target>
+            </trans-unit>
+            <trans-unit id="l.online">
+                <source>l.online</source>
+                <target>Online</target>
+            </trans-unit>
+            <trans-unit id="l.previous">
+                <source>l.previous</source>
+                <target>Previous</target>
+            </trans-unit>
+            <trans-unit id="l.next">
+                <source>l.next</source>
+                <target>Next</target>
+            </trans-unit>
+            <trans-unit id="l.trackers">
+                <source>l.trackers</source>
+                <target>Trackers</target>
+            </trans-unit>
+            <trans-unit id="l.list">
+                <source>l.list</source>
+                <target>List</target>
+            </trans-unit>
+            <trans-unit id="l.add">
+                <source>l.add</source>
+                <target>Add</target>
+            </trans-unit>
+            <trans-unit id="l.home">
+                <source>l.home</source>
+                <target>Home</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->
