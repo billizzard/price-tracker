@@ -1,4 +1,5 @@
 <?php
+namespace App\Tests\Behat\features\bootstrap;
 
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\RawMinkContext;

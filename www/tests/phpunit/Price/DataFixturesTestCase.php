@@ -1,19 +1,20 @@
 <?php
-namespace App\Tests\Repository;
+namespace App\Tests\phpunit\Price;
 
 use App\Entity\Watcher;
+use App\Kernel;
 use App\Repository\WatcherRepository;
-use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\MakerBundle\Str;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Tester\CommandTester;
 
 
-class DataFixturesTest extends KernelTestCase
+class DataFixturesTestCase extends KernelTestCase
 {
     private static $entityManager;
+
+    public static function getKernelClass()
+    {
+        return Kernel::class;
+    }
 
     public static function setUpBeforeClass()
     {

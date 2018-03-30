@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Bdd\Features\Bootstrap;
+namespace App\Tests\Behat\features\bootstrap;
 
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 
@@ -100,7 +100,7 @@ class WebContext extends DefaultContext
         $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
     }
 
-    public function spin ($lambda, $tries = 1, $sleep = 1)
+    public function spin ($lambda, $tries = 3, $sleep = 1)
     {
         for ($i = 0; $i < $tries; $i++)
         {
@@ -176,11 +176,12 @@ class WebContext extends DefaultContext
      */
     public function iShouldSeeMessageAfterAjax($type, $message)
     {
+        //$this->getSession()->wait(5000);
         $this->spin(function() use ($type, $message) {
             try
             {
                 $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $type . '"]', $this->fixStepArgument($message));
-                return true;
+                return false;
             }
             catch(Exception $e)
             {}
