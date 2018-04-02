@@ -122,9 +122,9 @@ class CronController extends Controller
                     // Устанавливаем статус успешно, чтобы больше этого наблюдателя не трогать
                     $watcher->setStatus(Watcher::STATUS_SUCCESS);
                     $message = new Message();
-                    $message->setMessage('qqqqqqwwwweeee');
+                    $message->setMessage('');
                     $message->setUser($user);
-                    $message->setType(Message::TYPE_SUCCESS);
+                    $message->setType(Message::TYPE_SALE_SUCCESS);
                     $this->entityManager->persist($message);
                     //$this->mailer->sendSaleMail($user->getEmail());
                 }

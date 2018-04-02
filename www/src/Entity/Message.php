@@ -15,6 +15,7 @@ class Message
     const STATUS_READ = 3;
 
     const TYPE_SUCCESS = 10;
+    const TYPE_SALE_SUCCESS = 11;
     const TYPE_INFO = 20;
     const TYPE_WARNING = 30;
 
