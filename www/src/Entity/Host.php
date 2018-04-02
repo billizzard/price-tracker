@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\HVF\PriceChecker\PriceParsers\OnlinerCatalogParser;
 use App\HVF\PriceChecker\PriceParsers\PriceParser;
+use App\HVF\PriceChecker\SiteParsers\FileGetContentParser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -75,7 +76,7 @@ class Host
     public function getParser(): ?PriceParser
     {
         switch($this->getHost()) {
-            case 'catalog.onliner.by': return new OnlinerCatalogParser();
+            case 'catalog.onliner.by': return new OnlinerCatalogParser(new FileGetContentParser());
         }
 
         return null;

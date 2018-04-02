@@ -125,7 +125,10 @@
                 <source>s.data_updated</source>
                 <target>Данные успешно обновлены</target>
             </trans-unit>
-
+            <trans-unit id="s.data_added">
+                <source>s.data_added</source>
+                <target>Данные успешно добавлены</target>
+            </trans-unit>
 
 
         </body>

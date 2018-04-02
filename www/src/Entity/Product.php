@@ -63,7 +63,7 @@ class Product
     /**
      * @ORM\Column(type="smallint")
      */
-    private $status = 1;
+    private $status = self::STATUS_TRACKED;
 
     public function getHost(): Host
     {

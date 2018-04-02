@@ -128,8 +128,10 @@
                 <source>s.data_updated</source>
                 <target>Data successfully updated</target>
             </trans-unit>
-
-
+            <trans-unit id="s.data_added">
+                <source>s.data_added</source>
+                <target>Data successfully added</target>
+            </trans-unit>
 
         </body>
     </file>
