@@ -1,18 +1,16 @@
 <?php
-namespace App\Tests\phpunit\Price;
+namespace App\Tests\phpunit\CronPriceChecker;
 
 use App\Entity\Host;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Entity\Watcher;
 use App\Kernel;
-use App\Repository\WatcherRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
-class DataFixturesTestCase extends WebTestCase
+class CronPriceFixturesTestCase extends WebTestCase
 {
     /** @var EntityManager entityManager */
     protected static $entityManager;

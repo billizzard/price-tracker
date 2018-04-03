@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\phpunit\Price;
+namespace App\Tests\phpunit\CronPriceChecker;
 
 use App\Entity\Message;
 use App\Entity\PriceTracker;
@@ -10,7 +10,7 @@ use App\Repository\PriceTrackerRepository;
 use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
 
-class PriceCheckerTest extends DataFixturesTestCase
+class PriceCheckerTest extends CronPriceFixturesTestCase
 {
     /* ------------------------ Запускаем крон с новым товаром  -------------------------------------*/
 

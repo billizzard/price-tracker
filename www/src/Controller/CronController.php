@@ -43,12 +43,12 @@ class CronController extends Controller
                     foreach ($host->getProducts() as $product) {
                         if ($product->getStatus() == Product::STATUS_TRACKED) {
 
-                            if ($env == 'test') {
+                            if ($env == 'test' && $request->get('price')) {
                                 $price = $request->get('price');
                             } else {
                                 $price = $parser->getPriceByUrl($product->getUrl());
                             }
-                            file_put_contents('aaaaaaaaaaaa.txt', $price);
+
                             if ($price) {
                                 $this->changeCurrentPrice($product, $price);
                                 $this->changeWatcherStatus($product);
