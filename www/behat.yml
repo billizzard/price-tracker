@@ -11,8 +11,8 @@ default:
                 - '%paths.base%/tests/behat/features/authorization'
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
-                - App\Tests\Behat\features\bootstrap\WebContext
-                - App\Tests\Behat\features\bootstrap\AuthenticationContext
+                - App\Tests\behat\features\bootstrap\WebContext
+                - App\Tests\behat\features\bootstrap\AuthenticationContext
 
 #composer dump-autoload
         profile:
@@ -20,8 +20,8 @@ default:
                 - '%paths.base%/tests/behat/features/profile'
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
-                - App\Tests\Behat\features\bootstrap\WebContext
-                - App\Tests\Behat\features\bootstrap\AuthenticationContext
+                - App\Tests\behat\features\bootstrap\WebContext
+                - App\Tests\behat\features\bootstrap\AuthenticationContext
 
 
     extensions:

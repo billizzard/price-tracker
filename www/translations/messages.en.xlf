@@ -91,6 +91,18 @@
                 <source>l.add</source>
                 <target>Add</target>
             </trans-unit>
+            <trans-unit id="l.edit">
+                <source>l.edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="l.delete">
+                <source>l.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="l.view">
+                <source>l.view</source>
+                <target>View</target>
+            </trans-unit>
             <trans-unit id="l.home">
                 <source>l.home</source>
                 <target>Home</target>

@@ -20,6 +20,7 @@ class HVFGridView
     private $qb;
     private $urlBuilder;
     private $columns;
+    private $actionColumn;
 
     public function __construct(Request $request, QueryBuilder $qb, $conf = [])
     {
@@ -38,6 +39,14 @@ class HVFGridView
         return $this;
     }
 
+    public function addActionColumn(string $name, array $options = [])
+    {
+        $this->actionColumn = [
+            'name' => $name,
+            'options' => $options
+        ];
+    }
+
     public function getGridData()
     {
         $result = ['pagination' => [], 'columns' => [], 'data' => []];
@@ -47,9 +56,21 @@ class HVFGridView
             $this->getColumns($result);
             $this->getData($models, $result);
             $this->getSort($result);
+            $this->getActionColumn($result);
         }
         
         return $result;
+    }
+
+    private function getActionColumn(&$result)
+    {
+        $result['actionColumn'] = [];
+        if ($this->actionColumn) {
+            $result['actionColumn'] = [
+                'name' => $this->actionColumn['name'],
+                'options' => $this->actionColumn['options'],
+            ];
+        }
     }
 
     private function getSort(&$result)

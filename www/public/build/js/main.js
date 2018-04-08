@@ -135,3 +135,111 @@ ProfileUserForm = function(message) {
 
     init(message);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(function () {
+
+    /*
+     * LINE CHART
+     * ----------
+     */
+    //LINE randomly generated data
+
+    var sin = [], cos = []
+    // for (var i = 0; i < 14; i += 0.5) {
+    //     sin.push([i, Math.sin(i)])
+    //     cos.push([i, Math.cos(i)])
+    // }
+    sin = [
+        ['05.04-df', 220],
+        ['06.04-df', 210],
+        ['08.04-df', 230],
+    ];
+
+    cos = [
+        ['05.04-df', 120],
+        ['06.04-df', 110],
+        ['08.04-df', 130],
+    ];
+    var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
+
+    var line_data1 = {
+        data : sin,
+        color: '#3c8dbc'
+    }
+    // var line_data2 = {
+    //     data : cos,
+    //     color: '#00c0ef'
+    // }
+    console.log(sin);
+    function euroFormatter(v, axis) {
+        console.log('-------');
+        console.log(v);
+        console.log('++++++++++');
+        console.log(axis);
+        return v.toFixed(axis.tickDecimals) + "€";
+    }
+    $.plot('#line-chart', [data], {
+        grid  : {
+            hoverable  : true,
+            borderColor: '#f3f3f3',
+            borderWidth: 1,
+            tickColor  : '#f3f3f3'
+        },
+        series: {
+            shadowSize: 0,
+            lines     : {
+                show: true
+            },
+            points    : {
+                show: true
+            }
+        },
+        lines : {
+            fill : false,
+            color: ['#3c8dbc', '#f56954']
+        },
+        yaxis : {
+            show: true,
+            tickFormatter: euroFormatter
+        },
+        xaxis : {
+            tickFormatter: euroFormatter
+        }
+    })
+    //Initialize tooltip on hover
+    $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+        position: 'absolute',
+        display : 'none',
+        opacity : 0.8
+    }).appendTo('body')
+    $('#line-chart').bind('plothover', function (event, pos, item) {
+
+        if (item) {
+            var x = item.datapoint[0].toFixed(2),
+                y = item.datapoint[1].toFixed(2)
+
+            $('#line-chart-tooltip').html(item.series.label + ' of ' + x + ' = ' + y)
+                .css({ top: item.pageY + 5, left: item.pageX + 5 })
+                .fadeIn(200)
+        } else {
+            $('#line-chart-tooltip').hide()
+        }
+
+    })
+    /* END LINE CHART */
+
+
+})

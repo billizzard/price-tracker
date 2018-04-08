@@ -5,6 +5,10 @@ class FileGetContentParser implements SiteParser
 {
     public function getContent(string $url): string
     {
-        return file_get_contents($url);
+        $content = @file_get_contents($url);
+        if (!$content) {
+            // logging: нет результата для сайта
+        }
+        return $content;
     }
 }

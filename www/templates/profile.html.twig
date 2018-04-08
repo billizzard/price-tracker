@@ -158,19 +158,23 @@
 
     <div class="content-wrapper">
         {% block contentHeader %}
-        <section class="content-header">
+        <section class="content-header" style="min-height:37px;">
+            <h1>
             {% block contentTitle %}
-                <h1>Dashboard <small>Version 2.0</small></h1>
+                Dashboard <small>Version 2.0</small>
             {% endblock %}
+            </h1>
             {% block breadcrumb %}
                 <ol class="breadcrumb">
                     <li><a href="{{ path('tracker_list') }}"><i class="fa fa-dashboard"></i> {{ 'l.home'|trans }}</a></li>
                     {% block breadcrumbAfter %}
-                        <li class="active">Dashboard</li>
+                        <li class="active">{{ 'l.home'|trans }}</li>
                     {% endblock %}
                 </ol>
             {% endblock %}
         </section>
+
+
         {% endblock %}
 
         <section class="content">
@@ -214,6 +218,7 @@
     <script src="{{ asset('build/js/dashboard2.js') }}"></script>
     <script src="{{ asset('build/js/demo.js') }}"></script>
     <script src="{{ asset('build/js/main.js') }}"></script>
+    <script src="{{ asset('build/js/jquery.flot.js') }}"></script>
 {% endblock %}
 </body>
 </html>

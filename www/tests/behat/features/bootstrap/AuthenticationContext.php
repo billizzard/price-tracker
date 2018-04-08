@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Behat\features\bootstrap;
+namespace App\Tests\behat\features\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
 

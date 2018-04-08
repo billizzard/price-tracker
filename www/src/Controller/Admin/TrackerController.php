@@ -71,6 +71,8 @@ class TrackerController extends MainController
                 }
                 return $result;
             }
+        ])->addActionColumn('Actions', [
+            'view', 'edit', 'delete'
         ]);
 
         $products = $grid->getGridData();
@@ -110,7 +112,7 @@ class TrackerController extends MainController
                 $product = new Product();
                 $product->setHost($host);
                 $product->setUrl($form['url']->getData());
-            } else {
+            } else { // такой товар есть
                 if ($product->getCurrentPrice() && $product->getCurrentPrice() != $watcher->getStartPrice()) {
                     // logging:  пользователь с таким то ид указал неверную цену, т.е. либо он ошибся, либо скрипт неверно распознает цену
                 }
@@ -174,8 +176,23 @@ class TrackerController extends MainController
 
         }
         throw new NotFoundHttpException();
-        //$this->denyAccessUnlessGranted('edit', $post, 'Posts can only be edited by their authors.');
+    }
 
+    public function viewAction(Request $request, WatcherRepository $watcherRepository)
+    {
+        $watcher = $watcherRepository->findOneBy(['product' => $request->get('id'), 'user' => $this->getUser()->getId()]);
+        if ($watcher) {
+            $product = $watcher->getProduct();
+            $this->denyAccessUnlessGranted('view', $watcher, 'Access denied.');
+
+
+            return $this->render('trackers/view.html.twig', [
+                'product' => $product,
+                'watcher' => $watcher,
+            ]);
+
+        }
+        throw new NotFoundHttpException();
     }
 
 

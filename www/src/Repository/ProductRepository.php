@@ -42,6 +42,13 @@ class ProductRepository extends ServiceEntityRepository
 
         return (array) $this->createPaginator($queryBuilder,$page)->getCurrentPageResults();
     }
+
+    public function findTracked(): array
+    {
+        return $this->findBy(['status' => Product::STATUS_TRACKED]);
+    }
+
+
 //
 //    private function createPaginator(QueryBuilder $query, int $page): Pagerfanta
 //    {

@@ -12,3 +12,9 @@ tracker_edit:
       id: '\d+'
     controller: App\Controller\Admin\TrackerController::editAction
 
+tracker_view:
+    path: /trackers/{id}/view/
+    requirements:
+      id: '\d+'
+    controller: App\Controller\Admin\TrackerController::viewAction
+

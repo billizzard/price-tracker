@@ -39,8 +39,9 @@ class CronController extends Controller
             foreach ($hosts as $host) {
                 /** @var PriceParser $parser */
                 if ($parser = $host->getParser()) {
-                    // Исправить88: вместо всех продуктов вынимать только со статусом нужным уже
-                    foreach ($host->getProducts() as $product) {
+                    /** @var ProductRepository $repository */
+                    $repository = $this->getDoctrine()->getRepository(Product::class);
+                    foreach ($repository->findTracked() as $product) {
                         if ($product->getStatus() == Product::STATUS_TRACKED) {
 
                             if ($env == 'test' && $request->get('price')) {
@@ -128,9 +129,13 @@ class CronController extends Controller
                     $this->entityManager->persist($message);
                     //$this->mailer->sendSaleMail($user->getEmail());
                 }
-                $this->entityManager->flush();
             }
+        } else { // значит за товаром уже никто не наблюдает
+            $this->logger->info('Product not tracker more', ['product_id' => $product->getId()]);
+            $product->setStatus(Product::STATUS_NOT_TRACKED);
+            $this->entityManager->persist($product);
         }
+        $this->entityManager->flush();
     }
 
 }

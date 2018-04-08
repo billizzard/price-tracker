@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Behat\features\bootstrap;
+namespace App\Tests\behat\features\bootstrap;
 
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 

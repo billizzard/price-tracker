@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ProductVoter extends Voter
 {
     const ADD = 'add';
-    const EDIT   = 'edit';
+    const EDIT = 'edit';
+    const VIEW = 'view';
 
     private $decisionManager;
 
@@ -22,7 +23,7 @@ class ProductVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::ADD, self::EDIT])) {
+        if (!in_array($attribute, [self::ADD, self::EDIT, self::VIEW])) {
             return false;
         }
 
@@ -54,6 +55,14 @@ class ProductVoter extends Voter
 
             // if the user is the author of the post, allow them to edit the posts
             case self::EDIT:
+                if ($user->getId() === $product->getUser()->getId()) {
+                    return true;
+                }
+
+                break;
+
+            // if the user is the author of the post, allow them to edit the posts
+            case self::VIEW:
                 if ($user->getId() === $product->getUser()->getId()) {
                     return true;
                 }

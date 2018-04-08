@@ -1,7 +1,11 @@
 {% extends 'profile.html.twig' %}
 
 {% block contentTitle %}
-    sdfsdfsdf
+    {{ 'l.edit'|trans }}
+{% endblock %}
+
+{% block breadcrumbAfter %}
+    <li class="active">{{ 'l.edit'|trans }}</li>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +14,7 @@
         {{ form_row(form.url,  {'attr': {'disabled': 'disabled'}}) }}
         {{ form_row(form.startPrice) }}
         {{ form_row(form.percent) }}
-        <button type="submit" class="btn btn-primary">Register!</button>
+        <button type="submit" class="btn btn-primary">{{ 'l.edit'|trans }}</button>
     {{ form_end(form) }}
 
 {% endblock %}
