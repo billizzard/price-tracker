@@ -106,6 +106,34 @@
                 <source>l.home</source>
                 <target>Главная</target>
             </trans-unit>
+            <trans-unit id="l.startPrice">
+                <source>l.startPrice</source>
+                <target>Начальная цена</target>
+            </trans-unit>
+            <trans-unit id="l.expectedDiscount">
+                <source>l.expectedDiscount</source>
+                <target>Ожидаемая скидка</target>
+            </trans-unit>
+            <trans-unit id="l.status">
+                <source>l.status</source>
+                <target>Статус</target>
+            </trans-unit>
+            <trans-unit id="l.createdAt">
+                <source>l.createdAt</source>
+                <target>Дата создания</target>
+            </trans-unit>
+            <trans-unit id="l.completed">
+                <source>l.completed</source>
+                <target>Завершен</target>
+            </trans-unit>
+            <trans-unit id="l.tracked">
+                <source>l.tracked</source>
+                <target>Отслеживается</target>
+            </trans-unit>
+            <trans-unit id="l.schedule">
+                <source>l.schedule</source>
+                <target>График</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

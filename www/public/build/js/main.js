@@ -151,74 +151,32 @@ ProfileUserForm = function(message) {
 
 $(function () {
 
-    /*
-     * LINE CHART
-     * ----------
-     */
-    //LINE randomly generated data
+    var jsonPrice = $('#jsonPrice').val();
+    jsonPrice = JSON.parse(jsonPrice);
+    if (jsonPrice && jsonPrice.data && jsonPrice.labels) {
 
-    var sin = [], cos = []
-    // for (var i = 0; i < 14; i += 0.5) {
-    //     sin.push([i, Math.sin(i)])
-    //     cos.push([i, Math.cos(i)])
-    // }
-    sin = [
-        ['05.04-df', 220],
-        ['06.04-df', 210],
-        ['08.04-df', 230],
-    ];
-
-    cos = [
-        ['05.04-df', 120],
-        ['06.04-df', 110],
-        ['08.04-df', 130],
-    ];
-    var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
-
-    var line_data1 = {
-        data : sin,
-        color: '#3c8dbc'
-    }
-    // var line_data2 = {
-    //     data : cos,
-    //     color: '#00c0ef'
-    // }
-    console.log(sin);
-    function euroFormatter(v, axis) {
-        console.log('-------');
-        console.log(v);
-        console.log('++++++++++');
-        console.log(axis);
-        return v.toFixed(axis.tickDecimals) + "€";
-    }
-    $.plot('#line-chart', [data], {
-        grid  : {
-            hoverable  : true,
-            borderColor: '#f3f3f3',
-            borderWidth: 1,
-            tickColor  : '#f3f3f3'
-        },
-        series: {
-            shadowSize: 0,
-            lines     : {
-                show: true
+        $.plot('#line-chart', [{
+            data: jsonPrice.data
+        }], {
+            grid  : {
+                hoverable  : true,
+                borderColor: '#f3f3f3',
+                borderWidth: 1,
+                tickColor  : '#f3f3f3'
             },
-            points    : {
-                show: true
-            }
-        },
-        lines : {
-            fill : false,
-            color: ['#3c8dbc', '#f56954']
-        },
-        yaxis : {
-            show: true,
-            tickFormatter: euroFormatter
-        },
-        xaxis : {
-            tickFormatter: euroFormatter
-        }
-    })
+            series: {
+                shadowSize: 0,
+                lines     : {
+                    show: true
+                },
+                points    : {
+                    show: true
+                }
+            },
+            xaxis: { ticks: jsonPrice.labels}
+        })
+    }
+
     //Initialize tooltip on hover
     $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
         position: 'absolute',
@@ -226,12 +184,11 @@ $(function () {
         opacity : 0.8
     }).appendTo('body')
     $('#line-chart').bind('plothover', function (event, pos, item) {
-
         if (item) {
             var x = item.datapoint[0].toFixed(2),
-                y = item.datapoint[1].toFixed(2)
+                price = item.datapoint[1].toFixed(2)
 
-            $('#line-chart-tooltip').html(item.series.label + ' of ' + x + ' = ' + y)
+            $('#line-chart-tooltip').html(price)
                 .css({ top: item.pageY + 5, left: item.pageX + 5 })
                 .fadeIn(200)
         } else {
@@ -239,6 +196,70 @@ $(function () {
         }
 
     })
+
+
+
+    // function euroFormatter(v, axis) {
+    //     console.log('-------');
+    //     console.log(v);
+    //     console.log('++++++++++');
+    //     console.log(axis);
+    //     return v.toFixed(axis.tickDecimals) + "€";
+    // }
+    // $.plot('#line-chart', [data], {
+    //     grid  : {
+    //         hoverable  : true,
+    //         borderColor: '#f3f3f3',
+    //         borderWidth: 1,
+    //         tickColor  : '#f3f3f3'
+    //     },
+    //     series: {
+    //         shadowSize: 0,
+    //         lines     : {
+    //             show: true
+    //         },
+    //         points    : {
+    //             show: true
+    //         }
+    //     },
+    //     lines : {
+    //         fill : false,
+    //         color: ['#3c8dbc', '#f56954']
+    //     },
+    //     yaxis : {
+    //         show: true,
+    //         tickFormatter: euroFormatter
+    //     },
+    //     xaxis : {
+    //         tickFormatter: euroFormatter
+    //     }
+    // })
+
+    // var $hist_data = [
+    //     [20.03, 202],
+    //     [21.03, 210],
+    //     [22.03, 250],
+    //     [23.03, 240],
+    //     [24.03, 230],
+    //     [25.03, 220]
+    // ];
+    //
+    // var $hist_ticks = [
+    //     [20.03, "20.03"],
+    //     [21.03, "21.03"],
+    //     [22.03, "22.03"],
+    //     [23.03, "23.03"],
+    //     [24.03, "24.03"],
+    //     [25.03, "25.03"]
+    // ];
+    //
+    // $.plot('#line-chart', [{
+    //     data: $hist_data
+    // }], {
+    //     xaxis: { ticks: $hist_ticks}
+    // })
+
+
     /* END LINE CHART */
 
 

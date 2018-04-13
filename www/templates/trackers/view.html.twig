@@ -32,75 +32,37 @@
                     </div>
                     <!-- /.user-block -->
                     <div class="box-tools">
-                        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-original-title="Mark as read">
-                            <i class="fa fa-circle-o"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                     <!-- /.box-tools -->
                 </div>
                 <div class="box-footer no-padding">
                     <ul class="nav nav-stacked">
-                        <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
-                        <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>
+                        <li><a href="#">{{ 'l.startPrice'|trans }}<span class="pull-right text-blue">{{ watcher.startPrice }}</span></a></li>
+                        <li><a href="#">{{ 'l.expectedDiscount'|trans }}<span class="pull-right text-green"><i class="fa fa-angle-down"></i> {{ watcher.percent }} %</span></a></li>
+                        <li><a href="#">{{ 'l.status'|trans }}<span class="pull-right text-{{ addData.status.class }}">{{ addData.status.label }}</span></a></li>
+                        <li><a href="#">{{ 'l.createdAt'|trans }}<span class="pull-right badge bg-blue">{{ watcher.createdAt|date("m/d/Y")  }}</span></a></li>
                     </ul>
                 </div>
+            </div>
 
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <i class="fa fa-bar-chart-o"></i>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-bar-chart-o"></i>
 
-                        <h3 class="box-title">Line Chart</h3>
+                    <h3 class="box-title">{{ 'l.schedule'|trans }}</h3>
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
                     </div>
-                    <div class="box-body">
-                        <div id="line-chart" style="height: 300px;"></div>
-                    </div>
-                    <!-- /.box-body-->
                 </div>
-
-                <!-- Line chart -->
-
-                <!-- /.box -->
-
-
-                <!-- /.box-header -->
                 <div class="box-body">
-
-                    <!-- post text -->
-                    <p>Far far away, behind the word mountains, far from the
-                        countries Vokalia and Consonantia, there live the blind
-                        texts. Separated they live in Bookmarksgrove right at</p>
-
-                    <p>the coast of the Semantics, a large language ocean.
-                        A small river named Duden flows by their place and supplies
-                        it with the necessary regelialia. It is a paradisematic
-                        country, in which roasted parts of sentences fly into
-                        your mouth.</p>
-
-                    <!-- Attachment -->
-
+                    <div id="line-chart" style="height: 300px;"></div>
+                    <input type="hidden" name="jsonPrice" value="{{ jsonPrice }}" id="jsonPrice">
                 </div>
-
-                <!-- /.box-footer -->
-                <div class="box-footer">
-                    <form action="#" method="post">
-                        <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
-                        <!-- .img-push is used to add margin to elements next to floating images -->
-                        <div class="img-push">
-                            <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
-                        </div>
-                    </form>
-                </div>
-                <!-- /.box-footer -->
+                <!-- /.box-body-->
             </div>
             <!-- /.box -->
         </div>

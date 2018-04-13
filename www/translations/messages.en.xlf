@@ -107,6 +107,34 @@
                 <source>l.home</source>
                 <target>Home</target>
             </trans-unit>
+            <trans-unit id="l.startPrice">
+                <source>l.startPrice</source>
+                <target>Starting price</target>
+            </trans-unit>
+            <trans-unit id="l.expectedDiscount">
+                <source>l.expectedDiscount</source>
+                <target>Expected discount</target>
+            </trans-unit>
+            <trans-unit id="l.status">
+                <source>l.status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="l.createdAt">
+                <source>l.createdAt</source>
+                <target>Date of creation</target>
+            </trans-unit>
+            <trans-unit id="l.completed">
+                <source>l.completed</source>
+                <target>Completed</target>
+            </trans-unit>
+            <trans-unit id="l.tracked">
+                <source>l.tracked</source>
+                <target>Tracked</target>
+            </trans-unit>
+            <trans-unit id="l.schedule">
+                <source>l.schedule</source>
+                <target>Schedule</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->

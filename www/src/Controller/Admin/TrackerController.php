@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Controller used to manage blog contents in the backend.
@@ -44,8 +45,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class TrackerController extends MainController
 {
+    private $translator;
+    private $logger;
 
-    public function listAction(LoggerInterface $logger, Request $request, WatcherRepository $wr)
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        $this->translator = $translator;
+    }
+
+    public function listAction(Request $request, WatcherRepository $wr)
     {
         //$logger->error('Cannot find price', ['product_id' => 1]);
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
@@ -184,11 +193,32 @@ class TrackerController extends MainController
         if ($watcher) {
             $product = $watcher->getProduct();
             $this->denyAccessUnlessGranted('view', $watcher, 'Access denied.');
+            $jsonPrice = [];
+            $addData = [];
 
+            // optimization: вынимает с товаром, хотя тут это не нужно
+            foreach ($product->getPriceTrackers() as $key => $priceTracker) {
+                $jsonPrice['data'][] = [$key, $priceTracker->getPrice()];
+                $jsonPrice['labels'][] = [$key, date('d.m', $priceTracker->getDate())];
+            }
+
+            if ($watcher->getStatus()) {
+                $addData['status'] = [
+                    'class' => 'green',
+                    'label' => $this->translator->trans('l.completed')
+                ];
+            } else {
+                $addData['status'] = [
+                    'class' => 'yellow',
+                    'label' => $this->translator->trans('l.tracked')
+                ];
+            }
 
             return $this->render('trackers/view.html.twig', [
                 'product' => $product,
                 'watcher' => $watcher,
+                'jsonPrice' => json_encode($jsonPrice),
+                'addData' => $addData
             ]);
 
         }

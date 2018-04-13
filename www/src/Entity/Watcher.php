@@ -12,9 +12,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Watcher
 {
-    const STATUS_NEW = 1;
-    const STATUS_PRICE_CONFIRMED = 3;
-    const STATUS_SUCCESS = 2;
+    const STATUS_NEW = 1; // Новый ватчер
+    const STATUS_PRICE_CONFIRMED = 3; // После нового статуса присваивается этот, значит вотчер отслеживается
+    const STATUS_SUCCESS = 2; // Успешно отслежен, скидка получена, больше не отслеживается
 
     /**
      * @ORM\Id
@@ -166,6 +166,7 @@ class Watcher
     {
         $this->createdAt = $createdAt;
     }
+
     /**
      * Triggered on insert
      * @ORM\PrePersist
