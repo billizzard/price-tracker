@@ -60,6 +60,12 @@ class Watcher
     private $createdAt = 0;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     */
+    private $successDate = 0;
+
+    /**
      * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
     private $status = self::STATUS_NEW;
@@ -165,6 +171,22 @@ class Watcher
     public function setCreatedAt($createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getSuccessDate(): int
+    {
+        return $this->successDate;
+    }
+
+    /**
+     * @param integer $successDate
+     */
+    public function setSuccessDate($successDate): void
+    {
+        $this->successDate = $successDate;
     }
 
     /**

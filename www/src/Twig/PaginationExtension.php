@@ -1,11 +1,10 @@
 <?php
 namespace App\Twig;
 
-use App\Service\HVFUrlBuilder;
-use Twig\Extension\AbstractExtension;
+use App\HVF\Helper\UrlBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class HVFPaginationExtension extends AbstractExtension
+class PaginationExtension extends \Twig_Extension
 {
     private $requestStack;
     private $urlBuilder;
@@ -14,7 +13,7 @@ class HVFPaginationExtension extends AbstractExtension
     {
         $this->requestStack = $requestStack;
         if (isset($_SERVER['REQUEST_URI'])) {
-            $this->urlBuilder = new HVFUrlBuilder($_SERVER['REQUEST_URI']);
+            $this->urlBuilder = new UrlBuilder($_SERVER['REQUEST_URI']);
         }
     }
 
@@ -57,6 +56,6 @@ class HVFPaginationExtension extends AbstractExtension
             $data['url'] = $this->urlBuilder->removeParam('page')->addParam('page', '')->getUrl();
         }
 
-        echo $environment->render('grid_view/pagination.html.twig', ['data' => $data]);
+        echo $environment->render('pagination/pagination.html.twig', ['data' => $data]);
     }
 }

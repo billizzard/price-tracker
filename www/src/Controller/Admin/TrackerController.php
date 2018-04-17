@@ -13,16 +13,21 @@ namespace App\Controller\Admin;
 
 use App\Entity\Domain;
 use App\Entity\Host;
+use App\Entity\Message;
 use App\Entity\PriceTracker;
 use App\Entity\Product;
 use App\Entity\Watcher;
 use App\Form\AddProductType;
 use App\Form\AddWatcherType;
 use App\Form\EditWatcherType;
+use App\Repository\MessageRepository;
 use App\Repository\PriceTrackerRepository;
 use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
-use App\Service\HVFGridView;
+
+use Billizzard\GridView\BillizzardGridViewBundle;
+use Billizzard\GridView\GridView;
+use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
@@ -50,15 +55,24 @@ class TrackerController extends MainController
 
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
+        //parent::__construct();
         $this->logger = $logger;
         $this->translator = $translator;
+
     }
 
     public function listAction(Request $request, WatcherRepository $wr)
     {
+//        $repository = $this->getDoctrine()->getRepository(Message::class);
+//        $messages = $repository->getUnreadMessagesByUser($this->getUser(), 5);
+//        echo "<pre>";
+//        var_dump($messages);
+//        die();
         //$logger->error('Cannot find price', ['product_id' => 1]);
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
-        $grid = new HVFGridView($request, $qb, ['perPage' => 1]);
+        //$grid = new HVFGridView($request, $qb, ['perPage' => 1]);
+        $grid = new GridView($request, $qb, ['perPage' => 10]);
+       // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
 
         $grid->addColumn('id', [
             'sort' => false,
@@ -122,14 +136,12 @@ class TrackerController extends MainController
                 $product->setHost($host);
                 $product->setUrl($form['url']->getData());
             } else { // такой товар есть
+                if ($product->getStatus() == Product::STATUS_NOT_TRACKED) $product->setStatus(Product::STATUS_NEW);
                 if ($product->getCurrentPrice() && $product->getCurrentPrice() != $watcher->getStartPrice()) {
                     // logging:  пользователь с таким то ид указал неверную цену, т.е. либо он ошибся, либо скрипт неверно распознает цену
                 }
             }
 
-            if ($host->getParser()) {
-                $product->setStatus(Product::STATUS_TRACKED);
-            }
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -138,13 +150,13 @@ class TrackerController extends MainController
             $watcherExisted = $repository->findOneBy(['product' => $product->getId(), 'user' => $this->getUser()]);
 
             if ($watcherExisted) {
-                $this->addFlash('info', 'v.priceTracker.taken');
+                $this->addFlash('info', 'e.tracker_exists');
             } else {
                 $watcher->setProduct($product);
                 $watcher->setUser($this->getUser());
                 $entityManager->persist($watcher);
                 $entityManager->flush();
-                $this->addFlash('success', 'v.success.added');
+                $this->addFlash('success', 's.data_added');
             }
 
             return $this->redirectToRoute('tracker_list');
@@ -187,7 +199,7 @@ class TrackerController extends MainController
         throw new NotFoundHttpException();
     }
 
-    public function viewAction(Request $request, WatcherRepository $watcherRepository)
+    public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
     {
         $watcher = $watcherRepository->findOneBy(['product' => $request->get('id'), 'user' => $this->getUser()->getId()]);
         if ($watcher) {
@@ -196,13 +208,9 @@ class TrackerController extends MainController
             $jsonPrice = [];
             $addData = [];
 
-            // optimization: вынимает с товаром, хотя тут это не нужно
-            foreach ($product->getPriceTrackers() as $key => $priceTracker) {
-                $jsonPrice['data'][] = [$key, $priceTracker->getPrice()];
-                $jsonPrice['labels'][] = [$key, date('d.m', $priceTracker->getDate())];
-            }
+            $jsonPrice = $priceTrackerRepository->getGraphDataForProduct($product);
 
-            if ($watcher->getStatus()) {
+            if ($watcher->getStatus() == Watcher::STATUS_SUCCESS) {
                 $addData['status'] = [
                     'class' => 'green',
                     'label' => $this->translator->trans('l.completed')
@@ -224,9 +232,4 @@ class TrackerController extends MainController
         }
         throw new NotFoundHttpException();
     }
-
-
-
-
-
 }

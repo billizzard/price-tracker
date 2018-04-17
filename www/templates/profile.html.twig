@@ -40,6 +40,30 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    {% if (short_messages) %}
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">{{ short_messages|length }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">{{ 'm.have_notifications'|trans({'%num%': short_messages|length }) }}</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    {% for short_message in short_messages %}
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa {{ short_message.class }}"></i> {{ short_message.message }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">{{ 'l.view_all'|trans }}</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -132,6 +156,25 @@
                     <ul class="treeview-menu">
                         <li id="trackers-list"><a href="{{ path('tracker_list') }}"><i class="fa fa-circle-o"></i>{{ 'l.list'|trans }}</a></li>
                         <li id="trackers-add"><a href="{{ path('tracker_add') }}"><i class="fa fa-circle-o"></i>{{ 'l.add'|trans }}</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="mailbox.html">
+                        <i class="fa fa-envelope"></i> <span>{{ 'l.messages'|trans }}</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            {#<small class="label pull-right bg-yellow">{{ short_messages|length }}</small>#}
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="active">
+                            <a href="mailbox.html">{{ 'l.inbox'|trans }}
+                                {#<span class="pull-right-container">
+                                    <span class="label bg-yellow pull-right">{{ short_messages|length }}</span>
+                                </span>#}
+                            </a>
+                        </li>
+                        <li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>
                     </ul>
                 </li>
                 <li class="treeview">

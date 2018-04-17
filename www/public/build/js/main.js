@@ -153,6 +153,7 @@ $(function () {
 
     var jsonPrice = $('#jsonPrice').val();
     jsonPrice = JSON.parse(jsonPrice);
+    console.log(jsonPrice);
     if (jsonPrice && jsonPrice.data && jsonPrice.labels) {
 
         $.plot('#line-chart', [{
@@ -175,6 +176,9 @@ $(function () {
             },
             xaxis: { ticks: jsonPrice.labels}
         })
+    } else {
+        $('#line-chart').html('<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>');
+        //$('#line-chart').innerHTML = '<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>';
     }
 
     //Initialize tooltip on hover
@@ -182,7 +186,8 @@ $(function () {
         position: 'absolute',
         display : 'none',
         opacity : 0.8
-    }).appendTo('body')
+    }).appendTo('body');
+
     $('#line-chart').bind('plothover', function (event, pos, item) {
         if (item) {
             var x = item.datapoint[0].toFixed(2),

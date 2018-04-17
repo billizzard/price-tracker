@@ -74,7 +74,7 @@ class PriceTracker
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getDate(): int
     {
@@ -82,7 +82,7 @@ class PriceTracker
     }
 
     /**
-     * @param mixed $date
+     * @param int $date
      */
     public function setDate($date): void
     {

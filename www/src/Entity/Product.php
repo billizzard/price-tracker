@@ -14,9 +14,10 @@ use App\Annotations\HVFGrid;
  */
 class Product
 {
-    const STATUS_TRACKED = 2;
-    const STATUS_NOT_TRACKED = 1;
-    const STATUS_ERROR_TRACKED = 3;
+    const STATUS_TRACKED = 2; // отслеживается, есть парсер, есть dfnxths
+    const STATUS_NOT_TRACKED = 1; // не отслеживается, т.е. у продукта нету ватчеров
+    const STATUS_NEW = 4; // новый продукт, непонятно есть ли у него парсер
+    const STATUS_ERROR_TRACKED = 3; // не смог найти продукта либо его цену
 
     public function __construct()
     {
@@ -61,9 +62,17 @@ class Product
     private $currentPrice = 0;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     */
+    private $lastTrackedDate = 0;
+
+    /**
      * @ORM\Column(type="smallint")
      */
-    private $status = self::STATUS_TRACKED;
+    private $status = self::STATUS_NEW;
+
+    private $changedPrice = false;
 
     public function getHost(): Host
     {
@@ -141,6 +150,32 @@ class Product
     public function getPriceTrackers()
     {
         return $this->priceTrackers;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastTrackedDate(): int
+    {
+        return $this->lastTrackedDate;
+    }
+
+    /**
+     * @param int $lastTrackedDate
+     */
+    public function setLastTrackedDate($lastTrackedDate): void
+    {
+        $this->lastTrackedDate = $lastTrackedDate;
+    }
+
+    public function setChangedPrice(bool $changedPrice)
+    {
+        $this->changedPrice = $changedPrice;
+    }
+
+    public function getChangedPrice(): bool
+    {
+        return $this->changedPrice;
     }
 
 

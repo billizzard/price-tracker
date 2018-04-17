@@ -44,6 +44,12 @@ class WatcherRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findActiveByProductId($productId)
+    {
+        $qb = $this->createQueryBuilder('w')->where('w.status != ' . Watcher::STATUS_SUCCESS)->andWhere('w.product = ' . (int)$productId);
+        return $qb->getQuery()->getResult();
+    }
+
     /*
     public function findBySomething($value)
     {

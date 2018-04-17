@@ -41,7 +41,12 @@
                     <ul class="nav nav-stacked">
                         <li><a href="#">{{ 'l.startPrice'|trans }}<span class="pull-right text-blue">{{ watcher.startPrice }}</span></a></li>
                         <li><a href="#">{{ 'l.expectedDiscount'|trans }}<span class="pull-right text-green"><i class="fa fa-angle-down"></i> {{ watcher.percent }} %</span></a></li>
-                        <li><a href="#">{{ 'l.status'|trans }}<span class="pull-right text-{{ addData.status.class }}">{{ addData.status.label }}</span></a></li>
+                        <li><a href="#">{{ 'l.status'|trans }}<span class="pull-right text-{{ addData.status.class }}">{{ addData.status.label }}</span>
+                                {% if watcher.successDate %}
+                                <span class="pull-right badge bg-green">{{ watcher.successDate|date("m/d/Y") }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li><a href="#">{{ 'l.createdAt'|trans }}<span class="pull-right badge bg-blue">{{ watcher.createdAt|date("m/d/Y")  }}</span></a></li>
                     </ul>
                 </div>
@@ -59,7 +64,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                    <div id="line-chart" style="height: 300px;"></div>
+                    <div id="line-chart" style="height: 300px;" data-notfound="{{ 'l.no_data'|trans }}"></div>
                     <input type="hidden" name="jsonPrice" value="{{ jsonPrice }}" id="jsonPrice">
                 </div>
                 <!-- /.box-body-->

@@ -160,6 +160,39 @@
                 <source>e.email_busy</source>
                 <target>Email занят</target>
             </trans-unit>
+            <trans-unit id="e.tracker_exists">
+                <source>e.tracker_exists</source>
+                <target>Трекер уже существует</target>
+            </trans-unit>
+            <trans-unit id="e.number_invalid">
+                <source>e.number_invalid</source>
+                <target>Некорректное число</target>
+            </trans-unit>
+            <trans-unit id="l.actions">
+                <source>l.actions</source>
+                <target>Действия</target>
+            </trans-unit>
+            <trans-unit id="l.no_data">
+                <source>l.no_data</source>
+                <target>Нет данных</target>
+            </trans-unit>
+            <trans-unit id="l.messages">
+                <source>l.messages</source>
+                <target>Сообщения</target>
+            </trans-unit>
+            <trans-unit id="l.inbox">
+                <source>l.inbox</source>
+                <target>Входящие</target>
+            </trans-unit>
+            <trans-unit id="l.outbox">
+                <source>l.outbox</source>
+                <target>Исходящие</target>
+            </trans-unit>
+            <trans-unit id="l.view_all">
+                <source>l.view_all</source>
+                <target>Смотреть все</target>
+            </trans-unit>
+
                                              <!-- s: success -->
             <trans-unit id="s.data_updated">
                 <source>s.data_updated</source>
@@ -170,7 +203,15 @@
                 <target>Данные успешно добавлены</target>
             </trans-unit>
 
-
+                                             <!-- m: message -->
+            <trans-unit id="m.changed_price">
+                <source>m.changed_price</source>
+                <target>Изменилась цена товара %product%</target>
+            </trans-unit>
+            <trans-unit id="m.have_notifications">
+                <source>m.have_notifications</source>
+                <target>У вас %num% сообщений</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

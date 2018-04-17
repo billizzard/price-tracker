@@ -12,13 +12,16 @@
 namespace App\Controller\Admin;
 
 
+use App\Entity\Message;
 use App\Entity\User;
+use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -36,6 +39,21 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class MainController extends AbstractController
 {
+    public function getMessages()
+    {
+        /** @var MessageRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(Message::class);
+        $messages = $repository->getUnreadMessagesByUser($this->getUser(), 5);
+        $cookieMessages = [];
+        $class = 'fa-warning text-yellow';
+        foreach ($messages as $message) {
+            if ($message->getType() == Message::TYPE_SALE_SUCCESS) $class = 'fa-shopping-cart text-green';
+
+            $cookieMessages[] = ['id' => $message->getId(), 'class' => $class, 'message' => $message->getMessage()];
+        }
+        return $cookieMessages;
+    }
+
     protected function getJsonSuccessResponse($data)
     {
         return [
@@ -50,5 +68,11 @@ class MainController extends AbstractController
             'success' => false,
             'data' => $data
         ];
+    }
+    
+    public function render(string $view, array $parameters = array(), Response $response = null): Response
+    {
+        $parameters['short_messages'] = $this->getMessages();
+        return parent::render($view, $parameters, $response);
     }
 }

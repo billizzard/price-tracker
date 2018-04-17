@@ -5,7 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    {{ grid_view(products) }}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            {{ grid_view(products) }}
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 

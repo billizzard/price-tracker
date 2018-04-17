@@ -46,6 +46,7 @@ class UserController extends MainController
 
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
+        //parent::__construct();
         $this->logger = $logger;
         $this->translator = $translator;
     }

@@ -39,8 +39,8 @@ class AddWatcherType extends AbstractType
                 'constraints' => array(
                     new NotBlank,
                     new Regex([
-                        'pattern' => "/^([1-9][0-9]*|0)(\.[0-9]{2})?$/",
-                        'message' => 'v.number.invalid'
+                        'pattern' => "/^([1-9][0-9]*|0)(\.[0-9]{0,2})?$/",
+                        'message' => 'e.number_invalid'
                     ]),
                 ),
             ]);

@@ -135,6 +135,30 @@
                 <source>l.schedule</source>
                 <target>Schedule</target>
             </trans-unit>
+            <trans-unit id="l.actions">
+                <source>l.actions</source>
+                <target>Actions</target>
+            </trans-unit>
+            <trans-unit id="l.no_data">
+                <source>l.no_data</source>
+                <target>No data</target>
+            </trans-unit>
+            <trans-unit id="l.messages">
+                <source>l.messages</source>
+                <target>Messages</target>
+            </trans-unit>
+            <trans-unit id="l.inbox">
+                <source>l.inbox</source>
+                <target>Inbox</target>
+            </trans-unit>
+            <trans-unit id="l.outbox">
+                <source>l.outbox</source>
+                <target>Outbox</target>
+            </trans-unit>
+            <trans-unit id="l.view_all">
+                <source>l.view_all</source>
+                <target>View all</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->
@@ -162,6 +186,14 @@
                 <source>e.email_busy</source>
                 <target>Email already exist</target>
             </trans-unit>
+            <trans-unit id="e.tracker_exists">
+                <source>e.tracker_exists</source>
+                <target>Tracker already exists</target>
+            </trans-unit>
+            <trans-unit id="e.number_invalid">
+                <source>e.number_invalid</source>
+                <target>Invalid number</target>
+            </trans-unit>
 
                                              <!-- s: success -->
             <trans-unit id="s.data_updated">
@@ -171,6 +203,16 @@
             <trans-unit id="s.data_added">
                 <source>s.data_added</source>
                 <target>Data successfully added</target>
+            </trans-unit>
+
+                                             <!-- m: message -->
+            <trans-unit id="m.changed_price">
+                <source>m.changed_price</source>
+                <target>Changed the price of the %product%</target>
+            </trans-unit>
+            <trans-unit id="m.have_notifications">
+                <source>m.have_notifications</source>
+                <target>You have %num% notifications</target>
             </trans-unit>
 
         </body>

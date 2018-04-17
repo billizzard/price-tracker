@@ -16,16 +16,19 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CronController extends Controller
 {
     private $entityManager;
     private $logger;
     private $mailer;
+    private $translator;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, TranslatorInterface $translator)
     {
         $this->logger = $logger;
+        $this->translator = $translator;
         $this->mailer = new HVFMailer();
     }
 
@@ -42,23 +45,20 @@ class CronController extends Controller
                     /** @var ProductRepository $repository */
                     $repository = $this->getDoctrine()->getRepository(Product::class);
                     foreach ($repository->findTracked() as $product) {
-                        if ($product->getStatus() == Product::STATUS_TRACKED) {
+                        if ($env == 'test' && $request->get('price')) {
+                            $price = $request->get('price');
+                        } else {
+                            $price = $parser->getPriceByUrl($product->getUrl());
+                        }
 
-                            if ($env == 'test' && $request->get('price')) {
-                                $price = $request->get('price');
-                            } else {
-                                $price = $parser->getPriceByUrl($product->getUrl());
-                            }
-
-                            if ($price) {
-                                $this->changeCurrentPrice($product, $price);
-                                $this->changeWatcherStatus($product);
-                            } else {
-                                $product->setStatus(Product::STATUS_ERROR_TRACKED);
-                                $this->entityManager->persist($product);
-                                $this->entityManager->flush();
-                                $this->logger->error('Cannot find price', ['product_id' => $product->getId()]);
-                            }
+                        if ($price) {
+                            $this->changeCurrentPrice($product, $price);
+                            $this->changeWatcherStatus($product);
+                        } else {
+                            $product->setStatus(Product::STATUS_ERROR_TRACKED);
+                            $this->entityManager->persist($product);
+                            $this->entityManager->flush();
+                            $this->logger->error('Cannot find price', ['product_id' => $product->getId()]);
                         }
                     }
                 } else {
@@ -79,6 +79,7 @@ class CronController extends Controller
      */
     private function changeCurrentPrice(Product $product, $price)
     {
+        $product->setLastTrackedDate(time());
         // Если текущая цена отличается от новой цены
         if (!$product->getCurrentPrice() || $product->getCurrentPrice() != $price) {
             $priceTracker = new PriceTracker();
@@ -86,9 +87,12 @@ class CronController extends Controller
             $priceTracker->setProduct($product);
             $this->entityManager->persist($priceTracker);
             $product->setCurrentPrice($price);
-            $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            $product->setStatus(Product::STATUS_TRACKED);
+            $product->setChangedPrice(true);
+
         }
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
     }
 
     /**
@@ -99,13 +103,19 @@ class CronController extends Controller
     {
         /** @var WatcherRepository $repository */
         $repository = $this->getDoctrine()->getRepository(Watcher::class);
-        //$watchers = $repository->findAll(['product_id' => $product->getId(), 'status' => [Watcher::STATUS_NEW]]);
-        $watchers = $repository->findActive();
+        $watchers = $repository->findActiveByProductId($product->getId());
 
         if ($watchers) {
             /** @var Watcher $watcher */
             foreach ($watchers as $watcher) {
                 $user = $watcher->getUser();
+                if ($product->getChangedPrice()) {
+                    $message = new Message();
+                    $message->setMessage($this->translator->trans('m.changed_price', ['%product%' => '111']));
+                    $message->setUser($user);
+                    $message->setType(Message::TYPE_INFO);
+                    $this->entityManager->persist($message);
+                }
                 // Если это новый ватчер
                 if ($watcher->getStatus() == Watcher::STATUS_NEW) {
                     $watcher->setStatus(Watcher::STATUS_PRICE_CONFIRMED);
@@ -118,10 +128,12 @@ class CronController extends Controller
 //                    }
                 }
 
+
                 // Если это цена, которую ждал пользователь
                 if ($watcher->getEndPrice() >= $product->getCurrentPrice()) {
                     // Устанавливаем статус успешно, чтобы больше этого наблюдателя не трогать
                     $watcher->setStatus(Watcher::STATUS_SUCCESS);
+                    $watcher->setSuccessDate(time());
                     $message = new Message();
                     $message->setMessage('');
                     $message->setUser($user);

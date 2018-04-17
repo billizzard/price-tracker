@@ -12,7 +12,6 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail('qq@qq.qq');
         $user->setPassword('$2y$12$A1comgHtNSnZwjz09PIWhuD2DOt2iV8rwG74pZ9t9apQzkwdpYByC');//qq
-        $user->setRoles([User::USER_ROLE_DEFAULT]);
         $manager->persist($user);
         $manager->flush();
     }

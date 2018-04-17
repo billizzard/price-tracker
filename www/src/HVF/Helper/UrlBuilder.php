@@ -1,7 +1,7 @@
 <?php
-namespace App\Service;
+namespace App\HVF\Helper;
 
-class HVFUrlBuilder
+class UrlBuilder
 {
     private $originalUrl;
     private $resultUrl;

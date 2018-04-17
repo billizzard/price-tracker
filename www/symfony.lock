@@ -32,14 +32,11 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "billizzard/grid-view": {
+        "version": "1.0.2"
+    },
     "container-interop/container-interop": {
         "version": "1.2.0"
-    },
-    "dmore/behat-chrome-extension": {
-        "version": "1.1.0"
-    },
-    "dmore/chrome-mink-driver": {
-        "version": "2.6.2"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -419,15 +416,6 @@
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
-    "symfony/phpunit-bridge": {
-        "version": "3.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "179470cb6492db92dffee208cfdb436f175c93b4"
-        }
-    },
     "symfony/polyfill-intl-icu": {
         "version": "v1.7.0"
     },
@@ -538,9 +526,6 @@
     },
     "symfony/yaml": {
         "version": "v4.0.4"
-    },
-    "textalk/websocket": {
-        "version": "1.2.0"
     },
     "theseer/tokenizer": {
         "version": "1.1.0"
