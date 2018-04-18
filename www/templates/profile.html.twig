@@ -60,7 +60,7 @@
                                     {% endfor %}
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">{{ 'l.view_all'|trans }}</a></li>
+                            <li class="footer"><a href="{{ path('message_list') }}">{{ 'l.view_all'|trans }}</a></li>
                         </ul>
                     </li>
                     {% endif %}
@@ -159,7 +159,7 @@
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="mailbox.html">
+                    <a href="#">
                         <i class="fa fa-envelope"></i> <span>{{ 'l.messages'|trans }}</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
@@ -167,8 +167,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="active">
-                            <a href="mailbox.html">{{ 'l.inbox'|trans }}
+                        <li id="messages-list">
+                            <a href="{{ path('message_list') }}">{{ 'l.inbox'|trans }}
                                 {#<span class="pull-right-container">
                                     <span class="label bg-yellow pull-right">{{ short_messages|length }}</span>
                                 </span>#}

@@ -59,9 +59,20 @@ class MessageController extends MainController
         $this->translator = $translator;
     }
 
-    public function listAction(Request $request, WatcherRepository $wr)
+    public function listAction(Request $request, MessageRepository $mr)
     {
-        die('message list');
+        $qb = $mr->findByRequestQueryBuilder($request, $this->getUser());
+        $grid = new GridView($request, $qb, ['perPage' => 10, 'template' => '2']);
+        $grid->addColumn('id', ['sort' => false])
+            ->addColumn('message', ['sort' => false])
+            ->addColumn('status', ['sort' => true])
+            ->addColumn('createdAt', ['sort' => true]);
+        $messages = $grid->getGridData();
+
+        return $this->render('messages/list.html.twig', [
+            'messages' => $messages,
+            'activeMenu' => 'messages-list'
+        ]);
     }
 
 

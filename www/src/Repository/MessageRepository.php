@@ -6,6 +6,7 @@ use App\Entity\Message;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class MessageRepository extends ServiceEntityRepository
 {
@@ -25,16 +26,25 @@ class MessageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /*
-    public function findBySomething($value)
+    public function findByRequestQueryBuilder(Request $request, User $user)
     {
-        return $this->createQueryBuilder('m')
-            ->where('m.something = :value')->setParameter('value', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sortColumn = $request->get('sort', 'id');
+        $sortDirection = 'ASC';
+
+        if ($sortColumn[0] === '-') {
+            $sortDirection = 'DESC';
+            $sortColumn = mb_substr($sortColumn, 1);
+        }
+
+        $queryBuilder = $this->createQueryBuilder('m');
+        $queryBuilder->addSelect('m.id as id');
+        $queryBuilder->addSelect('m.message as message');
+        $queryBuilder->addSelect('m.status as status');
+        $queryBuilder->addSelect('m.createdAt as createdAt');
+
+        $queryBuilder->addOrderBy($sortColumn, $sortDirection);
+
+        return $queryBuilder;
     }
-    */
+
 }

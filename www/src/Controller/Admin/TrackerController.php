@@ -73,7 +73,7 @@ class TrackerController extends MainController
         //$grid = new HVFGridView($request, $qb, ['perPage' => 1]);
         $grid = new GridView($request, $qb, ['perPage' => 10]);
        // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
-
+        
         $grid->addColumn('id', [
             'sort' => false,
         ])->addColumn('title', [
@@ -91,6 +91,8 @@ class TrackerController extends MainController
                     $result = "<a href='google.by'>Tracked</a>";
                 } else if ($model['status'] == Product::STATUS_ERROR_TRACKED) {
                     $result = 'Error';
+                } else if ($model['status'] == Product::STATUS_NEW) {
+                    $result = 'Waiting';
                 }
                 return $result;
             }

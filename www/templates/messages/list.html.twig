@@ -1,0 +1,24 @@
+{% extends 'profile.html.twig' %}
+
+{% block contentTitle %}
+    {{ 'l.trackers'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            {{ grid_view2(messages) }}
+        </div>
+        <!-- /. box -->
+    </div>
+    <div class="col-xs-12">
+        <div class="box">
+            {{ grid_view(messages) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

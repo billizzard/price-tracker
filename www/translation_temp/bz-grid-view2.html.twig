@@ -1,0 +1,297 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Inbox</h3>
+
+                <div class="box-tools pull-right">
+                    <div class="has-feedback">
+                        <input type="text" class="form-control input-sm" placeholder="Search Mail">
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    </div>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+
+                    <div class="pull-right">
+                        1-50/200
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                        </div>
+                        <!-- /.btn-group -->
+                    </div>
+                    <!-- /.pull-right -->
+                </div>
+                {% if models.columns and models.data %}
+                <div class="table-responsive mailbox-messages">
+                    <table class="table table-hover table-striped">
+                        <tbody>
+                        {% for id, rows in models.data %}
+                            <tr>
+                                <td><input type="checkbox" style="position: absolute;"></td>
+                                {% for row in rows %}
+                                    {% if row.raw %}
+                                        <td>{{ row.value|raw }}</td>
+                                    {% else %}
+                                        <td>{{ row.value }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if models.actionColumn %}
+                                    <td class="td-actions">
+                                        {% for option in models.actionColumn.options %}
+                                            {% if option == 'edit' %}
+                                                <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if option == 'delete' %}
+                                                <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if option == 'view' %}
+                                                <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
+                                                    <i class="fa fa-folder-open-o"></i>
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+
+
+                        {#<tr>#}
+                            {#<td><input type="checkbox" style="position: absolute;"></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"></td>#}
+                            {#<td class="mailbox-date">5 mins ago</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
+                            {#<td class="mailbox-date">28 mins ago</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
+                            {#<td class="mailbox-date">11 hours ago</td>#}
+                        {#</tr>#}
+                        </tbody>
+                    </table>
+                    <!-- /.table -->
+                </div>
+                {% endif %}
+                <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-padding">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                    <div class="pull-right">
+                        1-50/200
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                        </div>
+                        <!-- /.btn-group -->
+                    </div>
+                    <!-- /.pull-right -->
+                </div>
+            </div>
+        </div>
+        <!-- /. box -->
+    </div>
+</div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Data Table With Full Features</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                {% if models.columns and models.data %}
+                <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="example1" class="table table-bordered table-striped dataTable HVFTable" role="grid"
+                                   aria-describedby="example1_info">
+                                <thead>
+
+                                <tr role="row">
+                                    {% for column in models.columns %}
+                                    <th class="{{ column.sortClass }}" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1"
+                                        data-sorturl="{{ column.sortUrl }}"
+                                        aria-sort="ascending"
+                                        aria-label="Rendering engine: activate to sort column descending"
+                                        style="width: 231px;">{{ column.label|trans }}
+                                    </th>
+                                    {% endfor %}
+                                    {% if models.actionColumn %}
+                                        <th>models.actionColumn.name</th>
+                                    {% endif %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for id, rows in models.data %}
+                                    <tr role="row" class="odd">
+                                        {% for row in rows %}
+                                            {% if row.raw %}
+                                                <td>{{ row.value|raw }}</td>
+                                            {% else %}
+                                                <td>{{ row.value }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if models.actionColumn %}
+                                        <td class="td-actions">
+                                            {% for option in models.actionColumn.options %}
+                                                {% if option == 'edit' %}
+                                                    <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if option == 'delete' %}
+                                                    <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if option == 'view' %}
+                                                    <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
+                                                        <i class="fa fa-folder-open-o"></i>
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    {% for column in models.columns %}
+                                        <th rowspan="1" colspan="1">{{ column.label|trans }}</th>
+                                    {% endfor %}
+                                    {% if models.actionColumn %}
+                                        <th>models.actionColumn.name</th>
+                                    {% endif %}
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                                {% if models.pagination.totalPage > 1 %}
+                                <ul class="pagination">
+                                    <li class="paginate_button previous {{ models.pagination.prevClass }}" id="example1_previous">
+                                        <a
+                                            {% if  models.pagination.prevClass %}
+                                                href="#"
+                                            {% else %}
+                                                href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
+                                            {% endif %}>
+                                            Previous
+                                        </a>
+                                    </li>
+                                    {% for i in models.pagination.startPage..models.pagination.endPage %}
+                                        <li class="paginate_button {% if models.pagination.curPage == i %} active {% endif %}">
+                                            <a href="{{ models.pagination.url }}{{ i }}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{ i }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    <li class="paginate_button next {{ models.pagination.nextClass }}" id="example1_next">
+                                        <a
+                                            {% if  models.pagination.nextClass %}
+                                                href="#"
+                                            {% else %}
+                                                href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
+                                            {% endif %}>
+                                            Next
+                                        </a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                No data
+                {% endif %}
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+<script>
+    function tableInit() {
+        let elements = document.querySelectorAll('.HVFTable thead th');
+        if (elements.length) {
+            Array.prototype.slice.call(elements);
+            elements.forEach(function (item) {
+                let sortUrl = item.getAttribute('data-sorturl');
+                if (sortUrl) {
+                    item.addEventListener('click', function() {
+                        window.location.href = sortUrl;
+                    })
+                }
+            })
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", tableInit);
+
+</script>
+<style>
+    .btn.btn-action {
+        border-radius: 3px;
+        position: relative;
+        padding: 0 0 0 2px;
+        /* margin: 0 0 10px 10px; */
+        min-width: 30px;
+        height: 30px;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #f4f4f4;
+        font-size: 21px;
+    }
+    .table>tbody>tr>td.td-actions {
+        padding:3px 8px 0 8px;
+    }
+</style>
