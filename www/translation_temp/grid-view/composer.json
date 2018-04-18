@@ -1,0 +1,20 @@
+{
+    "name": "billizzard/grid-view",
+    "description": "Table for entities",
+    "keywords": ["grid-view","table"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Khmylko Vladimir",
+            "email": "billizzard@mail.ru"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~4.0",
+        "symfony/twig-bundle": "~4.0"
+    },
+    "autoload": {
+        "psr-4": { "Billizzard\\GridView\\": "" }
+    }
+}

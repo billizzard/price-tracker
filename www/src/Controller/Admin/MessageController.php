@@ -62,7 +62,7 @@ class MessageController extends MainController
     public function listAction(Request $request, MessageRepository $mr)
     {
         $qb = $mr->findByRequestQueryBuilder($request, $this->getUser());
-        $grid = new GridView($request, $qb, ['perPage' => 10, 'template' => '2']);
+        $grid = new GridView($request, $qb, ['perPage' => 2, 'template' => '2']);
         $grid->addColumn('id', ['sort' => false])
             ->addColumn('message', ['sort' => false])
             ->addColumn('status', ['sort' => true])

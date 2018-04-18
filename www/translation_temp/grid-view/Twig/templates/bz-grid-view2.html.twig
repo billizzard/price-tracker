@@ -1,0 +1,161 @@
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+
+                    {% if models.pagination.totalPage > 1 %}
+                        <div class="pull-right">
+                            {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
+                            <div class="btn-group">
+                                <a
+                                        {% if  models.pagination.prevClass %}
+                                            href="#"
+                                        {% else %}
+                                            href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
+                                        {% endif %}
+
+                                        class="btn btn-default btn-sm {{ models.pagination.prevClass }}"><i class="fa fa-chevron-left"></i></a>
+                                <a
+                                        {% if  models.pagination.nextClass %}
+                                            href="#"
+                                        {% else %}
+                                            href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
+                                        {% endif %}
+                                        class="btn btn-default btn-sm {{ models.pagination.nextClass }}"><i class="fa fa-chevron-right"></i></a>
+                            </div>
+                            <!-- /.btn-group -->
+                        </div>
+                    {% endif %}
+                    <!-- /.pull-right -->
+                </div>
+                {% if models.columns and models.data %}
+                <div class="table-responsive mailbox-messages">
+                    <table class="table table-hover table-striped">
+                        <tbody>
+                        {% for id, rows in models.data %}
+                            <tr>
+                                <td><input type="checkbox" style="position: absolute;"></td>
+                                {% for row in rows %}
+                                    {% if row.raw %}
+                                        <td>{{ row.value|raw }}</td>
+                                    {% else %}
+                                        <td>{{ row.value }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if models.actionColumn %}
+                                    <td class="td-actions">
+                                        {% for option in models.actionColumn.options %}
+                                            {% if option == 'edit' %}
+                                                <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if option == 'delete' %}
+                                                <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if option == 'view' %}
+                                                <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
+                                                    <i class="fa fa-folder-open-o"></i>
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+
+
+                        {#<tr>#}
+                            {#<td><input type="checkbox" style="position: absolute;"></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"></td>#}
+                            {#<td class="mailbox-date">5 mins ago</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
+                            {#<td class="mailbox-date">28 mins ago</td>#}
+                        {#</tr>#}
+                        {#<tr>#}
+                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
+                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
+                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
+                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
+                            {#</td>#}
+                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
+                            {#<td class="mailbox-date">11 hours ago</td>#}
+                        {#</tr>#}
+                        </tbody>
+                    </table>
+                    <!-- /.table -->
+                </div>
+                {% endif %}
+                <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-padding">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                    {% if models.pagination.totalPage > 1 %}
+                    <div class="pull-right">
+                        {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
+                        <div class="btn-group">
+                            <a
+                                {% if  models.pagination.prevClass %}
+                                    href="#"
+                                {% else %}
+                                    href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
+                                {% endif %}
+
+                                class="btn btn-default btn-sm {{ models.pagination.prevClass }}"><i class="fa fa-chevron-left"></i></a>
+                            <a
+                                {% if  models.pagination.nextClass %}
+                                    href="#"
+                                {% else %}
+                                    href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
+                                {% endif %}
+                                class="btn btn-default btn-sm {{ models.pagination.nextClass }}"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                        <!-- /.btn-group -->
+                    </div>
+                    {% endif %}
+                    <!-- /.pull-right -->
+                </div>
+            </div>
+
+<style>
+    .btn.btn-action {
+        border-radius: 3px;
+        position: relative;
+        padding: 0 0 0 2px;
+        /* margin: 0 0 10px 10px; */
+        min-width: 30px;
+        height: 30px;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #f4f4f4;
+        font-size: 21px;
+    }
+    .table>tbody>tr>td.td-actions {
+        padding:3px 8px 0 8px;
+    }
+</style>

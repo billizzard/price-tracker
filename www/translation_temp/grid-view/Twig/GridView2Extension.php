@@ -7,7 +7,7 @@ namespace Billizzard\GridView\Twig;
 use Twig\Extension\AbstractExtension;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class GridViewExtension extends \Twig_Extension
+class GridView2Extension extends \Twig_Extension
 {
 
     public function __construct(RequestStack $requestStack)
@@ -19,13 +19,13 @@ class GridViewExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction(
                 'grid_view2',
-                array($this, 'gridView'),
+                array($this, 'gridView2'),
                 array('needs_environment' => true)
             ),
         );
     }
 
-    public function gridView(\Twig_Environment $environment, $models)
+    public function gridView2(\Twig_Environment $environment, $models)
     {
         //$loader = new \Twig_Loader_Filesystem(__DIR__ . '/Templates/');
         /** @var \Twig_Loader_Filesystem $loader */
