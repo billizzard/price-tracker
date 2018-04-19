@@ -62,11 +62,10 @@ class MessageController extends MainController
     public function listAction(Request $request, MessageRepository $mr)
     {
         $qb = $mr->findByRequestQueryBuilder($request, $this->getUser());
-        $grid = new GridView($request, $qb, ['perPage' => 2, 'template' => '2']);
-        $grid->addColumn('id', ['sort' => false])
-            ->addColumn('message', ['sort' => false])
-            ->addColumn('status', ['sort' => true])
-            ->addColumn('createdAt', ['sort' => true]);
+        $grid = new GridView($request, $qb, ['perPage' => 10, 'template' => '2']);
+        $grid->addColumn('message', ['sort' => false])
+            ->addColumn('type', $this->getTypeOption())
+            ->addColumn('createdAt', $this->getCreatedAdOption());
         $messages = $grid->getGridData();
 
         return $this->render('messages/list.html.twig', [
@@ -75,9 +74,43 @@ class MessageController extends MainController
         ]);
     }
 
+    public function deleteAction(Request $request, MessageRepository $mr)
+    {
+        $ids = $request->get('id');
+        $updated = $mr->deleteById($ids, $this->getUser());
+        $this->addFlash('success', $this->translator->trans('m.data_deleted'));
+        return $this->redirectToRoute('message_list');
+    }
+
 
     public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
     {
         die('message view');
+    }
+
+    private function getTypeOption()
+    {
+        return [
+            'raw' => true,
+            'callback' => function($model) {
+                $result = '';
+                if ($model['type'] == Message::TYPE_INFO) {
+                    $result = '<i class="fa fa-warning text-yellow"></i>';
+                } else if ($model['status'] == Message::TYPE_SALE_SUCCESS) {
+                    $result = '<i class="fa fa-shopping-cart text-green"></i>';
+                }
+                return $result;
+            }
+        ];
+    }
+
+    private function getCreatedAdOption()
+    {
+        return [
+            'raw' => true,
+            'callback' => function($model) {
+                return date('d-m-Y', $model['createdAt']);
+            }
+        ];
     }
 }

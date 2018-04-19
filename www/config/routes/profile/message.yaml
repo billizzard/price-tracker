@@ -8,3 +8,7 @@ message_view:
       id: '\d+'
     controller: App\Controller\Admin\MessageController::viewAction
 
+message_delete:
+    path: /message/delete/
+    controller: App\Controller\Admin\MessageController::deleteAction
+

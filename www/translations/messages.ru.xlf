@@ -212,6 +212,11 @@
                 <source>m.have_notifications</source>
                 <target>У вас %num% сообщений</target>
             </trans-unit>
+            <trans-unit id="m.data_deleted">
+                <source>m.data_deleted</source>
+                <target>Данные успешно удалены</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

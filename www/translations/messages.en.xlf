@@ -214,6 +214,10 @@
                 <source>m.have_notifications</source>
                 <target>You have %num% notifications</target>
             </trans-unit>
+            <trans-unit id="m.data_deleted">
+                <source>m.data_deleted</source>
+                <target>Data successfully deleted</target>
+            </trans-unit>
 
         </body>
     </file>
