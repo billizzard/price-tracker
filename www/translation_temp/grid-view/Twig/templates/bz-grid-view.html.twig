@@ -33,22 +33,22 @@
                                     <td>{{ row.value }}</td>
                                 {% endif %}
                             {% endfor %}
-                            {% if models.actionColumn %}
+                            {% if models.actionColumn and models.actionColumn.options.buttons %}
                             <td class="td-actions">
-                                {% for option in models.actionColumn.options %}
-                                    {% if option == 'edit' %}
+                                {% for button in models.actionColumn.options.buttons %}
+                                    {% if button == 'edit' %}
                                         <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     {% endif %}
 
-                                    {% if option == 'delete' %}
+                                    {% if button == 'delete' %}
                                         <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     {% endif %}
 
-                                    {% if option == 'view' %}
+                                    {% if button == 'view' %}
                                         <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
                                             <i class="fa fa-folder-open-o"></i>
                                         </a>

@@ -3,12 +3,12 @@ message_list:
     controller: App\Controller\Admin\MessageController::listAction
 
 message_view:
-    path: /message/{id}/view/
+    path: /messages/{id}/view/
     requirements:
       id: '\d+'
     controller: App\Controller\Admin\MessageController::viewAction
 
 message_delete:
-    path: /message/delete/
+    path: /messages/delete/
     controller: App\Controller\Admin\MessageController::deleteAction
 

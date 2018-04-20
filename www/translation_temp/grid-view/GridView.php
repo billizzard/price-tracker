@@ -99,6 +99,7 @@ class GridView
                 'sortClass' => $isSortable ? 'sorting' : '',
                 'sortUrl' => $isSortable ? $this->urlBuilder->removeParam('page')->addParam('sort', $name)->getUrl() : '',
                 'raw' => isset($options['raw']) ? (bool)$options['raw'] : false,
+                'colOptions' => isset($options['colOptions']) ? $options['colOptions'] : [],
             ];
         }
     }
@@ -110,7 +111,8 @@ class GridView
                 if (isset($model[$key])) {
                     $result['data'][$model[0]->getId()][$key] = [
                         'value' => $this->getValue($model, $key),
-                        'raw' => $column['raw']
+                        'raw' => $column['raw'],
+                        'colOptions' => $column['colOptions']
                     ];
                 } else {
                     throw new \Exception('Not found column with name ' . $key);

@@ -37,6 +37,7 @@ class MessageRepository extends ServiceEntityRepository
         $queryBuilder->addSelect('m.id as id');
         $queryBuilder->addSelect('m.message as message');
         $queryBuilder->addSelect('m.type as type');
+        $queryBuilder->addSelect('m.addData as addData');
         $queryBuilder->addSelect('m.createdAt as createdAt');
 
         $queryBuilder->addOrderBy($sortColumn, $sortDirection);

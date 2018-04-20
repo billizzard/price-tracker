@@ -208,7 +208,7 @@
                                              <!-- m: message -->
             <trans-unit id="m.changed_price">
                 <source>m.changed_price</source>
-                <target>Changed the price of the %product%</target>
+                <target>Changed the price of the %watcher%</target>
             </trans-unit>
             <trans-unit id="m.have_notifications">
                 <source>m.have_notifications</source>

@@ -1,124 +1,107 @@
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-                <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+<!-- /.box-header -->
+<div class="box-body no-padding gv2-container">
+    <div class="mailbox-controls">
+        <!-- Check all button -->
+        <form class="gv2-form" method="post" action="{{ path('message_delete') }}">
+            <button type="button" class="btn btn-default btn-sm gv2-checkAll"><i class="fa fa-square-o"></i>
+            </button>
+            <button type="submit" class="btn btn-default btn-sm gv2-delete"><i class="fa fa-trash-o"></i></button>
+            <input type="hidden" name="id" value="" class="gv-id">
+        </form>
+        {% if models.pagination.totalPage > 1 %}
+            <div class="pull-right">
+                {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
+                <div class="btn-group">
+                    <a
+                            {% if  models.pagination.prevClass %}
+                                href="#"
+                            {% else %}
+                                href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
+                            {% endif %}
 
-                    {% if models.pagination.totalPage > 1 %}
-                        <div class="pull-right">
-                            {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
-                            <div class="btn-group">
-                                <a
-                                        {% if  models.pagination.prevClass %}
-                                            href="#"
-                                        {% else %}
-                                            href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
-                                        {% endif %}
-
-                                        class="btn btn-default btn-sm {{ models.pagination.prevClass }}"><i class="fa fa-chevron-left"></i></a>
-                                <a
-                                        {% if  models.pagination.nextClass %}
-                                            href="#"
-                                        {% else %}
-                                            href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
-                                        {% endif %}
-                                        class="btn btn-default btn-sm {{ models.pagination.nextClass }}"><i class="fa fa-chevron-right"></i></a>
-                            </div>
-                            <!-- /.btn-group -->
-                        </div>
-                    {% endif %}
-                    <!-- /.pull-right -->
+                            class="btn btn-default btn-sm {{ models.pagination.prevClass }}"><i class="fa fa-chevron-left"></i></a>
+                    <a
+                            {% if  models.pagination.nextClass %}
+                                href="#"
+                            {% else %}
+                                href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
+                            {% endif %}
+                            class="btn btn-default btn-sm {{ models.pagination.nextClass }}"><i class="fa fa-chevron-right"></i></a>
                 </div>
-                {% if models.columns and models.data %}
-                <div class="table-responsive mailbox-messages">
-                    <table class="table table-hover table-striped">
-                        <tbody>
-                        {% for id, rows in models.data %}
-                            <tr>
-                                <td><input type="checkbox" style="position: absolute;"></td>
-                                {% for row in rows %}
-                                    {% if row.raw %}
-                                        <td>{{ row.value|raw }}</td>
-                                    {% else %}
-                                        <td>{{ row.value }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if models.actionColumn %}
-                                    <td class="td-actions">
-                                        {% for option in models.actionColumn.options %}
-                                            {% if option == 'edit' %}
-                                                <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            {% endif %}
-
-                                            {% if option == 'delete' %}
-                                                <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
-                                            {% endif %}
-
-                                            {% if option == 'view' %}
-                                                <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
-                                                    <i class="fa fa-folder-open-o"></i>
-                                                </a>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-
-
-
-                        {#<tr>#}
-                            {#<td><input type="checkbox" style="position: absolute;"></td>#}
-                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>#}
-                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
-                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
-                            {#</td>#}
-                            {#<td class="mailbox-attachment"></td>#}
-                            {#<td class="mailbox-date">5 mins ago</td>#}
-                        {#</tr>#}
-                        {#<tr>#}
-                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
-                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
-                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
-                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
-                            {#</td>#}
-                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
-                            {#<td class="mailbox-date">28 mins ago</td>#}
-                        {#</tr>#}
-                        {#<tr>#}
-                            {#<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>#}
-                            {#<td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>#}
-                            {#<td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>#}
-                            {#<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...#}
-                            {#</td>#}
-                            {#<td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>#}
-                            {#<td class="mailbox-date">11 hours ago</td>#}
-                        {#</tr>#}
-                        </tbody>
-                    </table>
-                    <!-- /.table -->
-                </div>
-                {% endif %}
-                <!-- /.mail-box-messages -->
+                <!-- /.btn-group -->
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer no-padding">
-                <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                    {% if models.pagination.totalPage > 1 %}
-                    <div class="pull-right">
-                        {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
-                        <div class="btn-group">
-                            <a
+        {% endif %}
+        <!-- /.pull-right -->
+    </div>
+    {% if models.columns and models.data %}
+    <div class="table-responsive mailbox-messages">
+        <table class="table gv2-table table-hover table-striped">
+            <tbody>
+            {% for id, rows in models.data %}
+                <tr>
+                    <td><input type="checkbox" class="row-check" value="{{ id }}" style="position: absolute;"></td>
+                    {% for key, row in rows %}
+                        <td
+                        {% if (row.colOptions.style is defined) %}
+                            style="{{ row.colOptions.style }}"
+                        {% endif %}
+                        >
+                        {% if row.raw %}
+                            {{ row.value|raw }}
+                        {% else %}
+                            {{ row.value }}
+                        {% endif %}
+                        </td>
+                    {% endfor %}
+                    {% if models.actionColumn and models.actionColumn.options.buttons %}
+                        <td class="td-actions"
+                        {% if (models.actionColumn.options.colOptions.style is defined) %}
+                              style="{{ models.actionColumn.options.colOptions.style }}"
+                        {% endif %}
+                        >
+                            {% for button in models.actionColumn.options.buttons %}
+                                {% if button == 'edit' %}
+                                    <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if button == 'delete' %}
+                                    <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if button == 'view' %}
+                                    <a href="{{ id }}/view/" class="btn btn-action" title="{{ 'l.view'|trans }}">
+                                        <i class="fa fa-folder-open-o"></i>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <!-- /.table -->
+    </div>
+    {% endif %}
+    <!-- /.mail-box-messages -->
+    <!-- /.box-body -->
+    <div class="box-footer no-padding">
+        <div class="mailbox-controls">
+            <form class="gv2-form" method="post" action="{{ path('message_delete') }}">
+                <button type="button" class="btn btn-default btn-sm gv2-checkAll"><i class="fa fa-square-o"></i>
+                </button>
+                <button type="submit" class="btn btn-default btn-sm gv2-delete"><i class="fa fa-trash-o"></i></button>
+                <input type="hidden" name="id" value="" class="gv-id">
+            </form>
+            {% if models.pagination.totalPage > 1 %}
+                <div class="pull-right">
+                    {{ models.pagination.fromCurPageItem }}-{{ models.pagination.toCurPageItem }}/{{ models.pagination.total }}
+                    <div class="btn-group">
+                        <a
                                 {% if  models.pagination.prevClass %}
                                     href="#"
                                 {% else %}
@@ -126,20 +109,74 @@
                                 {% endif %}
 
                                 class="btn btn-default btn-sm {{ models.pagination.prevClass }}"><i class="fa fa-chevron-left"></i></a>
-                            <a
+                        <a
                                 {% if  models.pagination.nextClass %}
                                     href="#"
                                 {% else %}
                                     href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
                                 {% endif %}
                                 class="btn btn-default btn-sm {{ models.pagination.nextClass }}"><i class="fa fa-chevron-right"></i></a>
-                        </div>
-                        <!-- /.btn-group -->
                     </div>
-                    {% endif %}
-                    <!-- /.pull-right -->
+                    <!-- /.btn-group -->
                 </div>
-            </div>
+            {% endif %}
+            <!-- /.pull-right -->
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        function GridView2() {
+
+            var init = () => {
+                addEvents();
+                this.table;
+            };
+
+            var addEvents = () => {
+
+                var self = this;
+                $('.gv2-checkAll').on('click', function() {
+                    self.table = $(this).closest('.gv2-container').find('.gv2-table');
+                    if ($(this).hasClass('checked')) {
+                        $(this).removeClass('checked').find('i').removeClass('fa-check-square-o').addClass('fa-square-o');
+                        toggleAllRows(self.table, false)
+                    } else {
+                        $(this).addClass('checked').find('i').removeClass('fa-square-o').addClass('fa-check-square-o');
+                        toggleAllRows(self.table, true)
+                    }
+                });
+
+                $('.gv2-form').on('submit', function() {
+                    self.table = $(this).closest('.gv2-container').find('.gv2-table');
+                    if (confirm('Are you sure?')) {
+                        $('.gv-id').val(getIds().join());
+                    } else {
+                        return false;
+                    }
+                });
+            };
+
+            var toggleAllRows = (table, check) => {
+                table.find('input.row-check').prop('checked', check);
+            };
+
+            var getIds = () => {
+                var ids = [];
+                this.table.find('.row-check:checked').each(function() {
+                    ids.push($(this).val())
+                });
+                return ids;
+            };
+
+            init();
+        }
+
+        var gridView = new GridView2();
+    });
+</script>
 
 <style>
     .btn.btn-action {

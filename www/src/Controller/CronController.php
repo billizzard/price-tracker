@@ -111,9 +111,10 @@ class CronController extends Controller
                 $user = $watcher->getUser();
                 if ($product->getChangedPrice()) {
                     $message = new Message();
-                    $message->setMessage($this->translator->trans('m.changed_price', ['%product%' => '111']));
+                    $message->setMessage('m.changed_price');
+                    $message->setAddData(['watcher_id' => $watcher->getId(), 'watcher_title' => $watcher->getTitle()]);
                     $message->setUser($user);
-                    $message->setType(Message::TYPE_INFO);
+                    $message->setType(Message::TYPE_CHANGE_PRICE);
                     $this->entityManager->persist($message);
                 }
                 // Если это новый ватчер

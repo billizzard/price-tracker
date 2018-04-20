@@ -97,7 +97,7 @@ class TrackerController extends MainController
                 return $result;
             }
         ])->addActionColumn('Actions', [
-            'view', 'edit', 'delete'
+            'buttons' => ['view', 'edit', 'delete']
         ]);
 
         $products = $grid->getGridData();

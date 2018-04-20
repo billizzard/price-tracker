@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
@@ -17,6 +18,7 @@ class Message
     const TYPE_SUCCESS = 10;
     const TYPE_SALE_SUCCESS = 11;
     const TYPE_INFO = 20;
+    const TYPE_CHANGE_PRICE = 21;
     const TYPE_WARNING = 30;
 
     /**
@@ -41,6 +43,11 @@ class Message
      * @ORM\JoinColumn(nullable=true)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private $addData;
 
     /**
      * @ORM\Column(type="smallint")
@@ -82,6 +89,22 @@ class Message
     public function setMessage($message): void
     {
         $this->message = $message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddData()
+    {
+        return (array)json_decode($this->addData);
+    }
+
+    /**
+     * @param mixed $addData
+     */
+    public function setAddData($addData): void
+    {
+        $this->addData = json_encode($addData);
     }
 
     public function getStatus(): int
@@ -129,5 +152,14 @@ class Message
     public function setUser(User $user): void
     {
         $this->user = $user;
+    }
+
+    public function getTranslatedMessage(TranslatorInterface $translator)
+    {
+        if ($this->getType() == self::TYPE_CHANGE_PRICE) {
+            $addData = $this->getAddData();
+            return $translator->trans($this->getMessage(), ['%watcher%' => '"<a target="_blank" href="/ru/profile/trackers/' . $addData['watcher_id'] . '/view/">' . $this->getAddData()['watcher_title'] . '</a>"']);
+        }
+        return '';
     }
 }

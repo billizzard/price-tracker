@@ -61,11 +61,26 @@ class MessageController extends MainController
 
     public function listAction(Request $request, MessageRepository $mr)
     {
+//        $em = $this->getDoctrine()->getManager();
+//        $message = new Message();
+//        $message->setMessage('m.changed_price');
+//        $message->setAddData(['watcher_id' => 1, 'watcher_title' => 'HDD']);
+//        $message->setUser($this->getUser());
+//        $message->setType(Message::TYPE_INFO);
+//        $em->persist($message);
+//        $em->flush();
+
         $qb = $mr->findByRequestQueryBuilder($request, $this->getUser());
         $grid = new GridView($request, $qb, ['perPage' => 10, 'template' => '2']);
-        $grid->addColumn('message', ['sort' => false])
+        $grid->addColumn('message', $this->getMessageOption())
             ->addColumn('type', $this->getTypeOption())
-            ->addColumn('createdAt', $this->getCreatedAdOption());
+            ->addColumn('createdAt', $this->getCreatedAdOption())
+            ->addActionColumn('Actions', [
+                'buttons' => ['view'],
+                'colOptions' => [
+                    'style' => 'width: 48px'
+                ]
+            ]);
         $messages = $grid->getGridData();
 
         return $this->render('messages/list.html.twig', [
@@ -88,13 +103,24 @@ class MessageController extends MainController
         die('message view');
     }
 
+    private function getMessageOption()
+    {
+        return [
+            'raw' => true,
+            'callback' => function($model) {
+                $result = $model[0]->getTranslatedMessage($this->translator);
+                return $result;
+            }
+        ];
+    }
+
     private function getTypeOption()
     {
         return [
             'raw' => true,
             'callback' => function($model) {
                 $result = '';
-                if ($model['type'] == Message::TYPE_INFO) {
+                if ($model['type'] == Message::TYPE_INFO || $model['type'] == Message::TYPE_CHANGE_PRICE) {
                     $result = '<i class="fa fa-warning text-yellow"></i>';
                 } else if ($model['status'] == Message::TYPE_SALE_SUCCESS) {
                     $result = '<i class="fa fa-shopping-cart text-green"></i>';
@@ -110,7 +136,10 @@ class MessageController extends MainController
             'raw' => true,
             'callback' => function($model) {
                 return date('d-m-Y', $model['createdAt']);
-            }
+            },
+            'colOptions' => [
+                'style' => 'width: 100px'
+            ]
         ];
     }
 }
