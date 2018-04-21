@@ -16,12 +16,15 @@ use App\Entity\Message;
 use App\Entity\User;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
+use Psr\Log\Test\LoggerInterfaceTest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -39,6 +42,15 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class MainController extends AbstractController
 {
+    protected $logger;
+    protected $translator;
+
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        $this->translator = $translator;
+    }
+
     public function getMessages()
     {
         /** @var MessageRepository $repository */
@@ -47,9 +59,11 @@ class MainController extends AbstractController
         $cookieMessages = [];
         $class = 'fa-warning text-yellow';
         foreach ($messages as $message) {
-            if ($message->getType() == Message::TYPE_SALE_SUCCESS) $class = 'fa-shopping-cart text-green';
+            if ($message->getType() == Message::TYPE_SALE_SUCCESS) {
+                $class = 'fa-shopping-cart text-green';
+            }
 
-            $cookieMessages[] = ['id' => $message->getId(), 'class' => $class, 'message' => $message->getMessage()];
+            $cookieMessages[] = ['id' => $message->getId(), 'class' => $class, 'message' => $message->getTranslatedTitle($this->translator)];
         }
         return $cookieMessages;
     }

@@ -34,6 +34,16 @@ class Message
     private $message;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $title = '';
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $fromUser = '';
+
+    /**
      * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
      */
     private $status = self::STATUS_NOT_READ;
@@ -81,6 +91,38 @@ class Message
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $fromUser
+     */
+    public function setFromUser($fromUser): void
+    {
+        $this->fromUser = $fromUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFromUser(): string
+    {
+        return $this->fromUser ? $this->fromUser : 'price-tracker.by';
     }
 
     /**
@@ -161,5 +203,12 @@ class Message
             return $translator->trans($this->getMessage(), ['%watcher%' => '"<a target="_blank" href="/ru/profile/trackers/' . $addData['watcher_id'] . '/view/">' . $this->getAddData()['watcher_title'] . '</a>"']);
         }
         return '';
+    }
+
+    public function getTranslatedTitle(TranslatorInterface $translator)
+    {
+        if ($this->getType() == self::TYPE_CHANGE_PRICE) {
+            return $translator->trans($this->getTitle());
+        }
     }
 }

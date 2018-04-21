@@ -50,25 +50,18 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class MessageController extends MainController
 {
-    private $translator;
-    private $logger;
-
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        $this->translator = $translator;
-    }
-
     public function listAction(Request $request, MessageRepository $mr)
     {
 //        $em = $this->getDoctrine()->getManager();
 //        $message = new Message();
 //        $message->setMessage('m.changed_price');
-//        $message->setAddData(['watcher_id' => 1, 'watcher_title' => 'HDD']);
+//        $message->setAddData(['watcher_id' => 1, 'watcher_title' => 'werwerwe']);
 //        $message->setUser($this->getUser());
-//        $message->setType(Message::TYPE_INFO);
+//        $message->setTitle('m.changed_price_short');
+//        $message->setType(Message::TYPE_CHANGE_PRICE);
 //        $em->persist($message);
 //        $em->flush();
+//        die('ddd');
 
         $qb = $mr->findByRequestQueryBuilder($request, $this->getUser());
         $grid = new GridView($request, $qb, ['perPage' => 10, 'template' => '2']);
@@ -91,16 +84,49 @@ class MessageController extends MainController
 
     public function deleteAction(Request $request, MessageRepository $mr)
     {
-        $ids = $request->get('id');
+        $ids = explode(',', $request->get('id'));
+        if (!$this->isCsrfTokenValid('delete_message', $request->get('_token'))) {
+            throw new NotFoundHttpException();
+        }
+        $redirect_route = ['name' => 'message_list', 'params' => []];
+        if ($place = $request->get('place')) {
+            if ($place == 'one_message') {
+                /** @var Message $message */
+                $message = $mr->findById($request->get('id'), $this->getUser());
+                if ($prevMessage = $mr->findPrev($message)) {
+                    $redirect_route = ['name' => 'message_view', 'params' => ['id' => $prevMessage->getId()]];
+                } else if ($nextMessage = $mr->findNext($message)) {
+                    $redirect_route = ['name' => 'message_view', 'params' => ['id' => $nextMessage->getId()]];
+                }
+            }
+        }
         $updated = $mr->deleteById($ids, $this->getUser());
         $this->addFlash('success', $this->translator->trans('m.data_deleted'));
-        return $this->redirectToRoute('message_list');
+        return $this->redirectToRoute($redirect_route['name'], $redirect_route['params']);
     }
 
 
-    public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
+    public function viewAction(Request $request, MessageRepository $messageRepository)
     {
-        die('message view');
+        /** @var Message $message */
+        $message = $messageRepository->findById($request->get('id'), $this->getUser());
+        if ($message) {
+            if ($message->getStatus() == Message::STATUS_NOT_READ) {
+                $message->setStatus(Message::STATUS_READ);
+                $this->getDoctrine()->getManager()->flush();
+            }
+
+            $prevMessage = $messageRepository->findPrev($message);
+            $nextMessage = $messageRepository->findNext($message);
+
+            return $this->render('messages/view.html.twig', [
+                'message' => $message,
+                'translatedMessage' => $message->getTranslatedMessage($this->translator),
+                'prevMessageId' => $prevMessage ? $prevMessage->getId() : false,
+                'nextMessageId' => $nextMessage ? $nextMessage->getId() : false,
+            ]);
+        }
+        throw new NotFoundHttpException();
     }
 
     private function getMessageOption()

@@ -53,7 +53,7 @@
                                 <ul class="menu">
                                     {% for short_message in short_messages %}
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ path('message_view', {'id': short_message.id}) }}">
                                             <i class="fa {{ short_message.class }}"></i> {{ short_message.message }}
                                         </a>
                                     </li>
@@ -144,7 +144,7 @@
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree" data-active="{% if activeMenu is defined %} {{ activeMenu }} {% endif %}">
+            <ul class="sidebar-menu" data-widget="tree" data-active="{% if activeMenu is defined %}{{ activeMenu }}{% endif %}">
                 {#<li class="header">MAIN NAVIGATION</li>#}
                 <li class="treeview">
                     <a href="#">
@@ -168,31 +168,18 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="messages-list">
-                            <a href="{{ path('message_list') }}">{{ 'l.inbox'|trans }}
+
+                            <a href="{{ path('message_list') }}">
+                                <i class="fa fa-circle-o"></i>
+                                {{ 'l.inbox'|trans }}
                                 {#<span class="pull-right-container">
                                     <span class="label bg-yellow pull-right">{{ short_messages|length }}</span>
                                 </span>#}
                             </a>
                         </li>
-                        <li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>
+                        {#<li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>#}
                     </ul>
                 </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-files-o"></i>
-                        <span>Layout Options</span>
-                        <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
-            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-                        <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-                        <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-                        <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                    </ul>
-                </li>
-
             </ul>
         </section>
         <!-- /.sidebar -->

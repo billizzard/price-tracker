@@ -12,7 +12,13 @@
                 <h3 class="box-title">{{ 'l.inbox'|trans }}</h3>
                 <!-- /.box-tools -->
             </div>
+            {% if (messages.data) %}
             {{ grid_view2(messages) }}
+            {% else %}
+                <div style="text-align:center; padding: 10px;">
+                {{ 'l.no_data'|trans }}
+                </div>
+            {% endif %}
         </div>
         <!-- /. box -->
     </div>

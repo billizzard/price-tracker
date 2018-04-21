@@ -114,6 +114,7 @@ class CronController extends Controller
                     $message->setMessage('m.changed_price');
                     $message->setAddData(['watcher_id' => $watcher->getId(), 'watcher_title' => $watcher->getTitle()]);
                     $message->setUser($user);
+                    $message->setTitle('m.changed_price_short');
                     $message->setType(Message::TYPE_CHANGE_PRICE);
                     $this->entityManager->persist($message);
                 }

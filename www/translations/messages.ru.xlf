@@ -15,7 +15,7 @@
                 <target>Пароль</target>
             </trans-unit>
             <trans-unit id="l.login">
-                <source>l.Login</source>
+                <source>l.login</source>
                 <target>Вход</target>
             </trans-unit>
             <trans-unit id="l.homepage">
@@ -180,6 +180,14 @@
                 <source>l.messages</source>
                 <target>Сообщения</target>
             </trans-unit>
+            <trans-unit id="l.from">
+                <source>l.from</source>
+                <target>От</target>
+            </trans-unit>
+            <trans-unit id="l.message">
+                <source>l.message</source>
+                <target>Сообщение</target>
+            </trans-unit>
             <trans-unit id="l.inbox">
                 <source>l.inbox</source>
                 <target>Входящие</target>
@@ -191,6 +199,14 @@
             <trans-unit id="l.view_all">
                 <source>l.view_all</source>
                 <target>Смотреть все</target>
+            </trans-unit>
+            <trans-unit id="l.forgot_password">
+                <source>l.forgot_password</source>
+                <target>Я забыл пароль</target>
+            </trans-unit>
+            <trans-unit id="l.remember_me">
+                <source>l.remember_me</source>
+                <target>Запомнить меня</target>
             </trans-unit>
 
                                              <!-- s: success -->
@@ -215,6 +231,10 @@
             <trans-unit id="m.data_deleted">
                 <source>m.data_deleted</source>
                 <target>Данные успешно удалены</target>
+            </trans-unit>
+            <trans-unit id="m.changed_price_short">
+                <source>m.changed_price_short</source>
+                <target>Изменение цены товара</target>
             </trans-unit>
 
         </body>

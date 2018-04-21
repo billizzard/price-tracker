@@ -4,4 +4,5 @@ add bundle
 - src/Service/HVFGridView & HVFUrlBuilder
 - src/Annotations/HVFGrid
 
-Cron когда месседж создает , нужно чтобы в доп колонку addData подставлял в виде %prductId% => 1
+
+Запомнить меня при логировании нет функционала

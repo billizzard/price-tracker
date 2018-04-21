@@ -147,6 +147,14 @@
                 <source>l.messages</source>
                 <target>Messages</target>
             </trans-unit>
+            <trans-unit id="l.message">
+                <source>l.message</source>
+                <target>Message</target>
+            </trans-unit>
+            <trans-unit id="l.from">
+                <source>l.from</source>
+                <target>From</target>
+            </trans-unit>
             <trans-unit id="l.inbox">
                 <source>l.inbox</source>
                 <target>Inbox</target>
@@ -158,6 +166,14 @@
             <trans-unit id="l.view_all">
                 <source>l.view_all</source>
                 <target>View all</target>
+            </trans-unit>
+            <trans-unit id="l.forgot_password">
+                <source>l.forgot_password</source>
+                <target>I forgot my password</target>
+            </trans-unit>
+            <trans-unit id="l.remember_me">
+                <source>l.remember_me</source>
+                <target>Remember me</target>
             </trans-unit>
 
 
@@ -217,6 +233,10 @@
             <trans-unit id="m.data_deleted">
                 <source>m.data_deleted</source>
                 <target>Data successfully deleted</target>
+            </trans-unit>
+            <trans-unit id="m.changed_price_short">
+                <source>m.changed_price_short</source>
+                <target>Change in the price of goods</target>
             </trans-unit>
 
         </body>

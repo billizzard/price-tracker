@@ -10,9 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MessageRepository extends ServiceEntityRepository
 {
+    private $qb;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Message::class);
+    }
+
+    public function clearQb()
+    {
+        $this->qb = null;
     }
 
     public function getUnreadMessagesByUser(User $user, $count)
@@ -50,11 +57,41 @@ class MessageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder("m");
         $updated = $qb->update()
             ->set('m.status', Message::STATUS_DELETED)
-            ->where($qb->expr()->in('m  .id', ':ids'))->setParameter("ids", explode(',', $ids))
+            ->where($qb->expr()->in('m  .id', ':ids'))->setParameter("ids", $ids)
             ->andWhere('m.user = :userId')->setParameter("userId", $user->getId())
             ->getQuery()->execute();
 
         return $updated;
     }
+
+    public function findPrev(Message $message)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.id < :id AND m.user = :user AND m.status != :status')
+            ->setParameters(['id' => $message->getId(), 'user' => $message->getUser(), 'status' => Message::STATUS_DELETED])
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    public function findNext(Message $message)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.id > :id AND m.user = :user AND m.status != :status')
+            ->setParameters(['id' => $message->getId(), 'user' => $message->getUser(), 'status' => Message::STATUS_DELETED])
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    public function findById($id, User $user)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.id = :id AND m.user = :user AND m.status != :status')
+            ->setParameters(['id' => $id, 'user' => $user, 'status' => Message::STATUS_DELETED])
+            ->getQuery()->getOneOrNullResult();
+    }
+
+
 
 }

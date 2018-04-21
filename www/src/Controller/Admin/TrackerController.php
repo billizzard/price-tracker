@@ -50,17 +50,6 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class TrackerController extends MainController
 {
-    private $translator;
-    private $logger;
-
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
-    {
-        //parent::__construct();
-        $this->logger = $logger;
-        $this->translator = $translator;
-
-    }
-
     public function listAction(Request $request, WatcherRepository $wr)
     {
 //        $repository = $this->getDoctrine()->getRepository(Message::class);

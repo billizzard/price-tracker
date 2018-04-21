@@ -41,16 +41,6 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class UserController extends MainController
 {
-    private $translator;
-    private $logger;
-
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
-    {
-        //parent::__construct();
-        $this->logger = $logger;
-        $this->translator = $translator;
-    }
-
     public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = $this->getUser();

@@ -36,13 +36,13 @@ class PriceTrackerRepository extends ServiceEntityRepository
                     $dayStart = date('d.m', $dateStart);
                     if ($trackerDay != $dayStart) {
                         if ($beforePrice) {
-                            $jsonPrice['data'][] = [$i, $beforePrice];
+                            $jsonPrice['data'][] = [$i, $beforePrice, 'qqqq'];
                             $jsonPrice['labels'][] = [$i, date('d.m', $dateStart)];
                         }
                         $dateStart = $dateStart + 60*60*24;
                     } else {
                         $beforePrice = $tracker->getPrice();
-                        $jsonPrice['data'][] = [$i, $tracker->getPrice()];
+                        $jsonPrice['data'][] = [$i, $tracker->getPrice(), 'qqqq'];
                         $jsonPrice['labels'][] = [$i, date('d.m', $tracker->getDate())];
                         $dateStart = $dateStart + 60*60*24;
                         break;

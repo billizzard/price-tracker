@@ -12,54 +12,63 @@
     {#<link rel="alternate" type="application/rss+xml" title="{{ 'rss.title'|trans }}" >#}
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('build/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/css/main.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/ionicons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/jquery-jvectormap.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/AdminLTE.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/skin-blue.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/dataTables.bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/main.css?v=2') }}">
     {% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 
-<body id="{% block body_id %}{% endblock %}">
+<body id="{% block body_id %}{% endblock %}" class="login-page">
     {% block header %}
         <header>
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-                <a class="navbar-brand" href="{{ path('homepage') }}">Price</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ path('homepage') }}">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        {% if app.user %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('security_logout') }}">Logout</a>
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ path('homepage') }}">Price tracker</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a class="nav-link" href="{{ path('tracker_add') }}">Add</a>
                             </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('security_login') }}">Login</a>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-header">Nav header</li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
                             </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('tracker_add') }}">Add</a>
-                        </li>
-                        {#<li class="nav-item dropdown">#}
-                            {#<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                                {#Dropdown#}
-                            {#</a>#}
-                            {#<div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
-                                {#<a class="dropdown-item" href="#">Action</a>#}
-                                {#<a class="dropdown-item" href="#">Another action</a>#}
-                                {#<div class="dropdown-divider"></div>#}
-                                {#<a class="dropdown-item" href="#">Something else here</a>#}
-                            {#</div>#}
-                        {#</li>#}
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Language</a></li>
+                            {% if app.user %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('security_logout') }}">{{ 'l.logout'|trans }}</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('security_login') }}">{{ 'l.login'|trans }}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div><!--/.nav-collapse -->
                 </div>
             </nav>
         </header>
@@ -68,20 +77,10 @@
     <div class="container body-container">
         {% block body %}
             <div class="row">
-                <div id="main" class="col-sm-9">
+                <div id="main" class="col-sm-12">
                     {#{{ include('default/_flash_messages.html.twig') }}#}
 
                     {% block main %}{% endblock %}
-                </div>
-
-                <div id="sidebar" class="col-sm-3">
-                    {% block sidebar %}
-                        {#{{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {#}
-                            {#'template': 'blog/about.html.twig',#}
-                            {#'sharedAge': 600,#}
-                            {#'_locale': app.request.locale#}
-                        {#})) }}#}
-                    {% endblock %}
                 </div>
             </div>
         {% endblock %}
