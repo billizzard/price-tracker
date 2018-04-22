@@ -10,41 +10,247 @@
 {% block footer %}{% endblock %}
 
 {% block body %}
+    <div class="s1">
+        <div class="s1-inner">
+            <div class="heading-group">
+                <h1>Мы поможем вам</h1>
+                <p>Отследить скидки и цены на товары</p>
+            </div>
+            <div class="divider-default"></div>
+            <p class="desc">Многим покупателем не хватает небольшой скидки, чтобы купить товар. <br>
+                Продавцам не хватает информации о таких клиентах, чтобы сделать скидку. <br>
+                Мы помогаем продавцам и покупателям понять друг друга.
+            </p>
+            <div class="s1-buttons">
+                <div class="button blue-button">Добавить товар</div>
+                <div class="button">Узнать больше</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="s2">
+        <div class="s2-inner s-inner">
+            <div class="flex-container s2-flex-container">
+                <div class="s2-desc">
+                    <h3>Всем привет! Это price-tracker.com</h3>
+                    <div class="divider-default"></div>
+                    <p class="heading-5">Мы помогаем покупателям ослеживать цену товара, строить графики изменения цен с практически любых сайтов.
+                    Также с помощью нашего сервиса, можно настроить оповещение о том, что цена товара упала на определенный процент.
+                    </p>
+
+                    <p class="heading-8">Система автомитически следит за ценой товара. Вам не нужно каждый день заходить и отслеживать товар. Достаточно один раз
+                    указать ссылку на страницу товара и указать процент, при котором нужно будет вас оповестить.
+                        В личном кабинете вам будут доступны извещения о хоть каком-то увеличении или уменьшении цены товара.
+                        <br> Все это абсолюно бесплатно.
+                    </p>
+
+                    <div class="button gray-button" style="margin-left:0; margin-top:20px;">Начать бесплатно</div>
+
+
+                </div>
+                <div class="s2-image">
+                    <img src="/build/images/home/graph-05.jpeg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="s3">
+        <div class="s3-inner s-inner">
+            <div class="flex-container s3-flex-container">
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+                <div class="s3-item"></div>
+            </div>
+        </div>
+    </div>
+
     <style>
-        .page-header {
-            margin-top:60px;
+        .s3 {
+            background-color: #f2f3f9;
+        }
+
+        .s3 .s3-flex-container {
+            flex-wrap: wrap;
+            align-content: center;
+        }
+
+        .s3 .s3-flex-container .s3-item {
+            width:200px;
+            height: 200px;
+            border:1px solid black;
+            margin:10px;
+        }
+
+        .heading-5 {
+            margin-top: 15px;
+            font-size: 19px;
+            font-weight: 300;
+            font-family: serif;
+            letter-spacing: .02em;
+            line-height: 1.41667;
+        }
+        .heading-8 {
+            margin-top:20px;
+            letter-spacing: 0.02em;
+            font-size: 16px;
+            line-height: 1.55556;
+            color: #a0a0a0;
+            font-style: italic;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .flex-container {
+            display:flex;
+        }
+
+        .s2-flex-container {
+            flex-direction: column;
+        }
+
+
+
+
+        .s2 {
+            margin-top: 40px;
+        }
+
+        .s2 .s2-desc {
+            padding:0 30px;
+        }
+
+        .s2 .s2-image {
+            display:none;
+            text-align:center;
+            margin-top: 40px;
+        }
+
+        .s2-inner {
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .s-inner {
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .s-inner h3 {
+            font-weight: bold;
+        }
+
+        .button {
+            margin-left: 30px;
+            margin-top: 30px;
+            padding: 14px 38px;
+            display: inline-block;
+            max-width: 100%;
+            min-width: 210px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 2px solid;
+            border-radius: 35px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            white-space: pre-wrap;
+            transition: 0.5s;
+        }
+        .button:hover {
+            background-color: rgba(204, 204, 204, 0.30196078431372547);
+        }
+
+        .blue-button:hover {
+            background-color: #19b4e8;
+        }
+        .blue-button {
+            color: #fff;
+            background: #0796c6;
+        }
+        .gray-button:hover {
+            background-color: #19b4e8;
+            color: #fff;
+        }
+
+        .gray-button {
+            border-color: #ededed;
+        }
+
+        .s1 {
+            margin-top:50px;
+            min-height: 200px;
+            background-size: cover;
+            background-position: center center;
+            background-image: url("/build/images/home/bg-10.jpg");
+        }
+        .s1 .s1-inner {
+            padding-top: 100px;
+            padding-bottom: 100px;
+            text-align:center;
+            color: #fff;
+        }
+        .s1 .s1-inner .heading-group {
+            font-family: "Poppins", Helvetica, Arial, sans-serif;
+            font-weight: 700;
+        }
+
+        .s1 .s1-inner .heading-group h1 {
+            font-family: "Poppins", Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            font-size: 45px;
+        }
+        .s1 .s1-inner .heading-group p {
+            font-size: 27px;
+            font-weight: 300;
+        }
+        .divider-default {
+            background: linear-gradient(to right, #50e590 50%, #0796c6 120%);
+            display: inline-block;
+            border: 0;
+            font-size: 0;
+            line-height: 0;
+            height: 3px;
+            max-width: 100px;
+            width: 100%;
+            margin-top: 25px;
+        }
+        .s1-inner .desc {
+            font-size: 19px;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 700px) {
+            .s2 .s2-image {
+                display: inline-block;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .s-inner {
+                max-width: 750px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .s-inner {
+                max-width: 800px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .s2-flex-container {
+                flex-direction: row;
+            }
+            .s-inner {
+                max-width: 1400px;
+            }
         }
     </style>
-    <div class="page-header">
-        <h1>{{ 'l.homepage'|trans|raw }}</h1>
-    </div>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="jumbotron">
-                <p>
-                    {{ 'help.browse_app'|trans|raw }}
-                </p>
-                <p>
-                    <a class="btn btn-primary btn-lg" href="#">
-                        <i class="fa fa-users" aria-hidden="true"></i> {{ 'action.browse_app'|trans }}
-                    </a>
-                </p>
-            </div>
-        </div>
 
-        <div class="col-sm-6">
-            <div class="jumbotron">
-                <p>
-                    {{ 'help.browse_admin'|trans|raw }}
-                </p>
-                <p>
-                    <a class="btn btn-primary btn-lg" href="{{ path('security_login') }}">
-                        <i class="fa fa-lock" aria-hidden="true"></i> {{ 'action.browse_admin'|trans }}
-                    </a>
-                </p>
-            </div>
-        </div>
-        <a href="{{ path('security_login') }}" title="Login">Login</a>
-    </div>
 {% endblock %}

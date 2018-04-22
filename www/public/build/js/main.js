@@ -193,6 +193,7 @@ $(function () {
         backgroundColor: '#fff',
         color: '#7b7b7b',
         border: '1px solid #ccc',
+        letterSpacing: '0.05em'
     }).appendTo('body');
 
     $('#line-chart').bind('plothover', function (event, pos, item) {
