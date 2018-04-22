@@ -3,6 +3,10 @@
     <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
         <body>
                                              <!-- l: labels -->
+            <trans-unit id="l.language">
+                <source>l.language</source>
+                <target>Language</target>
+            </trans-unit>
             <trans-unit id="l.authorization">
                 <source>l.authorization</source>
                 <target>Authorization</target>

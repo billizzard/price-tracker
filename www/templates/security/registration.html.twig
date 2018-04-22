@@ -6,13 +6,45 @@
 
 {% block main %}
     {{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
-<fieldset>
-    <legend><i class="fa fa-lock" aria-hidden="true"></i> {{ 'l.registration'|trans }}</legend>
-    {{ form_row(form.email) }}
-    {{ form_row(form.plainPassword.first) }}
-    {{ form_row(form.plainPassword.second) }}
 
-    <button type="submit" title=" {{ 'l.registration'|trans }}"> {{ 'l.registration'|trans }}</button>
-</fieldset>
+    <div class="register-box shadow-block" style="margin-top:20%;">
+        <div class="register-box-body">
+            <p class="login-box-msg">{{ 'l.registration'|trans }}</p>
+
+                <div class="form-group has-feedback">
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'l.email'|trans }}) }}
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'l.password'|trans }}) }}
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'l.repeatPassword'|trans }}) }}
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    {#<div class="col-xs-8">#}
+                        {#<div class="checkbox">#}
+                            {#<input type="checkbox" name="agree" value="1">#}
+                            {#<label>#}
+                                {#I agree to the <a href="#">terms</a>#}
+                            {#</label>#}
+                        {#</div>#}
+                    {#</div>#}
+                    <!-- /.col -->
+                    <div class="col-xs-5" style="padding-top:13px;">
+                        <a href="{{ path('security_login') }}" class="text-center">{{ 'l.login'|trans }}</a>
+                    </div>
+                    <div class="col-xs-7">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'l.registration'|trans }}</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+
+        </div>
+        <!-- /.form-box -->
+    </div>
     {{ form_end(form) }}
 {% endblock %}

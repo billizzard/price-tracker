@@ -6,10 +6,15 @@
     the homepage is a special page which displays neither a header nor a footer.
     this is done with the 'trick' of defining empty Twig blocks without any content
 #}
-{% block header %}{% endblock %}
+
 {% block footer %}{% endblock %}
 
 {% block body %}
+    <style>
+        .page-header {
+            margin-top:60px;
+        }
+    </style>
     <div class="page-header">
         <h1>{{ 'l.homepage'|trans|raw }}</h1>
     </div>

@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class SecurityController extends Controller
+class SecurityController extends FrontendController
 {
     public function loginAction(AuthenticationUtils $helper): Response
     {

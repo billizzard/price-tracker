@@ -16,8 +16,17 @@ tracker:
     defaults:
         _locale: '%locale%'
 
+frontend_index:
+    path: /
+    controller: App\Controller\FrontendController::indexAction
+    requirements:
+        _locale: '%app.locales%'
+    defaults:
+        template: index/index.html.twig
+        _locale: '%locale%'
+
 homepage:
-    path: /{_locale}
+    path: /{_locale}/
     controller: App\Controller\IndexController::indexAction
     requirements:
         _locale: '%app.locales%'
