@@ -58,13 +58,51 @@
     <div class="s3">
         <div class="s3-inner s-inner">
             <div class="flex-container s3-flex-container">
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
-                <div class="s3-item"></div>
+                <div class="s3-item">
+                    <div class="s3-item-top">
+                        <div class="s3-icon fa fa-money"></div>
+                        <h6>Выгода</h6>
+                    </div>
+                    <div class="s3-item-body">
+                        Копейка рубль бережет. Вы всегда сможете узнать о снижении цены, даже если она не достигла нужного вам процента.
+                    </div>
+                </div>
+                <div class="s3-item">
+                    <div class="s3-item-top">
+                        <div class="s3-icon fa fa-dollar"></div>
+                        <h6>Выгода</h6>
+                    </div>
+                    <div class="s3-item-body">
+                        Сервисом можно пользоваться абсолютно бесплатно. Все что вам нужно, это зарегистрироваться и указать адрес страницы с товаром, который вас интересует.
+                    </div>
+                </div>
+                <div class="s3-item">
+                    <div class="s3-item-top">
+                        <div class="s3-icon fa fa-line-chart"></div>
+                        <h6>Выгода</h6>
+                    </div>
+                    <div class="s3-item-body">
+                        Вам будет доступна история изменения цен на товар в виде удобного графика. Вы сможете следить за честностью скидок.
+                    </div>
+                </div>
+                <div class="s3-item">
+                    <div class="s3-item-top">
+                        <div class="s3-icon fa fa-phone"></div>
+                        <h6>Выгода</h6>
+                    </div>
+                    <div class="s3-item-body">
+                        Если много пользователей ожидает определенную скидку на товар. Мы можем связаться с продавцом и рассказать ему об этом. Тем самым выгоду получат все.
+                    </div>
+                </div>
+                <div class="s3-item">
+                    <div class="s3-item-top">
+                        <div class="s3-icon fa fa-envelope-o"></div>
+                        <h6>Выгода</h6>
+                    </div>
+                    <div class="s3-item-body">
+                        Вам не нужно ежедневно следить за ценой товаров на разных сайтах. Как только скидка достигнет нужного вам процента, вам придет оповещение об этом.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -72,18 +110,39 @@
     <style>
         .s3 {
             background-color: #f2f3f9;
+            padding-bottom: 50px;
         }
 
         .s3 .s3-flex-container {
             flex-wrap: wrap;
-            align-content: center;
+            justify-content: center;
+        }
+
+        .s3-icon {
+            display: inline-block;
+            font-size: 50px;
+            color: #50e590;
         }
 
         .s3 .s3-flex-container .s3-item {
-            width:200px;
-            height: 200px;
-            border:1px solid black;
-            margin:10px;
+            max-width:50%;
+            margin-top: 50px;
+            padding: 0 15px;
+
+        }
+
+        .s3 .s3-item-body {
+            margin-top:16px;
+            font-size: 15px;
+            color: #838386;
+        }
+
+        .s3 .s3-item-top h6 {
+            display: inline-block;
+            margin-left:20px;
+            font-size: 20px;
+            font-weight: 700;
+            vertical-align: top;
         }
 
         .heading-5 {
@@ -116,6 +175,7 @@
 
         .s2 {
             margin-top: 40px;
+            margin-bottom: 50px;
         }
 
         .s2 .s2-desc {
