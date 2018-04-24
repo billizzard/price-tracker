@@ -10,10 +10,10 @@
 
 {% block content %}
     {{ form_start(form) }}
-        {{ form_row(form.title) }}
+        {{ form_row(form.title, { 'label': 'l.title'|trans}) }}
         {{ form_row(form.url) }}
-        {{ form_row(form.startPrice) }}
-        {{ form_row(form.percent) }}
+        {{ form_row(form.startPrice, { 'label': 'l.startPrice'|trans }) }}
+        {{ form_row(form.percent, { 'label': 'l.percent'|trans }) }}
         <button type="submit" class="btn btn-primary">{{ 'l.add'|trans }}</button>
     {{ form_end(form) }}
 

@@ -23,3 +23,117 @@
 .shadow-block {
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+
+/* video */
+.homepage-hero-module {
+  border-right: none;
+  border-left: none;
+  position: relative;
+}
+.no-video .video-container video,
+.touch .video-container video {
+  display: none;
+}
+.no-video .video-container .poster,
+.touch .video-container .poster {
+  display: block !important;
+}
+.video-container {
+  position: relative;
+  bottom: 0%;
+  left: 0%;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+.video-container .poster img {
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+}
+.video-container .filter {
+  z-index: 100;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+.video-container video {
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+}
+.video-container video.fillWidth {
+  width: 100%;
+}
+/* video */
+
+.login-box {
+  position: absolute;
+  z-index: 150;
+  display: flex;
+  margin-top: 12%;
+  width: 100%;
+  justify-content: center;
+}
+
+.login-box-body {
+  background: none;
+  min-width:300px;
+}
+
+.login-box-body input {
+  border: none;
+  opacity: 0.5;
+  transition: 0.5s;
+}
+
+.login-box-body input:hover {
+  opacity: 0.8;
+}
+.login-box-body a {
+  color: #dedede;
+  transition: 0.5s;
+}
+
+.login-box-body a:hover {
+  color: #fff;
+  text-shadow: 1px 1px 2px #3a3a3a, 0 0 1em white;
+}
+
+.login-title {
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+}
+
+.login-button {
+  background-color: #fff;
+  border-radius: 0;
+  font-weight: bold;
+  margin-top: 10px;
+  opacity: 0.8;
+  transition: 0.5s;
+}
+
+.login-button:hover {
+  color:inherit;
+  opacity: 1;
+}
+
+/* registration */
+
+.register-box {
+  margin-top: 12%;
+  position: absolute;
+  z-index: 150;
+  left: 50%;
+  margin-left: -180px;
+}
+
+.register-box-body {
+  background: none;
+  min-width:300px;
+}
+
+/* end registration */

@@ -10,6 +10,10 @@
                 <source>l.authorization</source>
                 <target>Авторизация</target>
             </trans-unit>
+            <trans-unit id="l.title">
+                <source>l.title</source>
+                <target>Заголовок</target>
+            </trans-unit>
             <trans-unit id="l.email">
                 <source>l.email</source>
                 <target>Email</target>
@@ -137,6 +141,10 @@
             <trans-unit id="l.schedule">
                 <source>l.schedule</source>
                 <target>График</target>
+            </trans-unit>
+            <trans-unit id="l.percent">
+                <source>l.percent</source>
+                <target>Процент</target>
             </trans-unit>
 
                                              <!-- e: errors -->

@@ -15,8 +15,16 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class SecurityController extends FrontendController
 {
-    public function loginAction(AuthenticationUtils $helper): Response
+    public function loginAction(Request $request, AuthenticationUtils $helper): Response
     {
+        if ($request->isXmlHttpRequest()) {
+            if ($error = $helper->getLastAuthenticationError()) {
+                $response = $this->getJsonErrorResponse(['message' => $this->translator->trans('e.login_invalid')]);
+            } else {
+                $response = $this->getJsonSuccessResponse(['url' => 'http://price-tracker.local/ru/profile/trackers']);
+            }
+            return $this->json($response);
+        }
         if ($error = $helper->getLastAuthenticationError()) {
             $this->addFlash('error', 'e.login_invalid');
         }

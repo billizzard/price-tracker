@@ -4,13 +4,15 @@
     {{ parent() }}
 {% endblock %}
 
-{% block main %}
+{% block body %}
     {{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
 
-    <div class="register-box shadow-block" style="margin-top:20%;">
-        <div class="register-box-body">
-            <p class="login-box-msg">{{ 'l.registration'|trans }}</p>
+    <div class="homepage-hero-module" style="margin-top: 50px;">
 
+
+        <div class="login-box">
+            <div class="login-box-body">
+                <p class="login-box-msg login-title">{{ 'l.registration'|trans }}</p>
                 <div class="form-group has-feedback">
                     {{ form_widget(form.email, {'attr': {'placeholder': 'l.email'|trans }}) }}
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -24,27 +26,27 @@
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
-                    {#<div class="col-xs-8">#}
-                        {#<div class="checkbox">#}
-                            {#<input type="checkbox" name="agree" value="1">#}
-                            {#<label>#}
-                                {#I agree to the <a href="#">terms</a>#}
-                            {#</label>#}
-                        {#</div>#}
-                    {#</div>#}
-                    <!-- /.col -->
-                    <div class="col-xs-5" style="padding-top:13px;">
-                        <a href="{{ path('security_login') }}" class="text-center">{{ 'l.login'|trans }}</a>
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn login-button btn-block ">{{ 'l.registration'|trans }}</button>
                     </div>
-                    <div class="col-xs-7">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'l.registration'|trans }}</button>
-                    </div>
-                    <!-- /.col -->
                 </div>
+            </div>
+        </div>
 
+
+        <div class="video-container">
+            <div class="filter"></div>
+            <video autoplay loop class="fillWidth">
+                <source src="/build/video/Dc3.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="/build/video/Dc3.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+            <div class="poster hidden">
+                <img src="/build/video/Dc.jpg" alt="">
+            </div>
 
         </div>
-        <!-- /.form-box -->
     </div>
+
+
     {{ form_end(form) }}
 {% endblock %}

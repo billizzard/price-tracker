@@ -25,6 +25,9 @@ security:
         main:
             anonymous: true
 
+            json_login:
+                check_path: /ru/login/
+
             form_login:
                 # The route name that the login form submits to
                 check_path: security_login

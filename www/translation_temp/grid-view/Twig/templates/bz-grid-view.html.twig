@@ -19,7 +19,13 @@
                         </th>
                         {% endfor %}
                         {% if models.actionColumn %}
-                            <th>{{ "l.actions"|trans }}</th>
+                            <th>
+                                {% if (models.actionColumn.options.label is defined) %}
+                                    {{ "l.actions"|trans }}
+                                {% else %}
+                                    Actions
+                                {% endif %}
+                            </th>
                         {% endif %}
                     </tr>
                     </thead>
@@ -84,7 +90,7 @@
                                 {% else %}
                                     href="{{ models.pagination.url }}{{ models.pagination.curPage - 1 }}"
                                 {% endif %}>
-                                Previous
+                                {{ 'l.previous'|trans }}
                             </a>
                         </li>
                         {% for i in models.pagination.startPage..models.pagination.endPage %}
@@ -99,7 +105,7 @@
                                 {% else %}
                                     href="{{ models.pagination.url }}{{ models.pagination.curPage + 1 }}"
                                 {% endif %}>
-                                Next
+                                {{ 'l.next'|trans }}
                             </a>
                         </li>
                     </ul>

@@ -12,8 +12,10 @@
 namespace App\Controller;
 
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Controller used to manage blog contents in the backend.
@@ -30,6 +32,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FrontendController extends Controller
 {
+    protected $logger;
+    protected $translator;
+
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        $this->translator = $translator;
+    }
+
     public function render(string $view, array $parameters = array(), Response $response = null): Response
     {
         $parameters['languages'] = [
@@ -45,5 +56,21 @@ class FrontendController extends Controller
             ],
         ];
         return parent::render($view, $parameters, $response);
+    }
+
+    protected function getJsonSuccessResponse($data)
+    {
+        return [
+            'success' => true,
+            'data' => $data
+        ];
+    }
+
+    protected function getJsonErrorResponse($data)
+    {
+        return [
+            'success' => false,
+            'data' => $data
+        ];
     }
 }

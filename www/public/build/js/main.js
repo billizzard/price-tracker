@@ -15,6 +15,10 @@ $(function () {
     new ProfileUserForm(message);
     new SelectAvatar(message);
 
+    if ($('#login-form').length) {
+        new LoginForm(message);
+    }
+
 });
 
 /**
@@ -27,24 +31,24 @@ Message = function() {
     this.infoMessage = function(message) {
         classMessage = 'flash-info';
         showMessage(message, classMessage);
-    }
+    };
 
     this.errorMessage = function(message) {
         classMessage = 'flash-error';
         showMessage(message, classMessage);
-    }
+    };
 
     this.successMessage = function(message) {
         classMessage = 'flash-success';
         showMessage(message, classMessage);
-    }
+    };
 
     var showMessage = function(message, classMessage) {
         if (message) {
             removeFlash();
             $('body').append("<div class='flash-message " + classMessage + "'>" + message + "</div>");
         }
-    }
+    };
 
     var removeFlash = function() {
         var oldMessage = $('.flash-message');
@@ -52,7 +56,37 @@ Message = function() {
             oldMessage.remove();
         }
     }
-}
+};
+
+LoginForm = function(message) {
+
+    var init = function() {
+        this.form = $('#login-form');
+        if (this.form.length) {
+            this.message = message;
+            addEvents();
+        }
+    };
+
+    var addEvents = function() {
+        var self = this;
+        this.form.on('submit', function() {
+            var data = self.form.serialize();
+            $.post(self.form.attr('action'), {data: data}, function(res) {
+                console.log(res);
+                if (res.success) {
+                    console.log(res);
+                    window.location = res.data.url;
+                } else {
+                    self.message.errorMessage(res.data.message);
+                }
+            });
+            return false;
+        });
+    };
+
+    init(message);
+};
 
 SelectAvatar = function(message) {
 
@@ -294,3 +328,66 @@ $(function () {
 
 
 })
+
+$( document ).ready(function() {
+    scaleVideoContainer();
+
+    initBannerVideoSize('.video-container .poster img');
+    initBannerVideoSize('.video-container .filter');
+    initBannerVideoSize('.video-container video');
+
+    $(window).on('resize', function() {
+        scaleVideoContainer();
+        scaleBannerVideoSize('.video-container .poster img');
+        scaleBannerVideoSize('.video-container .filter');
+        scaleBannerVideoSize('.video-container video');
+    });
+});
+
+function scaleVideoContainer() {
+
+    var height = $(window).height() + 5 - 40;
+    var unitHeight = parseInt(height) + 'px';
+    $('.homepage-hero-module').css('height',unitHeight);
+
+}
+
+function initBannerVideoSize(element){
+
+    $(element).each(function(){
+        $(this).data('height', $(this).height());
+        $(this).data('width', $(this).width());
+    });
+
+    scaleBannerVideoSize(element);
+
+}
+
+function scaleBannerVideoSize(element){
+
+    var windowWidth = $(window).width(),
+        windowHeight = $(window).height() + 5,
+        videoWidth,
+        videoHeight;
+    
+    console.log(windowHeight);
+
+    // console.log(windowHeight);
+
+    $(element).each(function(){
+        var videoAspectRatio = $(this).data('height')/$(this).data('width');
+
+        $(this).width(windowWidth);
+
+        if(windowWidth < 1000){
+            videoHeight = windowHeight;
+            videoWidth = videoHeight / videoAspectRatio;
+            $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
+
+            $(this).width(videoWidth).height(videoHeight);
+        }
+
+        $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
+
+    });
+}

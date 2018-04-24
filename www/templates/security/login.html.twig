@@ -4,67 +4,51 @@
     {{ parent() }}
 {% endblock %}
 
-{% block main %}
-    <div class="login-box shadow-block" style="margin-top:20%;">
-        <!-- /.login-logo -->
-        <div class="login-box-body">
-            <p class="login-box-msg">{{ 'l.authorization'|trans }}</p>
+{% block body %}
+    <div class="homepage-hero-module" style="margin-top: 50px;">
 
-            <form action="{{ path('security_login') }}" method="post" style="margin-bottom: 10px;">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                <div class="form-group has-feedback">
-                    <input type="email" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'l.email'|trans }}" class="form-control"/>
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" id="password" name="_password" placeholder="{{ 'l.password'|trans }}" class="form-control" />
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            {#<input id="remember" style="margin: 4px 0 0 0" type="checkbox" name="remember" value="1">#}
-                            <label style="padding-left: 20px" for="remember">{{ 'l.remember_me'|trans }}</label>
+
+        <div class="login-box" style="margin-top:12%;">
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg login-title">{{ 'l.authorization'|trans }}</p>
+
+                <form action="{{ path('security_login') }}" id="login-form" method="post" style="margin-bottom: 10px;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                    <div class="form-group has-feedback">
+                        <input type="email" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'l.email'|trans }}" class="form-control"/>
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" id="password" name="_password" placeholder="{{ 'l.password'|trans }}" class="form-control" />
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-block login-button">{{ 'l.login'|trans }}</button>
                         </div>
                     </div>
-                    <!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'l.login'|trans }}</button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </form>
-            <!-- /.social-auth-links -->
+                </form>
+                <!-- /.social-auth-links -->
 
-            <a href="#">{{ 'l.forgot_password'|trans }}</a>
-            <a style="float:right" href="{{ path('security_registration') }}" class="text-center">{{ 'l.registration'|trans }}</a>
+                <a href="#">{{ 'l.forgot_password'|trans }}</a>
+                <a style="float:right" href="{{ path('security_registration') }}" class="text-center">{{ 'l.registration'|trans }}</a>
+
+            </div>
+            <!-- /.login-box-body -->
+        </div>
+
+
+        <div class="video-container">
+            <div class="filter"></div>
+            <video autoplay loop class="fillWidth">
+                <source src="/build/video/Dc3.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="/build/video/Dc.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+            <div class="poster hidden">
+                <img src="/build/video/Dc.jpg" alt="">
+            </div>
 
         </div>
-        <!-- /.login-box-body -->
     </div>
-
-{#<div class="row">#}
-    {#<div class="col-sm-12">#}
-        {#<div class="well">#}
-            {#<form action="{{ path('security_login') }}" method="post">#}
-                {#<fieldset>#}
-                    {#<legend><i class="fa fa-lock" aria-hidden="true"></i> {{ 'l.authorization'|trans }}</legend>#}
-                    {#<div class="form-group">#}
-                        {#<label for="username">{{ 'l.email'|trans }}</label>#}
-                        {#<input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>#}
-                    {#</div>#}
-                    {#<div class="form-group">#}
-                        {#<label for="password">{{ 'l.password'|trans }}</label>#}
-                        {#<input type="password" id="password" name="_password" class="form-control" />#}
-                    {#</div>#}
-                    {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>#}
-                    {#<button type="submit" class="btn btn-primary">#}
-                        {#<i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'l.login'|trans }}#}
-                    {#</button>#}
-                    {#<a href="{{ path('security_registration') }}" title="{{ 'l.registration'|trans }}">{{ 'l.registration'|trans }}</a>#}
-                {#</fieldset>#}
-            {#</form>#}
-        {#</div>#}
-    {#</div>#}
-{#</div>#}
 {% endblock %}

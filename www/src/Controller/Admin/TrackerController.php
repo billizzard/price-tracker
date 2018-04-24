@@ -67,9 +67,9 @@ class TrackerController extends MainController
             'sort' => false,
         ])->addColumn('title', [
             'sort' => true,
-            'label' => 'Tiittllee'
+            'label' => $this->translator->trans('l.title')
         ])->addColumn('status', [
-            'label' => 'Статус',
+            'label' => $this->translator->trans('l.status'),
             'sort' => true,
             'raw' => true,
             'callback' => function($model) {
@@ -86,7 +86,8 @@ class TrackerController extends MainController
                 return $result;
             }
         ])->addActionColumn('Actions', [
-            'buttons' => ['view', 'edit', 'delete']
+            'buttons' => ['view', 'edit', 'delete'],
+            'label' => $this->translator->trans('l.actions'),
         ]);
 
         $products = $grid->getGridData();
