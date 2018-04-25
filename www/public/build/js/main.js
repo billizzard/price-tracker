@@ -16,7 +16,7 @@ $(function () {
     new SelectAvatar(message);
 
     if ($('#login-form').length) {
-        new LoginForm(message);
+        //new LoginForm(message);
     }
 
 });
