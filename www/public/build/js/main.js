@@ -95,7 +95,7 @@ SelectAvatar = function(message) {
     var init = function() {
         addEvents();
         messenger = message;
-    }
+    };
 
     var addEvents = function() {
         $('.avatar-items .js-avatar').on('click', function() {
@@ -115,7 +115,7 @@ SelectAvatar = function(message) {
                 }
             });
         })
-    }
+    };
 
     init(message);
 }
@@ -332,14 +332,14 @@ $(function () {
 $( document ).ready(function() {
     scaleVideoContainer();
 
-    initBannerVideoSize('.video-container .poster img');
-    initBannerVideoSize('.video-container .filter');
+    // initBannerVideoSize('.video-container .poster img');
+    // initBannerVideoSize('.video-container .filter');
     initBannerVideoSize('.video-container video');
 
     $(window).on('resize', function() {
         scaleVideoContainer();
-        scaleBannerVideoSize('.video-container .poster img');
-        scaleBannerVideoSize('.video-container .filter');
+        // scaleBannerVideoSize('.video-container .poster img');
+        // scaleBannerVideoSize('.video-container .filter');
         scaleBannerVideoSize('.video-container video');
     });
 });
@@ -364,18 +364,33 @@ function initBannerVideoSize(element){
 }
 
 function scaleBannerVideoSize(element){
+    $(element).each(function(){
+        var needWidth = $(window).height() / 0.583;
+
+        if ($(window).width() > needWidth) {
+            needWidth = windowWidth;
+        }
+
+        $(this).width(needWidth);
+
+        $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
+
+    });
+}
+
+function scaleBannerVideoSize1(element){
 
     var windowWidth = $(window).width(),
         windowHeight = $(window).height() + 5,
         videoWidth,
         videoHeight;
     
-    console.log(windowHeight);
-
     // console.log(windowHeight);
 
     $(element).each(function(){
         var videoAspectRatio = $(this).data('height')/$(this).data('width');
+        console.log('---------------------');
+        console.log(videoAspectRatio);
 
         $(this).width(windowWidth);
 
