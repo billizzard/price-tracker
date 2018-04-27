@@ -14,7 +14,7 @@
                 <p class="login-box-msg login-title">{{ 'l.authorization'|trans }}</p>
 
                 <form action="{{ path('security_login') }}" id="login-form" method="post" style="margin-bottom: 10px;">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                    <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.refreshToken('authenticate') }}"/>
                     <div class="form-group has-feedback">
                         <input type="email" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'l.email'|trans }}" class="form-control"/>
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

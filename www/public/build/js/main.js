@@ -16,7 +16,7 @@ $(function () {
     new SelectAvatar(message);
 
     if ($('#login-form').length) {
-        //new LoginForm(message);
+        new LoginForm(message);
     }
 
 });
@@ -72,13 +72,11 @@ LoginForm = function(message) {
         var self = this;
         this.form.on('submit', function() {
             var data = self.form.serialize();
-            $.post(self.form.attr('action'), {data: data}, function(res) {
-                console.log(res);
-                if (res.success) {
-                    console.log(res);
-                    window.location = res.data.url;
+            $.post(self.form.attr('action'), data, function(res) {
+                if (res.authenticated) {
+                    window.location = res.url;
                 } else {
-                    self.message.errorMessage(res.data.message);
+                    self.message.errorMessage(res.error);
                 }
             });
             return false;

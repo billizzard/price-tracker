@@ -19,6 +19,17 @@ security:
                     #property: email
 
     firewalls:
+
+#        login:
+#            pattern:  ^/api/login
+#            stateless: true
+#            anonymous: true
+#            form_login:
+#                check_path:               /api/login_check
+#                success_handler:          lexik_jwt_authentication.handler.authentication_success
+#                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+#                require_previous_session: false
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -28,6 +39,8 @@ security:
             form_login:
                 # The route name that the login form submits to
                 check_path: security_login
+                failure_handler: security.custom_auth_failure_handler
+                success_handler: security.custom_auth_success_handler
                 # The name of the route where the login form lives
                 # When the user tries to access a protected page, they are redirected here
                 login_path: security_login

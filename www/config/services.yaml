@@ -38,3 +38,17 @@ services:
         $locales: '%app.locales%'
         $defaultLocale: '%locale%'
 #        $emailSender: '%app.notifications.email_sender%'
+
+    security.custom_auth_failure_handler:
+        class: App\Security\TestFailureHandler
+        arguments:
+            - "@http_kernel"
+            - "@security.http_utils"
+        calls:
+            - [setTranslator, ["@translator"]]
+
+    security.custom_auth_success_handler:
+            class: App\Security\AuthenticationSuccessHandler
+            arguments:
+                - "@security.http_utils"
+                - []
