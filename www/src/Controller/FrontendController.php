@@ -47,12 +47,12 @@ class FrontendController extends Controller
             [
                 'code' => 'ru',
                 'title' => 'Русский',
-                'url' => '/ru' . substr($_SERVER['REQUEST_URI'], 3)
+                'url' => '/ru' . (isset($_SERVER['REQUEST_URI']) ? substr($_SERVER['REQUEST_URI'], 3) : '')
             ],
             [
                 'code' => 'en',
                 'title' => 'English',
-                'url' => '/en' . substr($_SERVER['REQUEST_URI'], 3)
+                'url' => '/en' . (isset($_SERVER['REQUEST_URI']) ? substr($_SERVER['REQUEST_URI'], 3) : '')
             ],
         ];
         return parent::render($view, $parameters, $response);

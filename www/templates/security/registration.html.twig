@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
+    {{ form_start(form, { 'attr': {'novalidate': 'novalidate', 'id': 'registration-form'} }) }}
 
     <div class="homepage-hero-module" style="margin-top: 50px;">
 
 
         <div class="login-box">
             <div class="login-box-body">
-                <p class="login-box-msg login-title">{{ 'l.registration'|trans }}</p>
+                <p class="login-box-msg login-title" id="t-reg">{{ 'l.registration'|trans }}</p>
                 <div class="form-group has-feedback">
                     {{ form_widget(form.email, {'attr': {'placeholder': 'l.email'|trans }}) }}
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <button type="submit" class="btn login-button btn-block ">{{ 'l.registration'|trans }}</button>
+                        <button type="submit" id="t-regSubmit" class="btn login-button btn-block ">{{ 'l.registration'|trans }}</button>
                     </div>
                 </div>
             </div>

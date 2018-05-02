@@ -1,4 +1,7 @@
 {
+    "alexandresalome/php-selenium": {
+        "version": "v1.1.0"
+    },
     "behat/behat": {
         "version": "v3.4.3"
     },
@@ -16,6 +19,9 @@
     },
     "behat/mink-goutte-driver": {
         "version": "v1.2.1"
+    },
+    "behat/mink-selenium-driver": {
+        "version": "v1.2.0"
     },
     "behat/mink-selenium2-driver": {
         "version": "v1.3.1"

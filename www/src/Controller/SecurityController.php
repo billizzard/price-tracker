@@ -17,14 +17,6 @@ class SecurityController extends FrontendController
 {
     public function loginAction(Request $request, AuthenticationUtils $helper): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            if ($error = $helper->getLastAuthenticationError()) {
-                $response = $this->getJsonErrorResponse(['message' => $this->translator->trans('e.login_invalid')]);
-            } else {
-                $response = $this->getJsonSuccessResponse(['url' => 'http://price-tracker.local/ru/profile/trackers']);
-            }
-            return $this->json($response);
-        }
         if ($error = $helper->getLastAuthenticationError()) {
             $this->addFlash('error', 'e.login_invalid');
         }
@@ -50,20 +42,26 @@ class SecurityController extends FrontendController
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($request->isXmlHttpRequest()) {
+                // 3) Encode the password (you could also do this via Doctrine listener)
+                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
 
-            // 3) Encode the password (you could also do this via Doctrine listener)
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
+                // 4) save the User!
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $response = $this->getJsonSuccessResponse(['url' => $this->generateUrl('security_login')]);
 
-            // 4) save the User!
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('security_login');
+                return $this->json($response);
+            }
         }
 
         foreach ($form->getErrors(true, true) as $error) {
+            if ($request->isXmlHttpRequest()) {
+                $response = $this->getJsonErrorResponse(['message' => $error->getMessage()]);
+                return $this->json($response);
+            }
             $this->addFlash('error', $error->getMessage());
             break;
         }

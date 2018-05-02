@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bundled - Run system tests from IDE" type="PhpBehatConfigurationType" factoryName="Behat">
+    <BehatRunner configuration_file="$PROJECT_DIR$/tests/behat/behat.yml.docker" directory="$PROJECT_DIR$/tests/behat/" scenario="" scope="Yml" options="-f pretty -o std -f junit -o reports/report.xml" use_alternative_configuration_file="true" />
+    <CommandLine workingDirectory="$PROJECT_DIR$/tests/behat">
+      <envs>
+        <env name="MYSQL_DATABASE" value="dutycalc" />
+        <env name="MYSQL_HOST" value="127.0.0.1" />
+        <env name="MYSQL_PASSWORD" value="123456" />
+        <env name="MYSQL_PORT" value="3307" />
+        <env name="MYSQL_USER" value="root" />
+      </envs>
+    </CommandLine>
+    <option name="workingDirectory" value="$PROJECT_DIR$/tests/behat" />
+    <method />
+  </configuration>
+</component>

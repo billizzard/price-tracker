@@ -15,9 +15,8 @@ $(function () {
     new ProfileUserForm(message);
     new SelectAvatar(message);
 
-    if ($('#login-form').length) {
-        new LoginForm(message);
-    }
+    if ($('#login-form').length) new LoginForm(message);
+    if ($('#registration-form').length) new RegistrationForm(message);
 
 });
 
@@ -29,24 +28,24 @@ Message = function() {
     var classMessage = '';
 
     this.infoMessage = function(message) {
-        classMessage = 'flash-info';
+        classMessage = 'alert-info';
         showMessage(message, classMessage);
     };
 
     this.errorMessage = function(message) {
-        classMessage = 'flash-error';
+        classMessage = 'alert-error';
         showMessage(message, classMessage);
     };
 
     this.successMessage = function(message) {
-        classMessage = 'flash-success';
+        classMessage = 'alert-success';
         showMessage(message, classMessage);
     };
 
     var showMessage = function(message, classMessage) {
         if (message) {
             removeFlash();
-            $('body').append("<div class='flash-message " + classMessage + "'>" + message + "</div>");
+            $('body').append("<div class='flash-message alert " + classMessage + "'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" + message + "</div>");
         }
     };
 
@@ -77,6 +76,34 @@ LoginForm = function(message) {
                     window.location = res.url;
                 } else {
                     self.message.errorMessage(res.error);
+                }
+            });
+            return false;
+        });
+    };
+
+    init(message);
+};
+
+RegistrationForm = function(message) {
+
+    var init = function() {
+        this.form = $('#registration-form');
+        if (this.form.length) {
+            this.message = message;
+            addEvents();
+        }
+    };
+
+    var addEvents = function() {
+        var self = this;
+        this.form.on('submit', function() {
+            var data = self.form.serialize();
+            $.post(self.form.attr('action'), data, function(res) {
+                if (res.success) {
+                    window.location = res.data.url;
+                } else {
+                    self.message.errorMessage(res.data.message);
                 }
             });
             return false;
@@ -184,80 +211,83 @@ ProfileUserForm = function(message) {
 
 $(function () {
 
-    var jsonPrice = $('#jsonPrice').val();
-    jsonPrice = JSON.parse(jsonPrice);
-    //console.log(jsonPrice);
-    if (jsonPrice && jsonPrice.data && jsonPrice.labels) {
+    var jsonPriceEl = $('#jsonPrice');
+    if (jsonPriceEl.length) {
+        var jsonPrice = jsonPriceEl.val();
+        jsonPrice = JSON.parse(jsonPrice);
+        //console.log(jsonPrice);
+        if (jsonPrice && jsonPrice.data && jsonPrice.labels) {
 
-        $.plot('#line-chart', [{
-            data: jsonPrice.data
-        }], {
-            grid  : {
-                hoverable  : true,
-                borderColor: '#f3f3f3',
-                borderWidth: 1,
-                tickColor  : '#f3f3f3'
-            },
-            series: {
-                shadowSize: 0,
-                lines     : {
-                    show: true
+            $.plot('#line-chart', [{
+                data: jsonPrice.data
+            }], {
+                grid: {
+                    hoverable: true,
+                    borderColor: '#f3f3f3',
+                    borderWidth: 1,
+                    tickColor: '#f3f3f3'
                 },
-                points    : {
-                    show: true
-                }
-            },
-            xaxis: { ticks: jsonPrice.labels}
-        })
-    } else {
-        $('#line-chart').html('<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>');
-        //$('#line-chart').innerHTML = '<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>';
-    }
-
-    //Initialize tooltip on hover
-    $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
-        position: 'absolute',
-        marginLeft: '-50px',
-        marginTop: '10px',
-        display : 'none',
-        fontWeight: 'bold',
-        opacity : 0.8,
-        backgroundColor: '#fff',
-        color: '#7b7b7b',
-        border: '1px solid #ccc',
-        letterSpacing: '0.05em'
-    }).appendTo('body');
-
-    $('#line-chart').bind('plothover', function (event, pos, item) {
-        if (item) {
-            var x = item.datapoint[0].toFixed(2),
-                price = item.datapoint[1].toFixed(2)
-
-            var diff = 0;
-            if (item.dataIndex - 1 >= 0 && item.series.data[item.dataIndex - 1].length) {
-                var prevPrice = item.series.data[item.dataIndex - 1][1];
-                diff = (price - prevPrice).toFixed(2);
-            }
-
-            price = 'Price: <span class="text-yellow">' + price + '</span>';
-            if (diff != 0) {
-                var colorClass = 'text-green';
-                var sign = '';
-                if (diff > 0) {
-                    colorClass = 'text-red';
-                    sign = '+';
-                }
-                price += " (<span class='" + colorClass + "'>" + sign + diff + "</span> )";
-            }
-
-            $('#line-chart-tooltip').html(price)
-                .css({ top: item.pageY + 5, left: item.pageX + 5 })
-                .fadeIn(200)
+                series: {
+                    shadowSize: 0,
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                xaxis: {ticks: jsonPrice.labels}
+            })
         } else {
-            $('#line-chart-tooltip').hide()
+            $('#line-chart').html('<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>');
+            //$('#line-chart').innerHTML = '<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>';
         }
 
-    })
+        //Initialize tooltip on hover
+        $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+            position: 'absolute',
+            marginLeft: '-50px',
+            marginTop: '10px',
+            display: 'none',
+            fontWeight: 'bold',
+            opacity: 0.8,
+            backgroundColor: '#fff',
+            color: '#7b7b7b',
+            border: '1px solid #ccc',
+            letterSpacing: '0.05em'
+        }).appendTo('body');
+
+        $('#line-chart').bind('plothover', function (event, pos, item) {
+            if (item) {
+                var x = item.datapoint[0].toFixed(2),
+                    price = item.datapoint[1].toFixed(2)
+
+                var diff = 0;
+                if (item.dataIndex - 1 >= 0 && item.series.data[item.dataIndex - 1].length) {
+                    var prevPrice = item.series.data[item.dataIndex - 1][1];
+                    diff = (price - prevPrice).toFixed(2);
+                }
+
+                price = 'Price: <span class="text-yellow">' + price + '</span>';
+                if (diff != 0) {
+                    var colorClass = 'text-green';
+                    var sign = '';
+                    if (diff > 0) {
+                        colorClass = 'text-red';
+                        sign = '+';
+                    }
+                    price += " (<span class='" + colorClass + "'>" + sign + diff + "</span> )";
+                }
+
+                $('#line-chart-tooltip').html(price)
+                    .css({top: item.pageY + 5, left: item.pageX + 5})
+                    .fadeIn(200)
+            } else {
+                $('#line-chart-tooltip').hide()
+            }
+
+        })
+    }
 
 
 

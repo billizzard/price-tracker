@@ -15,7 +15,7 @@ class WebContext extends DefaultContext
      */
     public function iGoToTheWebsiteRoot()
     {
-        $this->getSession()->visit('/');
+        $this->getSession()->visit('/en/');
     }
 
     /**
@@ -97,30 +97,15 @@ class WebContext extends DefaultContext
         ];
         $class = $classesMap[$type];
         
-        $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $class . '"]', $this->fixStepArgument($message));
+        $this->assertSession()->elementTextContains('xpath', '//div[@class="alert-' . $class . '"]', $this->fixStepArgument($message));
     }
 
-    public function spin ($lambda, $tries = 3, $sleep = 1)
+    /**
+     * @Then /^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in "(?P<element>[^"]*)" with id "(?P<id>[^"]+)"$/
+     */
+    public function iShouldSeeInWithId($text, $element, $id)
     {
-        for ($i = 0; $i < $tries; $i++)
-        {
-            try
-            {
-                if ($lambda($this))
-                {
-                    return true;
-                    break;
-                }
-            }
-            catch (Exception $e)
-            {
-                // do nothing
-            }
-
-            sleep($sleep);
-        }
-
-		//throw new Exception ("Wait time limit of ". $tries*$sleep ." seconds exceeded.");
+        $this->assertSession()->elementTextContains('xpath', '//' . $element . '[@id="' . $id . '"]', $this->fixStepArgument($text));
     }
 
 // NEW
@@ -171,21 +156,5 @@ class WebContext extends DefaultContext
 
     // END NEW
 
-    /**
-     * @Then /^(?:|I )should see (?P<type>[(error|success|info|warning)]+) message "(?P<message>[^"]+)" after ajax$/
-     */
-    public function iShouldSeeMessageAfterAjax($type, $message)
-    {
-        //$this->getSession()->wait(5000);
-        $this->spin(function() use ($type, $message) {
-            try
-            {
-                $this->assertSession()->elementTextContains('xpath', '//div[@class="flash-message flash-' . $type . '"]', $this->fixStepArgument($message));
-                return false;
-            }
-            catch(Exception $e)
-            {}
-            return false;
-        });
-    }
+
 }

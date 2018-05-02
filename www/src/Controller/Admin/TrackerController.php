@@ -176,7 +176,7 @@ class TrackerController extends MainController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'v.success.edited');
+                $this->addFlash('success', 's.data_updated');
                 return $this->redirectToRoute('tracker_list');
             }
 
