@@ -148,7 +148,7 @@ class MessageController extends MainController
                 $result = '';
                 if ($model['type'] == Message::TYPE_INFO || $model['type'] == Message::TYPE_CHANGE_PRICE) {
                     $result = '<i class="fa fa-warning text-yellow"></i>';
-                } else if ($model['status'] == Message::TYPE_SALE_SUCCESS) {
+                } else if ($model['type'] == Message::TYPE_SALE_SUCCESS) {
                     $result = '<i class="fa fa-shopping-cart text-green"></i>';
                 }
                 return $result;

@@ -142,3 +142,10 @@
 }
 
 /* end registration */
+
+/* view tracker */
+.nav.nav-stacked .success-date {
+  margin-left: 10px;
+  margin-top: 2px;
+}
+/* end view tracker */

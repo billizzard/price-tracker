@@ -198,7 +198,7 @@ class Message
 
     public function getTranslatedMessage(TranslatorInterface $translator)
     {
-        if ($this->getType() == self::TYPE_CHANGE_PRICE) {
+        if ($this->getType() == self::TYPE_CHANGE_PRICE || $this->getType() == self::TYPE_SALE_SUCCESS) {
             $addData = $this->getAddData();
             return $translator->trans($this->getMessage(), ['%watcher%' => '"<a target="_blank" href="/ru/profile/trackers/' . $addData['watcher_id'] . '/view/">' . $this->getAddData()['watcher_title'] . '</a>"']);
         }
@@ -207,7 +207,7 @@ class Message
 
     public function getTranslatedTitle(TranslatorInterface $translator)
     {
-        if ($this->getType() == self::TYPE_CHANGE_PRICE) {
+        if ($this->getType() == self::TYPE_CHANGE_PRICE || $this->getType() == self::TYPE_SALE_SUCCESS) {
             return $translator->trans($this->getTitle());
         }
     }

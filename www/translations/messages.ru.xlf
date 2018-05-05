@@ -236,6 +236,10 @@
                 <source>m.changed_price</source>
                 <target>Изменилась цена товара %watcher%</target>
             </trans-unit>
+            <trans-unit id="m.success_price">
+                <source>m.success_price</source>
+                <target>%watcher% имеет приемлимую цену</target>
+            </trans-unit>
             <trans-unit id="m.have_notifications">
                 <source>m.have_notifications</source>
                 <target>У вас %num% сообщений</target>
@@ -247,6 +251,10 @@
             <trans-unit id="m.changed_price_short">
                 <source>m.changed_price_short</source>
                 <target>Изменение цены товара</target>
+            </trans-unit>
+            <trans-unit id="m.success_price_short">
+                <source>m.success_price_short</source>
+                <target>У товара нужная цена</target>
             </trans-unit>
 
         </body>

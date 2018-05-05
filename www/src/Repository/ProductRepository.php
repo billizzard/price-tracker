@@ -45,7 +45,7 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findTracked(): array
     {
-        return $this->findBy(['status' => [Product::STATUS_TRACKED, Product::STATUS_NEW]]);
+        return $this->findBy(['status' => [Product::STATUS_TRACKED, Product::STATUS_NEW, Product::STATUS_ERROR_TRACKED]]);
     }
 
 

@@ -58,6 +58,7 @@ class MainController extends AbstractController
         $messages = $repository->getUnreadMessagesByUser($this->getUser(), 5);
         $cookieMessages = [];
         $class = 'fa-warning text-yellow';
+        /** @var Message $message */
         foreach ($messages as $message) {
             if ($message->getType() == Message::TYPE_SALE_SUCCESS) {
                 $class = 'fa-shopping-cart text-green';

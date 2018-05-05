@@ -96,7 +96,7 @@ class CronController extends Controller
     }
 
     /**
-     * Изменяет стату нблюдателя и оповещает, если нужно о приемлемой цене для пользователя
+     * Изменяет статус нблюдателя и оповещает, если нужно о приемлемой цене для пользователя
      * @param Product $product
      */
     private function changeWatcherStatus(Product $product)
@@ -109,14 +109,30 @@ class CronController extends Controller
             /** @var Watcher $watcher */
             foreach ($watchers as $watcher) {
                 $user = $watcher->getUser();
+
                 if ($product->getChangedPrice()) {
-                    $message = new Message();
-                    $message->setMessage('m.changed_price');
-                    $message->setAddData(['watcher_id' => $watcher->getId(), 'watcher_title' => $watcher->getTitle()]);
-                    $message->setUser($user);
-                    $message->setTitle('m.changed_price_short');
-                    $message->setType(Message::TYPE_CHANGE_PRICE);
-                    $this->entityManager->persist($message);
+                    // Если это цена, которую ждал пользователь
+                    if ($watcher->getEndPrice() >= $product->getCurrentPrice()) {
+                        // Устанавливаем статус успешно, чтобы больше этого наблюдателя не трогать
+                        $watcher->setStatus(Watcher::STATUS_SUCCESS);
+                        $watcher->setSuccessDate(time());
+                        $messageSuccess = new Message();
+                        $messageSuccess->setMessage('m.success_price');
+                        $messageSuccess->setAddData(['watcher_id' => $watcher->getId(), 'watcher_title' => $watcher->getTitle()]);
+                        $messageSuccess->setUser($user);
+                        $messageSuccess->setTitle('m.success_price_short');
+                        $messageSuccess->setType(Message::TYPE_SALE_SUCCESS);
+                        $this->entityManager->persist($messageSuccess);
+                        //$this->mailer->sendSaleMail($user->getEmail());
+                    } else {
+                        $message = new Message();
+                        $message->setMessage('m.changed_price');
+                        $message->setAddData(['watcher_id' => $watcher->getId(), 'watcher_title' => $watcher->getTitle()]);
+                        $message->setUser($user);
+                        $message->setTitle('m.changed_price_short');
+                        $message->setType(Message::TYPE_CHANGE_PRICE);
+                        $this->entityManager->persist($message);
+                    }
                 }
                 // Если это новый ватчер
                 if ($watcher->getStatus() == Watcher::STATUS_NEW) {
@@ -131,18 +147,7 @@ class CronController extends Controller
                 }
 
 
-                // Если это цена, которую ждал пользователь
-                if ($watcher->getEndPrice() >= $product->getCurrentPrice()) {
-                    // Устанавливаем статус успешно, чтобы больше этого наблюдателя не трогать
-                    $watcher->setStatus(Watcher::STATUS_SUCCESS);
-                    $watcher->setSuccessDate(time());
-                    $message = new Message();
-                    $message->setMessage('');
-                    $message->setUser($user);
-                    $message->setType(Message::TYPE_SALE_SUCCESS);
-                    $this->entityManager->persist($message);
-                    //$this->mailer->sendSaleMail($user->getEmail());
-                }
+
             }
         } else { // значит за товаром уже никто не наблюдает
             $this->logger->info('Product not tracker more', ['product_id' => $product->getId()]);

@@ -22,7 +22,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
     }
 
     /**
-     * Должна изменить текущая цена товара
+     * Должна изменится текущая цена товара, так как изначально она равна 0, пока товар хоть один таз не протрекался
      * @depends testRunCron50
      */
     public function testCheckChangeProduct50()
@@ -30,12 +30,12 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
         /** @var ProductRepository $repository */
         $repository = self::$entityManager->getRepository(Product::class);
         /** @var Product $product */
-        $product = $repository->find(self::$entities['product']->getId());
+        $product = $repository->find(static::$entities['product']->getId());
         $this->assertEquals(50, $product->getCurrentPrice());
     }
 
     /**
-     * Должна быть запись о цене товара в price tracker
+     * Должна быть запись о цене товара в price tracker, так как цена изменилась, а при ее изменении запись должна быть
      * @depends testRunCron50
      */
     public function testCheckAddPriceTracker50()
@@ -61,17 +61,31 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
     }
 
     /**
-     * Сообщений не должно быть, так как это не цена, которую ожидает пользователь
+     * Сообщений (с типом успешно) не должно быть, так как это не цена, которую ожидает пользователь
      * @depends testRunCron50
      */
-    public function testCheckNotMessage50()
+    public function testCheckNotSuccessMessage50()
     {
         /** @var MessageRepository $repository */
         $repository = self::$entityManager->getRepository(Message::class);
         /** @var Message $message */
-        $message = $repository->findOneBy(['user' => self::$entities['user']->getId()]);
-
+        $message = $repository->findOneBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_SUCCESS]);
         $this->assertEquals(false, $message);
+    }
+
+    /**
+     * Должно быть сообщение о изменении цены товара, так как цена на товар изменилась
+     * @depends testRunCron50
+     */
+    public function testCheckChangePriceMessage50()
+    {
+        /** @var MessageRepository $repository */
+        $repository = self::$entityManager->getRepository(Message::class);
+        /** @var Message $message */
+        $message = $repository->findOneBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_CHANGE_PRICE]);
+        $this->assertEquals(Message::TYPE_CHANGE_PRICE, $message->getType());
+        $this->assertNotEmpty($message->getTitle());
+        $this->assertNotEmpty($message->getMessage());
     }
 
     /* ------------------------ Увеличение цены  -------------------------------------*/
@@ -131,14 +145,28 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
      * Сообщений не должно быть, так как это не цена, которую ожидает пользователь
      * @depends testRunCron60
      */
-    public function testCheckNotMessage60()
+    public function testCheckNotSuccessMessage60()
     {
         /** @var MessageRepository $repository */
         $repository = self::$entityManager->getRepository(Message::class);
         /** @var Message $message */
-        $message = $repository->findOneBy(['user' => self::$entities['user']->getId()]);
+        $message = $repository->findOneBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_SUCCESS]);
 
         $this->assertEquals(false, $message);
+    }
+
+    /**
+     * Сообщений должно быть 2 так как цена изменялась 2 раза
+     * @depends testRunCron60
+     */
+    public function testCheckCountMessages60()
+    {
+        /** @var MessageRepository $repository */
+        $repository = self::$entityManager->getRepository(Message::class);
+        /** @var Message $message */
+        $message = $repository->findBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_CHANGE_PRICE]);
+
+        $this->assertEquals(2, count($message));
     }
 
     /* ------------------------ Уменьшение цены, подходящей для пользователя  -------------------------------------*/
@@ -203,9 +231,11 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
         /** @var MessageRepository $repository */
         $repository = self::$entityManager->getRepository(Message::class);
         /** @var Message $message */
-        $message = $repository->findOneBy(['user' => self::$entities['user']->getId()]);
+        $message = $repository->findOneBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_SALE_SUCCESS]);
 
         $this->assertEquals(Message::TYPE_SALE_SUCCESS, $message->getType());
+        $this->assertNotEmpty($message->getTitle());
+        $this->assertNotEmpty($message->getMessage());
     }
 
     /* ------------------------ Повторное уменьшение цены  -------------------------------------*/
@@ -271,7 +301,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
         /** @var MessageRepository $repository */
         $repository = self::$entityManager->getRepository(Message::class);
         /** @var Message $message */
-        $message = $repository->findBy(['user' => self::$entities['user']->getId()]);
+        $message = $repository->findBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_SALE_SUCCESS]);
 
         $this->assertEquals(1, count($message));
     }
@@ -326,11 +356,8 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
         /** @var MessageRepository $repository */
         $repository = self::$entityManager->getRepository(Message::class);
         /** @var Message $message */
-        $message = $repository->findBy(['user' => self::$entities['user']->getId()]);
+        $message = $repository->findBy(['user' => self::$entities['user']->getId(), 'type' => Message::TYPE_SALE_SUCCESS]);
 
         $this->assertEquals(1, count($message));
     }
-
-
-
 }

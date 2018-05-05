@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
 class RegistrationType extends AbstractType
@@ -42,6 +43,9 @@ class RegistrationType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,
+            'intention' => 'registration_type_form',
+            'csrf_token_id' => 'registration_type_form',
         ));
     }
+
 }

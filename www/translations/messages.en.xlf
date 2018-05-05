@@ -238,6 +238,10 @@
                 <source>m.changed_price</source>
                 <target>Changed the price of the %watcher%</target>
             </trans-unit>
+            <trans-unit id="m.success_price">
+                <source>m.success_price</source>
+                <target>%watcher% has a necessary price</target>
+            </trans-unit>
             <trans-unit id="m.have_notifications">
                 <source>m.have_notifications</source>
                 <target>You have %num% notifications</target>
@@ -249,6 +253,10 @@
             <trans-unit id="m.changed_price_short">
                 <source>m.changed_price_short</source>
                 <target>Change in the price of goods</target>
+            </trans-unit>
+            <trans-unit id="m.success_price_short">
+                <source>m.success_price_short</source>
+                <target>Product has a necessary price</target>
             </trans-unit>
 
         </body>
