@@ -193,7 +193,8 @@ class TrackerController extends MainController
 
     public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
     {
-        $watcher = $watcherRepository->findOneBy(['product' => $request->get('id'), 'user' => $this->getUser()->getId()]);
+        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
+
         if ($watcher) {
             $product = $watcher->getProduct();
             $this->denyAccessUnlessGranted('view', $watcher, 'Access denied.');
@@ -222,6 +223,22 @@ class TrackerController extends MainController
             ]);
 
         }
+        throw new NotFoundHttpException();
+    }
+
+    public function deleteAction(Request $request, WatcherRepository $watcherRepository)
+    {
+        /** @var Watcher $watcher */
+        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
+
+        if ($watcher) {
+            $watcher->delete();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($watcher);
+            $entityManager->flush();
+            return $this->redirectToRoute('tracker_list');
+        }
+
         throw new NotFoundHttpException();
     }
 }

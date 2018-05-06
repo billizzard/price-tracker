@@ -18,3 +18,9 @@ tracker_view:
       id: '\d+'
     controller: App\Controller\Admin\TrackerController::viewAction
 
+tracker_delete:
+    path: /trackers/{id}/delete/
+    requirements:
+      id: '\d+'
+    controller: App\Controller\Admin\TrackerController::deleteAction
+

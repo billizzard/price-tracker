@@ -49,7 +49,7 @@
                                     {% endif %}
 
                                     {% if button == 'delete' %}
-                                        <a href="delete/?id={{ id }}" class="btn btn-action" title="{{ 'l.delete'|trans }}">
+                                        <a href="{{ id }}/delete/" onclick="return confirm('Are you sure?')" class="btn btn-action" title="{{ 'l.delete'|trans }}">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     {% endif %}

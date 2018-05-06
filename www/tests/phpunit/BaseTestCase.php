@@ -2,6 +2,7 @@
 namespace App\Tests\phpunit;
 
 use App\Entity\Host;
+use App\Entity\Message;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Entity\Watcher;
@@ -58,6 +59,18 @@ class BaseTestCase extends WebTestCase
         return $user;
     }
 
+    protected static function createTestUser2()
+    {
+        $user = new User();
+        $user->setEmail('test2@test.com');
+        $user->setRoles('ROLE_USER');
+        $user->setPassword('$2y$12$A1comgHtNSnZwjz09PIWhuD2DOt2iV8rwG74pZ9t9apQzkwdpYByC');
+        $user->setNickName('User_Test2');
+        self::$entityManager->persist($user);
+        self::$entityManager->flush();
+        return $user;
+    }
+
     protected static function createAdminUser()
     {
         $user = new User();
@@ -68,5 +81,49 @@ class BaseTestCase extends WebTestCase
         self::$entityManager->persist($user);
         self::$entityManager->flush();
         return $user;
+    }
+
+    protected static function createHost()
+    {
+        $host = new Host();
+        $host->setHost('http://test.te');
+        self::$entityManager->persist($host);
+        self::$entityManager->flush();
+        return $host;
+    }
+
+    protected static function createProduct(Host $host)
+    {
+        $product = new Product();
+        $product->setHost($host);
+        $product->setUrl('http://test.te');
+        $product->setCurrentPrice(100);
+        self::$entityManager->persist($product);
+        self::$entityManager->flush();
+        return $product;
+    }
+
+    protected static function createMessage(User $user)
+    {
+        $message = new Message();
+        $message->setMessage('message');
+        $message->setTitle('title');
+        $message->setUser($user);
+        self::$entityManager->persist($message);
+        self::$entityManager->flush();
+        return $message;
+    }
+
+    protected static function createWatcher(Product $product, User $user)
+    {
+        $watcher = new Watcher();
+        $watcher->setUser($user);
+        $watcher->setProduct($product);
+        $watcher->setTitle('title');
+        $watcher->setStartPrice(100);
+        $watcher->setPercent(10);
+        self::$entityManager->persist($watcher);
+        self::$entityManager->flush();
+        return $watcher;
     }
 }

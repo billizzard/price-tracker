@@ -15,6 +15,7 @@ class Watcher
     const STATUS_NEW = 1; // Новый ватчер
     const STATUS_PRICE_CONFIRMED = 3; // После нового статуса присваивается этот, значит вотчер отслеживается
     const STATUS_SUCCESS = 2; // Успешно отслежен, скидка получена, больше не отслеживается
+    const STATUS_DELETED = 4; // Удален, больше не отслеживается
 
     /**
      * @ORM\Id
@@ -206,5 +207,10 @@ class Watcher
     public function setProduct(Product $product)
     {
         $this->product = $product;
+    }
+
+    public function delete(): void
+    {
+        $this->setStatus(self::STATUS_DELETED);
     }
 }

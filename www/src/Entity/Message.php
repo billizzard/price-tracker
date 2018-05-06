@@ -57,7 +57,7 @@ class Message
     /**
      * @ORM\Column(type="string", length=500)
      */
-    private $addData;
+    private $addData = '';
 
     /**
      * @ORM\Column(type="smallint")

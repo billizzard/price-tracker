@@ -31,6 +31,7 @@ class WatcherRepository extends ServiceEntityRepository
         $queryBuilder->addSelect('w.title as title');
         $queryBuilder->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
         $queryBuilder->where("w.user = " . $user->getId());
+        $queryBuilder->andWhere($this->getActiveQuery());
 
 
         $queryBuilder->addOrderBy($sortColumn, $sortDirection);
@@ -40,26 +41,28 @@ class WatcherRepository extends ServiceEntityRepository
 
     public function findActive()
     {
-        $qb = $this->createQueryBuilder('w')->where('w.status != ' . Watcher::STATUS_SUCCESS);
+        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery());
         return $qb->getQuery()->getResult();
     }
 
     public function findActiveByProductId($productId)
     {
-        $qb = $this->createQueryBuilder('w')->where('w.status != ' . Watcher::STATUS_SUCCESS)->andWhere('w.product = ' . (int)$productId);
+        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery())
+            ->andWhere('w.product = ' . (int)$productId);
         return $qb->getQuery()->getResult();
     }
 
-    /*
-    public function findBySomething($value)
+    public function getOneByIdAndUser(int $id, User $user)
     {
-        return $this->createQueryBuilder('w')
-            ->where('w.something = :value')->setParameter('value', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery())
+            ->andWhere('w.id = ' . (int)$id)
+            ->andWhere('w.user = ' . $user->getId());
+        return $qb->getQuery()->getOneOrNullResult();
     }
-    */
+
+    private function getActiveQuery(): string
+    {
+        return 'w.status != ' . Watcher::STATUS_SUCCESS . ' AND w.status != ' . Watcher::STATUS_DELETED;
+    }
+
 }

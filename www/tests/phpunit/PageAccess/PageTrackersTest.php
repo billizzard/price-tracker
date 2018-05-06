@@ -16,27 +16,54 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class PageTrackersTest extends BaseTestCase
 {
     private $url = '/en/profile/trackers/';
+    private static $data = [];
+
+    private static $client1 = null;
+    private static $client2 = null;
+    private static $clientAdmin = null;
+
+    public static function loadFixtures()
+    {
+        $user1 = self::createTestUser();
+        self::createTestUser2();
+        self::createAdminUser();
+
+        $host = self::createHost();
+        $product = self::createProduct($host);
+        $deletedWatcher = self::createWatcher($product, $user1);
+        $deletedWatcher->setStatus(Watcher::STATUS_DELETED);
+        self::$entityManager->persist($deletedWatcher);
+        self::$entityManager->flush();
+        self::$data['user1Watcher'] = self::createWatcher($product, $user1);
+        self::$data['user1DeletedWatcher'] = $deletedWatcher;
+        self::$client1 = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'test@test.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
+        self::$client2 = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'test2@test.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
+        self::$clientAdmin = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin@admin.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
+    }
 
     /**
      * Доступ для залогиненого пользователя
      */
-    public function testUserTrackerList()
+    public function testUserTrackersList()
     {
-        self::createTestUser();
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'test@test.com',
-            'PHP_AUTH_PW'   => 'qq',
-        ));
+        self::$client1->request('GET', $this->url);
 
-        $client->request('GET', $this->url);
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, self::$client1->getResponse()->getStatusCode());
     }
 
     /**
-     * Некорректный логин
+     * Доступ для незалогиненого пользователя
      */
-    public function testNoUserTrackerList()
+    public function testNoUserTrackersList()
     {
         $client = static::createClient();
         $client->request('GET', $this->url);
@@ -46,16 +73,46 @@ class PageTrackersTest extends BaseTestCase
     /**
      * Доступ для админа пользователя
      */
-    public function testAdminTrackerList()
+    public function testAdminTrackersList()
     {
-        self::createAdminUser();
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'admin@admin.com',
-            'PHP_AUTH_PW'   => 'qq',
-        ));
-
-        $client->request('GET', $this->url);
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        self::$clientAdmin->request('GET', $this->url);
+        $this->assertEquals(200, self::$clientAdmin->getResponse()->getStatusCode());
     }
+
+    /**
+     * Доступ для залогиненого пользователя, к его товару
+     */
+    public function testUserOwnerTrackerView()
+    {
+        self::$client1->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/view/');
+        $this->assertEquals(200, self::$client1->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Доступ для залогиненого пользователя, к не его товару
+     */
+    public function testUserNotOwnerTrackerView()
+    {
+        self::$client2->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/view/');
+        $this->assertEquals(404, self::$client2->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Доступ для залогиненого пользователя, к его удаленному товару
+     */
+    public function testUserOwnerDeletedTrackerView()
+    {
+        self::$client1->request('GET', $this->url . self::$data['user1DeletedWatcher']->getId() . '/view/');
+        $this->assertEquals(404, self::$client1->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Доступ для удаления своего ватчера
+     */
+    public function testUserOwnerTrackerDelete()
+    {
+        self::$client1->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/delete/');
+        $this->assertEquals(302, self::$client1->getResponse()->getStatusCode());
+    }
+
 }
