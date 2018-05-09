@@ -20,13 +20,6 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-
-//    public function getTableData(HVFGridView $gridView, QueryBuilder $queryBuilder): array
-//    {
-//        $result = $gridView->getGridData($queryBuilder, $page, $onPage);
-//        return $result;
-//    }
-//
     public function findByRequestQueryBuilder(Request $request, User $user)
     {
         $sortColumn = $request->get('sort', 'id');
@@ -48,27 +41,4 @@ class ProductRepository extends ServiceEntityRepository
         return $this->findBy(['status' => [Product::STATUS_TRACKED, Product::STATUS_NEW, Product::STATUS_ERROR_TRACKED]]);
     }
 
-
-//
-//    private function createPaginator(QueryBuilder $query, int $page): Pagerfanta
-//    {
-//        $paginator = new Pagerfanta(new DoctrineORMAdapter($query));
-//        $paginator->setMaxPerPage(Product::DEFAULT_LIST_ITEMS);
-//        $paginator->setCurrentPage($page);
-//
-//        return $paginator;
-//    }
-
-    /*
-    public function findBySomething($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->where('t.something = :value')->setParameter('value', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 }

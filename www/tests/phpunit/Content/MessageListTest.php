@@ -18,6 +18,10 @@ class MessageListTest extends BaseTestCase
 {
     private $url = '/en/profile/messages/';
 
+    private static $client1;
+    private static $client2;
+    private static $clientAdmin;
+
     /**
      * Создаю 2 простых пользователей и админа.
      * У первого пользователя одно сообщение у второго 3 (одно из них удаленное).
@@ -35,6 +39,19 @@ class MessageListTest extends BaseTestCase
         $deletedMessage->setStatus(Message::STATUS_DELETED);
         self::$entityManager->persist($deletedMessage);
         self::$entityManager->flush();
+
+        self::$client1 = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'test@test.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
+        self::$client2 = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'test2@test.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
+        self::$clientAdmin = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin@admin.com',
+            'PHP_AUTH_PW'   => 'qq',
+        ));
     }
 
     /**
@@ -42,30 +59,33 @@ class MessageListTest extends BaseTestCase
      */
     public function testUser1CountMessages()
     {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'test@test.com',
-            'PHP_AUTH_PW'   => 'qq',
-        ));
-
-        $crawler = $client->request('GET', $this->url);
+        $crawler = self::$client1->request('GET', $this->url);
         $count = $crawler->filter('.mailbox-messages tr')->count();
 
         $this->assertEquals(1, $count);
     }
 
     /**
-     * Первый пользователь должен видеть только два сообщения
+     * Второй пользователь должен видеть только два сообщения
      */
     public function testUser2CountMessages()
     {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'test2@test.com',
-            'PHP_AUTH_PW'   => 'qq',
-        ));
-
-        $crawler = $client->request('GET', $this->url);
+        $crawler = self::$client2->request('GET', $this->url);
         $count = $crawler->filter('.mailbox-messages tr')->count();
 
         $this->assertEquals(2, $count);
     }
+
+    /**
+     * Администратор должен видеть три сообщения
+     */
+    public function testAdminCountMessages()
+    {
+        $crawler = self::$clientAdmin->request('GET', $this->url);
+        $count = $crawler->filter('.mailbox-messages tr')->count();
+
+        $this->assertEquals(3, $count);
+    }
+
+
 }

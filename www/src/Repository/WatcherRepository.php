@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WatcherRepository extends ServiceEntityRepository
 {
+    use TraitRepository;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Watcher::class);
@@ -30,10 +32,8 @@ class WatcherRepository extends ServiceEntityRepository
         $queryBuilder->addSelect('p.status as status');
         $queryBuilder->addSelect('w.title as title');
         $queryBuilder->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
-        $queryBuilder->where("w.user = " . $user->getId());
+        $this->andWhereUserOwner($queryBuilder, $user, 'w');
         $queryBuilder->andWhere($this->getActiveQuery());
-
-
         $queryBuilder->addOrderBy($sortColumn, $sortDirection);
 
         return $queryBuilder;
@@ -55,8 +55,8 @@ class WatcherRepository extends ServiceEntityRepository
     public function getOneByIdAndUser(int $id, User $user)
     {
         $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery())
-            ->andWhere('w.id = ' . (int)$id)
-            ->andWhere('w.user = ' . $user->getId());
+            ->andWhere('w.id = ' . (int)$id);
+        $this->andWhereUserOwner($qb, $user, 'w');
         return $qb->getQuery()->getOneOrNullResult();
     }
 
