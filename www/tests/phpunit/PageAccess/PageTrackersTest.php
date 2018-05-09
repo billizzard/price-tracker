@@ -50,6 +50,10 @@ class PageTrackersTest extends BaseTestCase
         ));
     }
 
+    /*
+     *  --------------------------  LIST
+     */
+
     /**
      * Доступ для залогиненого пользователя
      */
@@ -67,6 +71,7 @@ class PageTrackersTest extends BaseTestCase
     {
         $client = static::createClient();
         $client->request('GET', $this->url);
+        $this->assertContains('/login/', $client->getResponse()->getTargetUrl());
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
@@ -79,6 +84,9 @@ class PageTrackersTest extends BaseTestCase
         $this->assertEquals(200, self::$clientAdmin->getResponse()->getStatusCode());
     }
 
+    /*
+     *  --------------------------  VIEW
+     */
     /**
      * Доступ для залогиненого пользователя, к его товару
      */
@@ -107,11 +115,113 @@ class PageTrackersTest extends BaseTestCase
     }
 
     /**
+     * Просмотр для незалогиненого пользователя
+     */
+    public function testNoUserTrackersView()
+    {
+        $client = static::createClient();
+        $client->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/view/' );
+        $this->assertContains('/login/', $client->getResponse()->getTargetUrl());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /*
+     *  --------------------------  EDIT
+     */
+
+    /**
+     * Редактирование для незалогиненого пользователя
+     */
+    public function testNoUserTrackersEdit()
+    {
+        $client = static::createClient();
+        $client->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/edit/' );
+        $this->assertContains('/login/', $client->getResponse()->getTargetUrl());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Редактирование для залогиненого пользователя, к его товару
+     */
+    public function testUserOwnerTrackerEdit()
+    {
+        self::$client1->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/edit/');
+        $this->assertEquals(200, self::$client1->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Редактирование для залогиненого пользователя, к не его товару
+     */
+    public function testUserNotOwnerTrackerEdit()
+    {
+        self::$client2->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/edit/');
+        $this->assertEquals(404, self::$client2->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Редактирование для залогиненого пользователя, к его удаленному товару
+     */
+    public function testUserOwnerDeletedTrackerEdit()
+    {
+        self::$client1->request('GET', $this->url . self::$data['user1DeletedWatcher']->getId() . '/edit/');
+        $this->assertEquals(404, self::$client1->getResponse()->getStatusCode());
+    }
+
+    /*
+     *  --------------------------  ADD
+     */
+
+    /**
+     * Добавление для незалогиненого пользователя
+     */
+    public function testNoUserTrackersAdd()
+    {
+        $client = static::createClient();
+        $client->request('GET', $this->url . 'add/' );
+        $this->assertContains('/login/', $client->getResponse()->getTargetUrl());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Добавление для залогиненого пользователя
+     */
+    public function testUserTrackerAdd()
+    {
+        self::$client1->request('GET', $this->url . 'add/');
+        $this->assertEquals(200, self::$client1->getResponse()->getStatusCode());
+    }
+
+    /*
+     *  --------------------------  DELETE
+     */
+
+    /**
+     * Доступ для удаления не своего ватчера
+     */
+    public function testUserNotOwnerTrackerDelete()
+    {
+        self::$client2->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/delete/');
+        $this->assertEquals(404, self::$client2->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Доступ для удаления не своего ватчера
+     */
+    public function testNoUserTrackerDelete()
+    {
+        $client = static::createClient();
+        $client->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/delete/');
+        $this->assertContains('/login/', $client->getResponse()->getTargetUrl());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /**
      * Доступ для удаления своего ватчера
      */
     public function testUserOwnerTrackerDelete()
     {
         self::$client1->request('GET', $this->url . self::$data['user1Watcher']->getId() . '/delete/');
+        $this->assertContains('/trackers/', self::$client1->getResponse()->getTargetUrl());
         $this->assertEquals(302, self::$client1->getResponse()->getStatusCode());
     }
 

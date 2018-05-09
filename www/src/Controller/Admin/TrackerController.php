@@ -167,7 +167,7 @@ class TrackerController extends MainController
 
     public function editAction(Request $request, WatcherRepository $watcherRepository)
     {
-        $watcher = $watcherRepository->findOneBy(['product' => $request->get('id'), 'user' => $this->getUser()->getId()]);
+        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
         if ($watcher) {
             $this->denyAccessUnlessGranted('edit', $watcher, 'Access denied.');
             $form = $this->createForm(EditWatcherType::class, $watcher, ['attr' => ['novalidate' => 'novalidate']]);
