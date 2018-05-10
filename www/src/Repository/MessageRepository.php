@@ -14,6 +14,11 @@ class MessageRepository extends ServiceEntityRepository
 
     use TraitRepository;
 
+    public function getAlias(): string
+    {
+        return 'm';
+    }
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Message::class);
@@ -41,7 +46,7 @@ class MessageRepository extends ServiceEntityRepository
         $sortDirection = 'DESC';
 
         $queryBuilder = $this->createQueryBuilder('m')->where('m.status != ' . Message::STATUS_DELETED);
-        $this->andWhereUserOwner($queryBuilder, $user, 'm');
+        $this->andWhereUserOwner($queryBuilder, $user);
         $queryBuilder->addSelect('m.id as id');
         $queryBuilder->addSelect('m.message as message');
         $queryBuilder->addSelect('m.type as type');
@@ -56,7 +61,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder("m");
         $qb->update()->set('m.status', Message::STATUS_DELETED)->where($qb->expr()->in('m  .id', ':ids'))->setParameter("ids", $ids);
-        $this->andWhereUserOwner($qb, $user, 'm');
+        $this->andWhereUserOwner($qb, $user);
         $updated = $qb->getQuery()->execute();
 
         return $updated;
@@ -66,7 +71,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
         $qb->where('m.id < :id AND m.status != :status')->setParameters(['id' => $message->getId(), 'status' => Message::STATUS_DELETED]);
-        $this->andWhereUserOwner($qb, $message->getUser(), 'm');
+        $this->andWhereUserOwner($qb, $message->getUser());
         $qb->orderBy('m.id', 'DESC')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 
@@ -74,7 +79,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
         $qb->where('m.id > :id AND m.status != :status')->setParameters(['id' => $message->getId(), 'status' => Message::STATUS_DELETED]);
-        $this->andWhereUserOwner($qb, $message->getUser(), 'm');
+        $this->andWhereUserOwner($qb, $message->getUser());
         $qb->orderBy('m.id', 'ASC')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 
@@ -82,7 +87,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
         $qb->where('m.id = :id AND m.status != :status')->setParameters(['id' => $id, 'status' => Message::STATUS_DELETED]);
-        $this->andWhereUserOwner($qb, $user, 'm');
+        $this->andWhereUserOwner($qb, $user);
         return $qb->getQuery()->getOneOrNullResult();
     }
 

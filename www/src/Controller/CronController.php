@@ -103,7 +103,7 @@ class CronController extends Controller
     {
         /** @var WatcherRepository $repository */
         $repository = $this->getDoctrine()->getRepository(Watcher::class);
-        $watchers = $repository->findActiveByProductId($product->getId());
+        $watchers = $repository->findTrackedByProductId($product->getId());
 
         if ($watchers) {
             /** @var Watcher $watcher */

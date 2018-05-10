@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Entity\Watcher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,9 +13,16 @@ class WatcherRepository extends ServiceEntityRepository
 {
     use TraitRepository;
 
+    /** @var  QueryBuilder */
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Watcher::class);
+    }
+
+    public function getAlias()
+    {
+        return 'w';
     }
 
     public function findByRequestQueryBuilder(Request $request, User $user)
@@ -27,42 +35,61 @@ class WatcherRepository extends ServiceEntityRepository
             $sortColumn = mb_substr($sortColumn, 1);
         }
 
-        $queryBuilder = $this->createQueryBuilder('w');
-        $queryBuilder->addSelect('w.id as id');
-        $queryBuilder->addSelect('p.status as status');
-        $queryBuilder->addSelect('w.title as title');
-        $queryBuilder->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
-        $this->andWhereUserOwner($queryBuilder, $user, 'w');
-        $queryBuilder->andWhere($this->getActiveQuery());
-        $queryBuilder->addOrderBy($sortColumn, $sortDirection);
+        $qb = $this->createQueryBuilder('w');
+        $qb->addSelect('w.id as id')
+            ->addSelect('w.status as status')
+            ->addSelect('w.title as title')
+            ->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
+        $this->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
+        $qb->addOrderBy($sortColumn, $sortDirection);
 
-        return $queryBuilder;
+        return $qb;
     }
 
-    public function findActive()
+    /*
+     * Tracked - значит вынимаются все, которые не должны кроном отслеживаться, т.е. удаленные или успешно законченные
+     */
+
+    public function findTracked()
     {
-        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery());
+        $qb = $this->createQueryBuilder('w');
+        $this->getTracked($qb);
         return $qb->getQuery()->getResult();
     }
 
-    public function findActiveByProductId($productId)
+    public function findTrackedByProductId($productId)
     {
-        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery())
-            ->andWhere('w.product = ' . (int)$productId);
+        $qb = $this->createQueryBuilder('w')->andWhere('w.product = ' . (int)$productId);
+        $this->getTracked($qb);
         return $qb->getQuery()->getResult();
     }
 
-    public function getOneByIdAndUser(int $id, User $user)
+    /*
+     * Visible - те, которые пользователь может просматривать. Т.е. не удаленные.
+     */
+
+    public function getOneVisibleByIdAndUser(int $id, User $user)
     {
-        $qb = $this->createQueryBuilder('w')->where($this->getActiveQuery())
-            ->andWhere('w.id = ' . (int)$id);
-        $this->andWhereUserOwner($qb, $user, 'w');
+        $qb = $this->createQueryBuilder('w')->andWhere('w.id = ' . (int)$id);
+        $this->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    private function getActiveQuery(): string
+
+
+
+
+    private function getTracked(QueryBuilder &$qb)
     {
-        return 'w.status != ' . Watcher::STATUS_SUCCESS . ' AND w.status != ' . Watcher::STATUS_DELETED;
+        $this->getNotDeleted($qb);
+        $qb->andWhere('w.status != ' . Watcher::STATUS_SUCCESS);
+        return $this;
+    }
+
+    private function getNotDeleted(QueryBuilder &$qb)
+    {
+        $qb->andWhere('w.status != ' . Watcher::STATUS_DELETED);
+        return $this;
     }
 
 }

@@ -7,10 +7,13 @@ use Doctrine\ORM\QueryBuilder;
 
 trait TraitRepository
 {
-    public function andWhereUserOwner(QueryBuilder &$qb, User $user, string $alias)
+    public function andWhereUserOwner(QueryBuilder $qb, User $user)
     {
         if (!$user->isAdmin()) {
-            $qb->andWhere($alias . ".user = " . $user->getId());
+            $qb->andWhere($this->getAlias() . ".user = " . $user->getId());
         }
+        return $this;
     }
+
+    abstract function getAlias(): string;
 }

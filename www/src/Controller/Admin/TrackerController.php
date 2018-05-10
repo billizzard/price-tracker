@@ -62,6 +62,11 @@ class TrackerController extends MainController
         //$grid = new HVFGridView($request, $qb, ['perPage' => 1]);
         $grid = new GridView($request, $qb, ['perPage' => 10]);
        // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
+
+        $statuses = [
+            'success' => $this->translator->trans('l.completed'),
+            'tracked' => $this->translator->trans('l.tracked')
+        ];
         
         $grid->addColumn('id', [
             'sort' => false,
@@ -72,16 +77,11 @@ class TrackerController extends MainController
             'label' => $this->translator->trans('l.status'),
             'sort' => true,
             'raw' => true,
-            'callback' => function($model) {
-                $result = '';
-                if ($model['status'] == Product::STATUS_NOT_TRACKED) {
-                    $result = 'Not tracked';
-                } else if ($model['status'] == Product::STATUS_TRACKED) {
-                    $result = "<a href='google.by'>Tracked</a>";
-                } else if ($model['status'] == Product::STATUS_ERROR_TRACKED) {
-                    $result = 'Error';
-                } else if ($model['status'] == Product::STATUS_NEW) {
-                    $result = 'Waiting';
+            'callback' => function($model) use ($statuses) {
+                if ($model['status'] == Watcher::STATUS_SUCCESS) {
+                    $result = "<span class='label label-success'>" . $statuses['success'] . "</span>";
+                } else  {
+                    $result = "<span class='label label-warning'>" . $statuses['tracked'] . "</span>";
                 }
                 return $result;
             }
@@ -167,7 +167,7 @@ class TrackerController extends MainController
 
     public function editAction(Request $request, WatcherRepository $watcherRepository)
     {
-        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
+        $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
         if ($watcher) {
             $this->denyAccessUnlessGranted('edit', $watcher, 'Access denied.');
             $form = $this->createForm(EditWatcherType::class, $watcher, ['attr' => ['novalidate' => 'novalidate']]);
@@ -193,7 +193,7 @@ class TrackerController extends MainController
 
     public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
     {
-        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
+        $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
 
         if ($watcher) {
             $product = $watcher->getProduct();
@@ -229,7 +229,7 @@ class TrackerController extends MainController
     public function deleteAction(Request $request, WatcherRepository $watcherRepository)
     {
         /** @var Watcher $watcher */
-        $watcher = $watcherRepository->getOneByIdAndUser($request->get('id'), $this->getUser());
+        $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
 
         if ($watcher) {
             $watcher->delete();
