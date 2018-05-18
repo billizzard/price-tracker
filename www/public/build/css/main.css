@@ -29,6 +29,9 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
+.gray-button {
+  color: #333;
+}
 /* video */
 .homepage-hero-module {
   border-right: none;

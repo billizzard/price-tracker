@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Message;
 use App\Entity\User;
 use App\Entity\Watcher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -40,10 +41,30 @@ class WatcherRepository extends ServiceEntityRepository
             ->addSelect('w.status as status')
             ->addSelect('w.title as title')
             ->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
-        $this->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
+
+        $this->getFiltered($qb)->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
         $qb->addOrderBy($sortColumn, $sortDirection);
+        
+        //$query = $qb->getQuery();
 
         return $qb;
+    }
+
+    private function getFiltered(QueryBuilder &$qb)
+    {
+        if (isset($_GET['title'])) {
+            $qb->andWhere("w.title LIKE :title")->setParameter(':title', $_GET['title'] . '%');
+
+        }
+
+        if (isset($_GET['status']) && $status = $_GET['status']) {
+            if ($status == Watcher::STATUS_PRICE_CONFIRMED) {
+                $qb->andWhere('w.status IN (' . Watcher::STATUS_PRICE_CONFIRMED . ',' . Watcher::STATUS_NEW . ')');
+            } else {
+                $qb->andWhere('w.status = ' . (int)$status);
+            }
+        }
+        return $this;
     }
 
     /*
@@ -88,7 +109,7 @@ class WatcherRepository extends ServiceEntityRepository
 
     private function getNotDeleted(QueryBuilder &$qb)
     {
-        $qb->andWhere('w.status != ' . Watcher::STATUS_DELETED);
+        $qb->andWhere('w.isDeleted = false');
         return $this;
     }
 

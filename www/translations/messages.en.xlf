@@ -59,6 +59,14 @@
                 <source>l.save</source>
                 <target>Save</target>
             </trans-unit>
+            <trans-unit id="l.search">
+                <source>l.search</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="l.filter">
+                <source>l.filter</source>
+                <target>Filter</target>
+            </trans-unit>
             <trans-unit id="l.profile">
                 <source>l.profile</source>
                 <target>Profile</target>

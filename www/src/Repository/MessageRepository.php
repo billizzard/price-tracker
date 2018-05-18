@@ -45,7 +45,7 @@ class MessageRepository extends ServiceEntityRepository
         $sortColumn = $request->get('sort', 'id');
         $sortDirection = 'DESC';
 
-        $queryBuilder = $this->createQueryBuilder('m')->where('m.status != ' . Message::STATUS_DELETED);
+        $queryBuilder = $this->createQueryBuilder('m')->where('m.isDeleted = false');
         $this->andWhereUserOwner($queryBuilder, $user);
         $queryBuilder->addSelect('m.id as id');
         $queryBuilder->addSelect('m.message as message');
@@ -60,7 +60,7 @@ class MessageRepository extends ServiceEntityRepository
     public function deleteById($ids, User $user)
     {
         $qb = $this->createQueryBuilder("m");
-        $qb->update()->set('m.status', Message::STATUS_DELETED)->where($qb->expr()->in('m  .id', ':ids'))->setParameter("ids", $ids);
+        $qb->update()->set('m.isDeleted', true)->where($qb->expr()->in('m  .id', ':ids'))->setParameter("ids", $ids);
         $this->andWhereUserOwner($qb, $user);
         $updated = $qb->getQuery()->execute();
 
@@ -70,7 +70,7 @@ class MessageRepository extends ServiceEntityRepository
     public function findPrev(Message $message)
     {
         $qb = $this->createQueryBuilder('m');
-        $qb->where('m.id < :id AND m.status != :status')->setParameters(['id' => $message->getId(), 'status' => Message::STATUS_DELETED]);
+        $qb->where('m.id < :id AND m.isDeleted = false')->setParameters(['id' => $message->getId()]);
         $this->andWhereUserOwner($qb, $message->getUser());
         $qb->orderBy('m.id', 'DESC')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
@@ -78,7 +78,7 @@ class MessageRepository extends ServiceEntityRepository
     public function findNext(Message $message)
     {
         $qb = $this->createQueryBuilder('m');
-        $qb->where('m.id > :id AND m.status != :status')->setParameters(['id' => $message->getId(), 'status' => Message::STATUS_DELETED]);
+        $qb->where('m.id > :id AND m.isDeleted = false')->setParameters(['id' => $message->getId()]);
         $this->andWhereUserOwner($qb, $message->getUser());
         $qb->orderBy('m.id', 'ASC')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
@@ -86,7 +86,7 @@ class MessageRepository extends ServiceEntityRepository
     public function findById($id, User $user)
     {
         $qb = $this->createQueryBuilder('m');
-        $qb->where('m.id = :id AND m.status != :status')->setParameters(['id' => $id, 'status' => Message::STATUS_DELETED]);
+        $qb->where('m.id = :id AND m.isDeleted = false')->setParameters(['id' => $id]);
         $this->andWhereUserOwner($qb, $user);
         return $qb->getQuery()->getOneOrNullResult();
     }

@@ -64,8 +64,8 @@ class TrackerController extends MainController
        // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
 
         $statuses = [
-            'success' => $this->translator->trans('l.completed'),
-            'tracked' => $this->translator->trans('l.tracked')
+            Watcher::STATUS_SUCCESS => $this->translator->trans('l.completed'),
+            Watcher::STATUS_PRICE_CONFIRMED => $this->translator->trans('l.tracked')
         ];
         
         $grid->addColumn('id', [
@@ -79,15 +79,20 @@ class TrackerController extends MainController
             'raw' => true,
             'callback' => function($model) use ($statuses) {
                 if ($model['status'] == Watcher::STATUS_SUCCESS) {
-                    $result = "<span class='label label-success'>" . $statuses['success'] . "</span>";
+                    $result = "<span class='label label-success'>" . $statuses[Watcher::STATUS_SUCCESS] . "</span>";
                 } else  {
-                    $result = "<span class='label label-warning'>" . $statuses['tracked'] . "</span>";
+                    $result = "<span class='label label-warning'>" . $statuses[Watcher::STATUS_PRICE_CONFIRMED] . "</span>";
                 }
                 return $result;
             }
         ])->addActionColumn('Actions', [
             'buttons' => ['view', 'edit', 'delete'],
             'label' => $this->translator->trans('l.actions'),
+        ])->addFilter([
+            'fields' => [
+                ['type' => 'text', 'name' => 'title', 'placeholder' => $this->translator->trans('l.title')],
+                ['type' => 'select', 'name' => 'status', 'placeholder' => $this->translator->trans('l.status'), 'options' => $statuses]
+            ]
         ]);
 
         $products = $grid->getGridData();

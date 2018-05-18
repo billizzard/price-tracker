@@ -11,7 +11,7 @@
 
 {% block body %}
     <div class="s1">
-        <div class="s1-inner">
+        <div class="s1-inner revealator-zoomin revealator-load revealator-position-partially-below">
             <div class="heading-group">
                 <h1>Мы поможем вам</h1>
                 <p>Отследить скидки и цены на товары</p>
@@ -23,7 +23,7 @@
             </p>
             <div class="s1-buttons">
                 <div class="button blue-button">Добавить товар</div>
-                <div class="button">Узнать больше</div>
+                <div class="button" id="home-more">Узнать больше</div>
             </div>
         </div>
     </div>
@@ -32,23 +32,25 @@
         <div class="s2-inner s-inner">
             <div class="flex-container s2-flex-container">
                 <div class="s2-desc">
-                    <h3>Всем привет! Это price-tracker.com</h3>
+                    <div class="revealator-slideup revealator-once revealator-position-partially-below">
+                    <h3 id="greatings">Всем привет! Это price-tracker.com</h3>
                     <div class="divider-default"></div>
-                    <p class="heading-5">Мы помогаем покупателям ослеживать цену товара, строить графики изменения цен с практически любых сайтов.
+                    </div>
+
+                    <p class="heading-5 revealator-slideup revealator-once revealator-position-partially-below">Мы помогаем покупателям ослеживать цену товара, строить графики изменения цен с практически любых сайтов.
                     Также с помощью нашего сервиса, можно настроить оповещение о том, что цена товара упала на определенный процент.
                     </p>
 
-                    <p class="heading-8">Система автомитически следит за ценой товара. Вам не нужно каждый день заходить и отслеживать товар. Достаточно один раз
+                    <p class="heading-8 revealator-slideup revealator-once revealator-position-partially-below">Система автомитически следит за ценой товара. Вам не нужно каждый день заходить и отслеживать товар. Достаточно один раз
                     указать ссылку на страницу товара и указать процент, при котором нужно будет вас оповестить.
                         В личном кабинете вам будут доступны извещения о хоть каком-то увеличении или уменьшении цены товара.
                         <br> Все это абсолюно бесплатно.
                     </p>
 
-                    <div class="button gray-button" style="margin-left:0; margin-top:20px;">Начать бесплатно</div>
-
+                    <a href="{{ path('security_registration') }}" class="button gray-button revealator-slideup revealator-once revealator-position-partially-below" style="margin-left:0; margin-top:20px;">Начать бесплатно</a>
 
                 </div>
-                <div class="s2-image">
+                <div class="s2-image revealator-slideleft revealator-load revealator-once revealator-position-partially-below">
                     <img src="/build/images/home/graph-05.jpeg">
                 </div>
             </div>
@@ -58,7 +60,7 @@
     <div class="s3">
         <div class="s3-inner s-inner">
             <div class="flex-container s3-flex-container">
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-line-chart"></div>
                         <h6>График цен</h6>
@@ -67,7 +69,7 @@
                         Вам будет доступна история изменения цен на товар в виде удобного графика. Вы сможете следить за честностью скидок.
                     </div>
                 </div>
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-delay2 revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-envelope-o"></div>
                         <h6>Оповещение</h6>
@@ -76,7 +78,7 @@
                         Вам не нужно ежедневно следить за ценой товаров на разных сайтах. Как только скидка достигнет нужного вам процента, вам придет оповещение об этом.
                     </div>
                 </div>
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-dollar"></div>
                         <h6>Бесплатно</h6>
@@ -85,7 +87,7 @@
                         Сервисом можно пользоваться абсолютно бесплатно. Все что вам нужно, это зарегистрироваться и указать адрес страницы с товаром, который вас интересует.
                     </div>
                 </div>
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-delay2 revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-clock-o"></div>
                         <h6>Обновление</h6>
@@ -94,7 +96,7 @@
                         Данные о товарах обновляются ежедневно в автоматическом режиме.
                     </div>
                 </div>
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-money"></div>
                         <h6>Выгода</h6>
@@ -103,7 +105,7 @@
                         Копейка рубль бережет. В личном кабинете вы всегда сможете узнать о снижении цены, даже если она не достигла нужного вам процента.
                     </div>
                 </div>
-                <div class="s3-item">
+                <div class="s3-item revealator-slideup revealator-once revealator-delay2 revealator-position-partially-below">
                     <div class="s3-item-top">
                         <div class="s3-icon fa fa-phone"></div>
                         <h6>Связь с продавцом</h6>
@@ -118,9 +120,11 @@
 
     <div class="s4">
         <div class="s4-inner s-inner">
-            <h3>Отслеживаемые сайты</h3>
-            <div class="divider-default"></div>
-            <div class="flex-container s4-flex-container">
+            <div class="revealator-slideup revealator-once revealator-position-partially-below">
+                <h3>Отслеживаемые сайты</h3>
+                <div class="divider-default"></div>
+            </div>
+            <div class="flex-container s4-flex-container revealator-once revealator-slideup revealator-position-partially-below">
                 <div class="s4-item">
                     <div class="s4-item-image">
                         <img class="img-circle" src="/build/images/sites/onliner300x300.jpg">
@@ -138,12 +142,14 @@
 
     <div class="s5">
         <div class="s5-inner s-inner">
-            <div class="heading-group">
-                <h3>Отзывы</h3>
+            <div class="revealator-slideup revealator-once revealator-position-partially-below">
+                <div class="heading-group">
+                    <h3>Отзывы</h3>
+                </div>
+                <div class="divider-default"></div>
             </div>
-            <div class="divider-default"></div>
             <div class="flex-container s5-flex-container">
-                <div class="s5-item">
+                <div class="s5-item revealator-slideup revealator-position-partially-below revealator-once">
                     <i class="s5-item-quote fa fa-quote-left"></i>
                     <p>Помогли мне сэкономить 10 проценов от моей покупки</p>
                     <div class="s5-item-user flex-container">
@@ -157,7 +163,7 @@
                     </div>
                 </div>
 
-                <div class="s5-item">
+                <div class="s5-item revealator-slideup revealator-once revealator-delay2 revealator-position-partially-below">
                     <i class="s5-item-quote fa fa-quote-left"></i>
                     <p>Помогли мне сэкономить 10 проценов от моей покупки</p>
                     <div class="s5-item-user flex-container">

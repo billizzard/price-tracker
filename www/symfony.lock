@@ -1,7 +1,4 @@
 {
-    "alexandresalome/php-selenium": {
-        "version": "v1.1.0"
-    },
     "behat/behat": {
         "version": "v3.4.3"
     },
@@ -16,9 +13,6 @@
     },
     "behat/mink-extension": {
         "version": "2.3.1"
-    },
-    "behat/mink-selenium-driver": {
-        "version": "v1.2.0"
     },
     "behat/symfony2-extension": {
         "version": "2.1",

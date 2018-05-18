@@ -36,7 +36,7 @@ class MessageListTest extends BaseTestCase
         self::createMessage($user2);
         self::createMessage($user2);
         $deletedMessage = self::createMessage($user2);
-        $deletedMessage->setStatus(Message::STATUS_DELETED);
+        $deletedMessage->delete();
         self::$entityManager->persist($deletedMessage);
         self::$entityManager->flush();
 

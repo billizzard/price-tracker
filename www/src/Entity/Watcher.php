@@ -55,6 +55,11 @@ class Watcher
     private $percent = 0;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
+
+    /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
      */
@@ -211,6 +216,6 @@ class Watcher
 
     public function delete(): void
     {
-        $this->setStatus(self::STATUS_DELETED);
+        $this->isDeleted = true;
     }
 }

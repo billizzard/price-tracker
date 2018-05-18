@@ -12,7 +12,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 class Message
 {
     const STATUS_NOT_READ = 1;
-    const STATUS_DELETED = 2;
     const STATUS_READ = 3;
 
     const TYPE_SUCCESS = 10;
@@ -63,6 +62,11 @@ class Message
      * @ORM\Column(type="smallint")
      */
     private $type = self::TYPE_INFO;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
 
     /**
      * @ORM\Column(type="integer")
@@ -210,5 +214,10 @@ class Message
         if ($this->getType() == self::TYPE_CHANGE_PRICE || $this->getType() == self::TYPE_SALE_SUCCESS) {
             return $translator->trans($this->getTitle());
         }
+    }
+
+    public function delete()
+    {
+        $this->isDeleted = true;
     }
 }

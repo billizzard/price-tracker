@@ -11,12 +11,22 @@ $(function () {
         }
     }
 
+    $("#home-more").click(function() {
+        $('html, body').animate({
+            scrollTop: $("#greatings").offset().top - 70
+        }, 1500);
+    });
+
     var message = new Message();
     new ProfileUserForm(message);
     new SelectAvatar(message);
 
     if ($('#login-form').length) new LoginForm(message);
     if ($('#registration-form').length) new RegistrationForm(message);
+
+    $('#demo').datetimepicker({
+        inline:true,
+    });
 
 });
 
@@ -400,35 +410,6 @@ function scaleBannerVideoSize(element){
         }
 
         $(this).width(needWidth);
-
-        $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
-
-    });
-}
-
-function scaleBannerVideoSize1(element){
-
-    var windowWidth = $(window).width(),
-        windowHeight = $(window).height() + 5,
-        videoWidth,
-        videoHeight;
-    
-    // console.log(windowHeight);
-
-    $(element).each(function(){
-        var videoAspectRatio = $(this).data('height')/$(this).data('width');
-        console.log('---------------------');
-        console.log(videoAspectRatio);
-
-        $(this).width(windowWidth);
-
-        if(windowWidth < 1000){
-            videoHeight = windowHeight;
-            videoWidth = videoHeight / videoAspectRatio;
-            $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
-
-            $(this).width(videoWidth).height(videoHeight);
-        }
 
         $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
 

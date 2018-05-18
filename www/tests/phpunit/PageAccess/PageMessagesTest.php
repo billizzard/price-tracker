@@ -30,7 +30,7 @@ class PageMessagesTest extends BaseTestCase
         self::createAdminUser();
 
         $deletedMessage = self::createMessage($user1);
-        $deletedMessage->setStatus(Message::STATUS_DELETED);
+        $deletedMessage->delete();
         self::$entityManager->persist($deletedMessage);
         self::$entityManager->flush();
         self::$data['user1Message'] = self::createMessage($user1);

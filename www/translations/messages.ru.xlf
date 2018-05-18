@@ -58,6 +58,14 @@
                 <source>l.save</source>
                 <target>Сохранить</target>
             </trans-unit>
+            <trans-unit id="l.search">
+                <source>l.search</source>
+                <target>Поиск</target>
+            </trans-unit>
+            <trans-unit id="l.filter">
+                <source>l.filter</source>
+                <target>Фильтр</target>
+            </trans-unit>
             <trans-unit id="l.profile">
                 <source>l.profile</source>
                 <target>Профиль</target>

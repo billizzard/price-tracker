@@ -31,7 +31,7 @@ class PageTrackersTest extends BaseTestCase
         $host = self::createHost();
         $product = self::createProduct($host);
         $deletedWatcher = self::createWatcher($product, $user1);
-        $deletedWatcher->setStatus(Watcher::STATUS_DELETED);
+        $deletedWatcher->delete();
         self::$entityManager->persist($deletedWatcher);
         self::$entityManager->flush();
         self::$data['user1Watcher'] = self::createWatcher($product, $user1);
