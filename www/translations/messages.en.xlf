@@ -127,6 +127,10 @@
                 <source>l.startPrice</source>
                 <target>Starting price</target>
             </trans-unit>
+            <trans-unit id="l.currentPrice">
+                <source>l.currentPrice</source>
+                <target>Current price</target>
+            </trans-unit>
             <trans-unit id="l.expectedDiscount">
                 <source>l.expectedDiscount</source>
                 <target>Expected discount</target>
@@ -170,6 +174,10 @@
             <trans-unit id="l.from">
                 <source>l.from</source>
                 <target>From</target>
+            </trans-unit>
+            <trans-unit id="l.to">
+                <source>l.to</source>
+                <target>To</target>
             </trans-unit>
             <trans-unit id="l.inbox">
                 <source>l.inbox</source>

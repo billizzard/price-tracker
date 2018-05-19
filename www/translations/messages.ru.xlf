@@ -126,6 +126,10 @@
                 <source>l.startPrice</source>
                 <target>Начальная цена</target>
             </trans-unit>
+            <trans-unit id="l.currentPrice">
+                <source>l.currentPrice</source>
+                <target>Текущая цена</target>
+            </trans-unit>
             <trans-unit id="l.expectedDiscount">
                 <source>l.expectedDiscount</source>
                 <target>Ожидаемая скидка</target>
@@ -203,6 +207,10 @@
             <trans-unit id="l.from">
                 <source>l.from</source>
                 <target>От</target>
+            </trans-unit>
+            <trans-unit id="l.to">
+                <source>l.to</source>
+                <target>До</target>
             </trans-unit>
             <trans-unit id="l.message">
                 <source>l.message</source>

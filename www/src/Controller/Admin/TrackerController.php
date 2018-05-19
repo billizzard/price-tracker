@@ -199,15 +199,23 @@ class TrackerController extends MainController
     public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
     {
         $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
+        $dateStop = 0;
+        if ($graphTo = $request->get('graphTo')) {
+            $dateStop = strtotime($graphTo) ? strtotime($graphTo) + 86300 : 0;
+        }
 
         if ($watcher) {
             $product = $watcher->getProduct();
             $this->denyAccessUnlessGranted('view', $watcher, 'Access denied.');
-            $jsonPrice = [];
             $addData = [];
 
-            $jsonPrice = $priceTrackerRepository->getGraphDataForProduct($product);
-
+            $jsonPrice = $priceTrackerRepository->getGraphDataForProduct($product, 0, $dateStop);
+            $addData['graph'] = [
+                'startDate' => $jsonPrice['startDate'],
+                'dateMinus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) - 2592000),
+                'datePlus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) + 2592000),
+                'stopDate' => $jsonPrice['stopDate']
+            ];
             if ($watcher->getStatus() == Watcher::STATUS_SUCCESS) {
                 $addData['status'] = [
                     'class' => 'green',

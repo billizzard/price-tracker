@@ -96,10 +96,6 @@ class WatcherRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-
-
-
-
     private function getTracked(QueryBuilder &$qb)
     {
         $this->getNotDeleted($qb);

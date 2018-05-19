@@ -20,13 +20,21 @@ $(function () {
     var message = new Message();
     new ProfileUserForm(message);
     new SelectAvatar(message);
+    new TrackerGraph();
 
     if ($('#login-form').length) new LoginForm(message);
     if ($('#registration-form').length) new RegistrationForm(message);
 
-    $('#demo').datetimepicker({
-        inline:true,
-    });
+    //Date picker
+    if ($('.js-datepicker').length){
+        $('.js-datepicker').datepicker({
+            autoclose: true,
+            format: "dd.mm.yyyy"
+        })
+    }
+    // $('#demo').datetimepicker({
+    //     inline:true,
+    // });
 
 });
 
@@ -65,6 +73,27 @@ Message = function() {
             oldMessage.remove();
         }
     }
+};
+
+TrackerGraph = function() {
+
+    var that = this;
+
+    var init = function() {
+        that.form = $('#graph-range');
+        if (that.form.length) {
+            that.rangeStop = that.form.find('.js-graph-stop').one();
+            addEvents();
+        }
+    };
+
+    var addEvents = function() {
+        that.rangeStop.on('change', function() {
+            that.form.submit();
+        });
+    };
+
+    init();
 };
 
 LoginForm = function(message) {

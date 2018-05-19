@@ -20,7 +20,8 @@ class PriceTrackerRepository extends ServiceEntityRepository
         $dateStop = $dateStop && $dateStop <= $product->getLastTrackedDate() ? $dateStop : $product->getLastTrackedDate();
         $dateStart = $dateStart ? $dateStart : $dateStop - (60*60*24*30);
         $trackers = $this->getTrackersBetweenDate($product->getId(), $dateStart, $dateStop);
-
+        $jsonPrice['startDate'] = date('d.m.Y', $dateStart);
+        $jsonPrice['stopDate'] = date('d.m.Y', $dateStop);
         $beforeTracker = $this->getTrackerBeforeDate($product->getId(), $dateStart);
         $beforePrice = 0;
         if ($beforeTracker) {
@@ -36,13 +37,13 @@ class PriceTrackerRepository extends ServiceEntityRepository
                     $dayStart = date('d.m', $dateStart);
                     if ($trackerDay != $dayStart) {
                         if ($beforePrice) {
-                            $jsonPrice['data'][] = [$i, $beforePrice, 'qqqq'];
+                            $jsonPrice['data'][] = [$i, $beforePrice];
                             $jsonPrice['labels'][] = [$i, date('d.m', $dateStart)];
                         }
                         $dateStart = $dateStart + 60*60*24;
                     } else {
                         $beforePrice = $tracker->getPrice();
-                        $jsonPrice['data'][] = [$i, $tracker->getPrice(), 'qqqq'];
+                        $jsonPrice['data'][] = [$i, $tracker->getPrice()];
                         $jsonPrice['labels'][] = [$i, date('d.m', $tracker->getDate())];
                         $dateStart = $dateStart + 60*60*24;
                         break;
@@ -57,7 +58,7 @@ class PriceTrackerRepository extends ServiceEntityRepository
                 $dateStart = $dateStart + 60 * 60 * 24;
             }
         }
-
+        
         return $jsonPrice;
     }
 
@@ -78,6 +79,7 @@ class PriceTrackerRepository extends ServiceEntityRepository
             ->setParameter('product', $productId)
             ->setParameter('date', $date)
             ->getQuery()
+            ->setMaxResults(1)
             ->getOneOrNullResult();
     }
 }

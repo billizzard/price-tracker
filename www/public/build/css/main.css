@@ -151,4 +151,30 @@
   margin-left: 10px;
   margin-top: 2px;
 }
+
+.graph-auto-btn {
+  line-height: 32px;
+  vertical-align: bottom;
+  display: inline-block;
+  border: 1px solid #d6d6d6;
+  padding: 0 10px;
+  cursor: pointer;
+  color: #444;
+  transition: 0.3s;
+}
+.graph-auto-btn:hover {
+  background-color: #f9e3a8;
+  border-color: #f9e3a8;
+  color: #444;
+}
+
+
+.graph-datepicker {
+  margin-top: 10px;
+}
+
+.graph-datepicker .graph-datepicker_item {
+  display: inline-block;
+  max-width: 132px;
+}
 /* end view tracker */
