@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Error;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Error|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,40 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ErrorRepository extends ServiceEntityRepository
 {
+    use TraitRepository;
+
+    public function getAlias(): string
+    {
+        return 'e';
+    }
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Error::class);
     }
 
-//    /**
-//     * @return Error[] Returns an array of Error objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function findByRequestQueryBuilder(Request $request, User $user)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $sortColumn = $request->get('sort', 'id');
+        $sortDirection = 'DESC';
 
-    /*
-    public function findOneBySomeField($value): ?Error
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $queryBuilder = $this->createQueryBuilder('e')->where('e.isDeleted = false');
+        $queryBuilder->addSelect('e.id as id');
+        $queryBuilder->addSelect('e.message as message');
+        $queryBuilder->addSelect('e.type as type');
+        $queryBuilder->addSelect('e.addData as addData');
+        $queryBuilder->addSelect('e.createdAt as createdAt');
+        $queryBuilder->addOrderBy($sortColumn, $sortDirection);
+
+        return $queryBuilder;
     }
-    */
+
+    public function deleteById($ids)
+    {
+        $qb = $this->createQueryBuilder("e");
+        $qb->update()->set('e.isDeleted', true)->where($qb->expr()->in('e.id', ':ids'))->setParameter("ids", $ids);
+        $updated = $qb->getQuery()->execute();
+
+        return $updated;
+    }
 }

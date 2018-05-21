@@ -50,6 +50,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class MessageController extends MainController
 {
+
+
     public function listAction(Request $request, MessageRepository $mr)
     {
 //        $em = $this->getDoctrine()->getManager();
@@ -124,6 +126,7 @@ class MessageController extends MainController
                 'translatedMessage' => $message->getTranslatedMessage($this->translator),
                 'prevMessageId' => $prevMessage ? $prevMessage->getId() : false,
                 'nextMessageId' => $nextMessage ? $nextMessage->getId() : false,
+                'activeMenu' => 'messages-list'
             ]);
         }
         throw new NotFoundHttpException();

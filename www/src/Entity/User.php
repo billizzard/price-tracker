@@ -66,7 +66,7 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
-     * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
+     * @ORM\Column(type="smallint")
      */
     private $status = self::USER_STATUS_DEFAULT;
 

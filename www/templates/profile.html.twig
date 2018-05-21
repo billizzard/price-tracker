@@ -169,13 +169,15 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="messages-list">
-
                             <a href="{{ path('message_list') }}">
                                 <i class="fa fa-circle-o"></i>
                                 {{ 'l.inbox'|trans }}
-                                {#<span class="pull-right-container">
-                                    <span class="label bg-yellow pull-right">{{ short_messages|length }}</span>
-                                </span>#}
+                            </a>
+                        </li>
+                        <li id="errors-list">
+                            <a href="{{ path('error_list') }}">
+                                <i class="fa fa-circle-o"></i>
+                                {{ 'l.errors'|trans }}
                             </a>
                         </li>
                         {#<li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>#}

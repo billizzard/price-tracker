@@ -43,7 +43,7 @@ class Message
     private $fromUser = '';
 
     /**
-     * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
+     * @ORM\Column(type="smallint")
      */
     private $status = self::STATUS_NOT_READ;
 

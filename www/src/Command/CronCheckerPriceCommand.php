@@ -3,12 +3,15 @@
 namespace App\Command;
 
 
+use App\Entity\Error;
 use App\Entity\Host;
 use App\Entity\Message;
 use App\Entity\PriceTracker;
 use App\Entity\Product;
 use App\Entity\Watcher;
+use App\HVF\Helper\ProfilerLogger;
 use App\HVF\PriceChecker\PriceParsers\PriceParser;
+use App\Repository\ErrorRepository;
 use App\Repository\HostRepository;
 use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
@@ -29,6 +32,7 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
     private $em;
     /** @var LoggerInterface */
     private $logger;
+    private $loggerProfiling;
     /** @var TranslatorInterface */
     private $translator;
     /** @var HostRepository */
@@ -36,16 +40,19 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
 
     private $doctrine;
 
+    private $profiler;
+
 
     public function __construct(EntityManagerInterface $em, LoggerInterface $logger, TranslatorInterface $translator, HostRepository $hr, $name = null)
     {
         parent::__construct($name);
 
+
+        //$logger1 = $this->get('monolog.logger.profiler');
         $this->logger = $logger;
         $this->translator = $translator;
         $this->hostRepository = $hr;
         $this->em = $em;
-
     }
 
     protected function configure()
@@ -64,6 +71,8 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->profiler = new ProfilerLogger($this->getContainer()->get('monolog.logger.profiling'));
+
         $this->doctrine = $this->getContainer()->get('doctrine');
         $hosts = $this->hostRepository->findAll();
         if ($hosts) {
@@ -74,9 +83,13 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
                     /** @var ProductRepository $repository */
                     $repository = $this->doctrine->getRepository(Product::class);
 
-                    foreach ($repository->findTracked() as $product) {
+                    $this->profiler->log('Start foreach for host: ' . $host->getId() . '; ---------------------');
+                    /** @var Product $product */
+                    foreach ($repository->findTrackedByHost($host) as $product) {
                         if (!($price = $this->getPrice($input))) {
+                            $this->profiler->log('Start parse price for product: ' . $product->getId());
                             $price = $parser->getPriceByUrl($product->getUrl());
+                            $this->profiler->log('Stop parse price for product: ' . $product->getId());
                         }
 
                         if ($price) {
@@ -86,11 +99,14 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
                             $product->setStatus(Product::STATUS_ERROR_TRACKED);
                             $this->em->persist($product);
                             $this->em->flush();
-                            $this->logger->error('Cannot find price', ['product_id' => $product->getId()]);
+                            $this->addError('Cannot find price for product (' . $product->getId() . ') url: <a href="' . $product->getUrl() . '" >link</a>');
+                            $this->logger->critical('Cannot find price', ['product_id' => $product->getId()]);
                         }
                     }
+                    $this->profiler->log('Stop foreach for host: ' . $host->getId());
                 } else {
-                    $this->logger->error('Not found parser for host', ['host_id' => $host->getId()]);
+                    $this->addError('Not found parser for host (' . $host->getId() . '): ' . $host->getHost());
+                    $this->logger->critical('Not found parser for host', ['host_id' => $host->getId()]);
                 }
             }
         }
@@ -130,6 +146,7 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
         $watchers = $repository->findTrackedByProductId($product->getId());
 
         if ($watchers) {
+            $this->profiler->log('Start foreach for product: ' . $product->getId());
             /** @var Watcher $watcher */
             foreach ($watchers as $watcher) {
                 $user = $watcher->getUser();
@@ -173,39 +190,13 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
 
 
             }
+            $this->profiler->log('Stop foreach for product: ' . $product->getId());
         } else { // значит за товаром уже никто не наблюдает
             $this->logger->info('Product not tracker more', ['product_id' => $product->getId()]);
             $product->setStatus(Product::STATUS_NOT_TRACKED);
             $this->em->persist($product);
         }
         $this->em->flush();
-    }
-
-
-    /**
-     * If product exists - changes it. If not exist - creates it
-     * @param $data - array with product data
-     */
-    private function changeProductData($data)
-    {
-        $repository = $this->em->getRepository(ProductData::class);
-        $product = $repository->findOneBy(array('code' => $data[0]));
-
-        if (!$product) {
-            $product = new ProductData();
-            $product->setCode($data[0]);
-        }
-
-        $product->setName($data[1]);
-        $product->setDesc($data[2]);
-        $product->setStockLevel((float)$data[3]);
-        $product->setPrice((float)$data[4]);
-        if (isset($data[5]) && $data[5] == 'yes') {
-            $dt = new \DateTime();
-            $dt->format('Y-m-d H:i:s');
-            $product->setDiscontinued($dt);
-        }
-        $this->em->persist($product);
     }
 
     /**
@@ -217,5 +208,15 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
     {
         $price = $input->getOption('price') ? $input->getOptions('price') : 0;
         return $price;
+    }
+
+    private function addError($message, $addData = [])
+    {
+        $error = new Error();
+        $error->setMessage($message);
+        $error->setAddData($addData);
+        $error->setCreatedAt(time());
+        $this->em->persist($error);
+        $this->em->flush();
     }
 }

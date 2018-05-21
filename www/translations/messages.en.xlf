@@ -203,6 +203,10 @@
                 <source>l.percent</source>
                 <target>Percent</target>
             </trans-unit>
+            <trans-unit id="l.errors">
+                <source>l.errors</source>
+                <target>Errors</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->

@@ -72,7 +72,7 @@ class Watcher
     private $successDate = 0;
 
     /**
-     * @ORM\Column(columnDefinition="TINYINT DEFAULT 1 NOT NULL")
+     * @ORM\Column(type="smallint")
      */
     private $status = self::STATUS_NEW;
 

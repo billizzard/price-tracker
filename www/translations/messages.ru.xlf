@@ -158,6 +158,10 @@
                 <source>l.percent</source>
                 <target>Процент</target>
             </trans-unit>
+            <trans-unit id="l.errors">
+                <source>l.errors</source>
+                <target>Ошибки</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

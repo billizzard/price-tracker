@@ -1,0 +1,14 @@
+error_list:
+    path: /errors/
+    controller: App\Controller\Admin\ErrorController::listAction
+
+error_view:
+    path: /errors/{id}/view/
+    requirements:
+      id: '\d+'
+    controller: App\Controller\Admin\ErrorController::viewAction
+
+error_delete:
+    path: /errors/delete/
+    controller: App\Controller\Admin\ErrorController::deleteAction
+

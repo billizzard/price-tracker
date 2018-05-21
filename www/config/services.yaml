@@ -52,3 +52,7 @@ services:
             arguments:
                 - "@security.http_utils"
                 - []
+
+#    App\Command\CronCheckerPriceCommand:
+#        arguments:
+#            $logger: '@monolog.logger.profiler'

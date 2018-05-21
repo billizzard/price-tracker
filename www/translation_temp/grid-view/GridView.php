@@ -17,6 +17,7 @@ class GridView
     private $urlBuilder;
     private $columns;
     private $actionColumn;
+    private $filter;
 
     public function __construct(Request $request, QueryBuilder $qb, $conf = [])
     {
@@ -41,11 +42,12 @@ class GridView
             'name' => $name,
             'options' => $options
         ];
+        return $this;
     }
 
     public function getGridData()
     {
-        $result = ['pagination' => [], 'columns' => [], 'data' => []];
+        $result = ['pagination' => [], 'columns' => [], 'data' => [], 'filter' => []];
         $models = $this->getModels($result);
 
         if ($models) {
@@ -54,6 +56,7 @@ class GridView
             $this->getSort($result);
             $this->getActionColumn($result);
         }
+        $this->getFilter($result);
 
         return $result;
     }
@@ -158,6 +161,41 @@ class GridView
         }
 
         return $currentResults;
+    }
+
+    public function addFilter($filter)
+    {
+        $this->filter = $filter;
+    }
+
+    private function getFilter(&$result)
+    {
+        if ($this->filter) {
+            $result['filter']['url'] = isset($this->filter['url']) ? $this->filter['url'] : '';
+            $result['filter']['method'] = $this->getFilterMethod();
+            $result['filter']['fields'] = [];
+            foreach ($this->filter['fields'] as $field) {
+                $result['filter']['fields'][] = [
+                    'type' => $field['type'],
+                    'name' => $field['name'],
+                    'placeholder' => isset($field['placeholder']) ? $field['placeholder'] : '',
+                    'value' => $this->getFilterFieldValue($field['name']),
+                    'options' => isset($field['options']) ? $field['options'] : [],
+                ];
+            }
+        }
+    }
+
+    private function getFilterFieldValue($name) {
+        switch ($this->getFilterMethod()) {
+            case 'GET': return isset($_GET[$name]) ? $_GET[$name] : '';
+            default: return isset($_POST[$name]) ? $_POST[$name] : '';
+        }
+    }
+
+    private function getFilterMethod()
+    {
+        return isset($this->filter['method']) ? strtoupper($this->filter['method']) : 'GET';
     }
 
 }

@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Error
 {
+    const TYPE_CRON = 1;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,7 +26,12 @@ class Error
     /**
      * @ORM\Column(type="smallint")
      */
-    private $type;
+    private $type = self::TYPE_CRON;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
 
     /**
      * @ORM\Column(type="string", length=1000)
@@ -78,15 +85,15 @@ class Error
      */
     public function getAddData()
     {
-        return $this->addData;
+        return (array)json_decode($this->addData);
     }
 
     /**
      * @param mixed $addData
      */
-    public function setAddData($addData)
+    public function setAddData($addData): void
     {
-        $this->addData = $addData;
+        $this->addData = json_encode($addData);
     }
 
     /**
@@ -103,6 +110,18 @@ class Error
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    public function fill($message, $addData)
+    {
+        $this->setMessage($message);
+        $this->setAddData($addData);
+        $this->setCreatedAt(time());
+    }
+
+    public function delete()
+    {
+        $this->isDeleted = true;
     }
 
 

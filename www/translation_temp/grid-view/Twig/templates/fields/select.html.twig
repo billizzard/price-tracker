@@ -1,0 +1,7 @@
+<label>{{ field.placeholder }}</label>
+<select class="form-control" name="{{ field.name }}">
+    <option value=""></option>
+    {% for val, title in field.options %}
+        <option value="{{ val }}" {{ field.value == val ? 'selected' : '' }} >{{ title }}</option>
+    {% endfor %}
+</select>

@@ -22,6 +22,26 @@ try {
         // logging: нет результата для сайта
     }
 
+    function sendNotification()
+    {
+        $mail = new Mail('88billizzard88@gmail.com');
+        $mail->setFromName("Хмылко Владимир"); // Устанавливаем имя в обратном адресе
+        $mail->send("billizzard@mail.ru", "Изменения на странице с клендарем", "На странице что-то изменилось, возможно появились зеленые даты. <br>Письмо сгенерировано автоматически, отвечать не нужно.");
+
+//        $mail = new Mail('88billizzard88@gmail.com');
+//        $mail->setFromName("Хмылко Владимир"); // Устанавливаем имя в обратном адресе
+//        $mail->send("elen.02@mail.ru", "Изменения на странице с клендарем", "На странице что-то изменилось, возможно появились зеленые даты. <br>Письмо сгенерировано автоматически, отвечать не нужно.");
+        
+    }
+
+    function add($dbh, $page)
+    {
+        $stmt = $dbh->prepare('INSERT INTO karta (page) VALUES (:page)');
+        $stmt->bindParam(':page', $page);
+        $stmt->execute();
+        sendNotification();
+    }
+
     $content = mb_substr($content, 3893);
 
     if ($res) {
@@ -34,26 +54,9 @@ try {
         add($dbh, $content);
     }
 
-    function add($dbh, $page)
-    {
-        $stmt = $dbh->prepare('INSERT INTO karta (page) VALUES (:page)');
-        $stmt->bindParam(':page', $page);
-        $stmt->execute();
-        sendNotification();
-    }
 
-    function sendNotification()
-    {
-        $mail = new Mail('88billizzard88@gmail.com');
-        $mail->setFromName("Хмылко Владимир"); // Устанавливаем имя в обратном адресе
-        if ($mail->send("billizzard@mail.ru", "Изменения на странице с клендарем", "На странице что-то изменилось, возможно появились зеленые даты. <br>Письмо сгенерировано автоматически, отвечать не нужно.")) echo "Письмо отправлено";
-        else echo "Письмо не отправлено";
 
-        $mail = new Mail('88billizzard88@gmail.com');
-        $mail->setFromName("Хмылко Владимир"); // Устанавливаем имя в обратном адресе
-        if ($mail->send("elen.02@mail.ru", "Изменения на странице с клендарем", "На странице что-то изменилось, возможно появились зеленые даты. <br>Письмо сгенерировано автоматически, отвечать не нужно.")) echo "Письмо отправлено";
-        else echo "Письмо не отправлено";
-    }
+
 
     die();
 

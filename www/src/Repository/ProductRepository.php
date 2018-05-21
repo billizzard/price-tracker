@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Host;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Service\HVFGridView;
@@ -36,9 +37,9 @@ class ProductRepository extends ServiceEntityRepository
         return (array) $this->createPaginator($queryBuilder,$page)->getCurrentPageResults();
     }
 
-    public function findTracked(): array
+    public function findTrackedByHost(Host $host): array
     {
-        return $this->findBy(['status' => [Product::STATUS_TRACKED, Product::STATUS_NEW, Product::STATUS_ERROR_TRACKED]]);
+        return $this->findBy(['host' => $host, 'status' => [Product::STATUS_TRACKED, Product::STATUS_NEW, Product::STATUS_ERROR_TRACKED]]);
     }
 
 }
