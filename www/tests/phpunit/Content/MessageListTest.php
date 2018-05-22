@@ -12,6 +12,7 @@ use App\Kernel;
 use App\Tests\phpunit\BaseTestCase;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 
 class MessageListTest extends BaseTestCase

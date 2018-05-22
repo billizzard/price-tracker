@@ -12,8 +12,10 @@
 namespace App\Controller\Admin;
 
 
+use App\Entity\Error;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Repository\ErrorRepository;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
@@ -69,6 +71,13 @@ class MainController extends AbstractController
         return $cookieMessages;
     }
 
+    public function isHasError()
+    {
+        /** @var ErrorRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(Error::class);
+        return $repository->isHasEntity();
+    }
+
     protected function getJsonSuccessResponse($data)
     {
         return [
@@ -88,6 +97,11 @@ class MainController extends AbstractController
     public function render(string $view, array $parameters = array(), Response $response = null): Response
     {
         $parameters['short_messages'] = $this->getMessages();
+        $parameters['has_error'] = false;
+        $user = $this->getUser();
+        if ($user->isAdmin()) {
+            $parameters['has_error'] = $this->isHasError();
+        }
         return parent::render($view, $parameters, $response);
     }
 }

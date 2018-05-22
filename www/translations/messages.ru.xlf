@@ -162,6 +162,14 @@
                 <source>l.errors</source>
                 <target>Ошибки</target>
             </trans-unit>
+            <trans-unit id="l.member_since">
+                <source>l.member_since</source>
+                <target>Участник с</target>
+            </trans-unit>
+            <trans-unit id="l.user">
+                <source>l.user</source>
+                <target>Пользователь</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

@@ -27,7 +27,10 @@ class GridView
             'curPage' => (int)$this->request->get('page', 1),
             'perPage' => (int)$conf['perPage'] ? (int)$conf['perPage'] : 10
         ];
-        $this->urlBuilder = new UrlBuilder($_SERVER['REQUEST_URI']);
+
+        $url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+
+        $this->urlBuilder = new UrlBuilder($url);
     }
 
     public function addColumn($name, $options)

@@ -65,6 +65,15 @@
                         </ul>
                     </li>
                     {% endif %}
+
+                    {% if (has_error) %}
+                    <li class="dropdown error-notification">
+                        <a href="{{ path('error_list') }}" style="color:#ffc107">
+                            <i class="fa fa-exclamation"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -77,12 +86,12 @@
                                 <img src="{{ app.user.avatarFull }}" class="img-circle" alt="User Image">
 
                                 <p>
-                                    {{ app.user.nickname }} - Web Developer
-                                    <small>Member since Nov. 2012</small>
+                                    {{ app.user.nickname }}
+                                    <small>{{ 'l.member_since'|trans }} {{ app.user.createdAt|date("d.m.Y") }}</small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
+{#                            <li class="user-body">
                                 <div class="row">
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Followers</a>
@@ -94,8 +103,8 @@
                                         <a href="#">Friends</a>
                                     </div>
                                 </div>
-                                <!-- /.row -->
-                            </li>
+
+                            </li>#}
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
@@ -133,7 +142,7 @@
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
+           {# <form action="#" method="get" class="sidebar-form">
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
@@ -142,7 +151,7 @@
                 </button>
               </span>
                 </div>
-            </form>
+            </form>#}
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree" data-active="{% if activeMenu is defined %}{{ activeMenu }}{% endif %}">
@@ -174,12 +183,14 @@
                                 {{ 'l.inbox'|trans }}
                             </a>
                         </li>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <li id="errors-list">
                             <a href="{{ path('error_list') }}">
                                 <i class="fa fa-circle-o"></i>
                                 {{ 'l.errors'|trans }}
                             </a>
                         </li>
+                        {% endif %}
                         {#<li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>#}
                     </ul>
                 </li>

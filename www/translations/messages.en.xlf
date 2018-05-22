@@ -207,6 +207,14 @@
                 <source>l.errors</source>
                 <target>Errors</target>
             </trans-unit>
+            <trans-unit id="l.member_since">
+                <source>l.member_since</source>
+                <target>Member since</target>
+            </trans-unit>
+            <trans-unit id="l.user">
+                <source>l.user</source>
+                <target>User</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->

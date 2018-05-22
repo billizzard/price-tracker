@@ -1,33 +1,32 @@
 <!-- /.box-header -->
 
 {% if models.filter and models.filter.fields %}
-    <input type="text" id="demo"/>
+
 <div class="box box-default js-col-box {{ app.request.cookies.get('isOpen') ? '' : 'collapsed-box' }}">
-    <div class="box-header with-border">
+    
+    <div class="box-header with-border ">
         <h3 class="box-title">{{ "l.filter"|trans }}</h3>
 
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool js-filter-collapse" data-widget="collapse"><i class="fa fa-{{ app.request.cookies.get('isOpen') ? 'minus' : 'plus' }}"></i>
             </button>
         </div>
-        <!-- /.box-tools -->
     </div>
-    <!-- /.box-header -->
+
     <div class="box-body" style="display: {{ app.request.cookies.get('isOpen') ? 'block' : 'none' }};">
         <form action="{{ models.filter.url }}" method="{{ models.filter.method }}">
             {% for field in models.filter.fields %}
-                <div class="form-group">
+                <div class="form-group col-sm-6">
                     {% include 'fields/' ~  field.type  ~'.html.twig' with field %}
                 </div>
             {% endfor %}
 
-
-            <div>
-                <button type="submit" class="btn btn-block btn-success">{{ "l.search"|trans }}</button>
+            <div style="text-align: right;">
+                <button type="submit" class="btn btn-success" style="margin-right: 15px;">{{ "l.search"|trans }}</button>
             </div>
         </form>
     </div>
-    <!-- /.box-body -->
+
 </div>
 {% endif %}
 

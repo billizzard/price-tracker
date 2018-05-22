@@ -214,6 +214,11 @@ class User implements UserInterface
         return $this->messages;
     }
 
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
     /**
      * Returns the salt that was originally used to encode the password.
      *

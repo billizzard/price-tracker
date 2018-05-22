@@ -206,7 +206,7 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
      */
     private function getPrice(InputInterface $input)
     {
-        $price = $input->getOption('price') ? $input->getOptions('price') : 0;
+        $price = $input->getOption('price') ? $input->getOption('price') : 0;
         return $price;
     }
 

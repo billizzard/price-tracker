@@ -91,7 +91,8 @@ class TrackerController extends MainController
         ])->addFilter([
             'fields' => [
                 ['type' => 'text', 'name' => 'title', 'placeholder' => $this->translator->trans('l.title')],
-                ['type' => 'select', 'name' => 'status', 'placeholder' => $this->translator->trans('l.status'), 'options' => $statuses]
+                ['type' => 'select', 'name' => 'status', 'placeholder' => $this->translator->trans('l.status'), 'options' => $statuses],
+                ['type' => 'text', 'name' => 'user', 'placeholder' => $this->translator->trans('l.user')]
             ]
         ]);
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Tests\phpunit;
 
+use App\Entity\Error;
 use App\Entity\Host;
 use App\Entity\Message;
 use App\Entity\Product;
@@ -90,6 +91,16 @@ class BaseTestCase extends WebTestCase
         self::$entityManager->persist($host);
         self::$entityManager->flush();
         return $host;
+    }
+
+    protected static function createError()
+    {
+        $entity = new Error();
+        $entity->setMessage('error message');
+        $entity->setAddData([]);
+        self::$entityManager->persist($entity);
+        self::$entityManager->flush();
+        return $entity;
     }
 
     protected static function createProduct(Host $host)

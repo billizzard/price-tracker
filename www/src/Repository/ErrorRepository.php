@@ -33,7 +33,8 @@ class ErrorRepository extends ServiceEntityRepository
         $sortColumn = $request->get('sort', 'id');
         $sortDirection = 'DESC';
 
-        $queryBuilder = $this->createQueryBuilder('e')->where('e.isDeleted = false');
+        $queryBuilder = $this->createQueryBuilder('e');
+        $this->getNotDeleted($queryBuilder);
         $queryBuilder->addSelect('e.id as id');
         $queryBuilder->addSelect('e.message as message');
         $queryBuilder->addSelect('e.type as type');

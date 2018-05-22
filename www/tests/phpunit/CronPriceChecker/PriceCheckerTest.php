@@ -16,8 +16,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
 
     public function testRunCron50()
     {
-        $client = static::createClient();
-        $client->request('GET', '/cron/price-checker/?price=50');
+        $this->runCommandWithPrice(50);
         $this->assertEquals(false, false);
     }
 
@@ -95,8 +94,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
      */
     public function testRunCron60()
     {
-        $client = static::createClient();
-        $client->request('GET', '/cron/price-checker/?price=60');
+        $this->runCommandWithPrice(60);
         $this->assertEquals(false, false);
     }
 
@@ -176,8 +174,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
      */
     public function testRunCron45()
     {
-        $client = static::createClient();
-        $client->request('GET', '/cron/price-checker/?price=45');
+        $this->runCommandWithPrice(45);
         $this->assertEquals(false, false);
     }
 
@@ -245,8 +242,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
      */
     public function testRunCron35()
     {
-        $client = static::createClient();
-        $client->request('GET', '/cron/price-checker/?price=35');
+        $this->runCommandWithPrice(35);
         $this->assertEquals(false, false);
     }
 
@@ -313,8 +309,7 @@ class PriceCheckerTest extends CronPriceFixturesTestCase
      */
     public function testRunCron35_2()
     {
-        $client = static::createClient();
-        $client->request('GET', '/cron/price-checker/?price=35');
+        $this->runCommandWithPrice(35);
         $this->assertEquals(false, false);
     }
 

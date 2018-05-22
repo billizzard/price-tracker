@@ -40,7 +40,10 @@ class WatcherRepository extends ServiceEntityRepository
         $qb->addSelect('w.id as id')
             ->addSelect('w.status as status')
             ->addSelect('w.title as title')
+            ->addSelect('IDENTITY(w.user) as user')
             ->leftJoin('w.product', 'p', 'WITH', 'w.product = p.id');
+        
+
 
         $this->getFiltered($qb)->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
         $qb->addOrderBy($sortColumn, $sortDirection);
@@ -100,12 +103,6 @@ class WatcherRepository extends ServiceEntityRepository
     {
         $this->getNotDeleted($qb);
         $qb->andWhere('w.status != ' . Watcher::STATUS_SUCCESS);
-        return $this;
-    }
-
-    private function getNotDeleted(QueryBuilder &$qb)
-    {
-        $qb->andWhere('w.isDeleted = false');
         return $this;
     }
 

@@ -43,6 +43,11 @@ class Error
      */
     private $createdAt;
 
+    public function __construct()
+    {
+        $this->createdAt = time();
+    }
+
     public function getId()
     {
         return $this->id;
