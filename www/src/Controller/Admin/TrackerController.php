@@ -58,43 +58,15 @@ class TrackerController extends MainController
 //        var_dump($messages);
 //        die();
         //$logger->error('Cannot find price', ['product_id' => 1]);
+
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
         //$grid = new HVFGridView($request, $qb, ['perPage' => 1]);
         $grid = new GridView($request, $qb, ['perPage' => 10]);
        // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
 
-        $statuses = [
-            Watcher::STATUS_SUCCESS => $this->translator->trans('l.completed'),
-            Watcher::STATUS_PRICE_CONFIRMED => $this->translator->trans('l.tracked')
-        ];
-        
-        $grid->addColumn('id', [
-            'sort' => false,
-        ])->addColumn('title', [
-            'sort' => true,
-            'label' => $this->translator->trans('l.title')
-        ])->addColumn('status', [
-            'label' => $this->translator->trans('l.status'),
-            'sort' => true,
-            'raw' => true,
-            'callback' => function($model) use ($statuses) {
-                if ($model['status'] == Watcher::STATUS_SUCCESS) {
-                    $result = "<span class='label label-success'>" . $statuses[Watcher::STATUS_SUCCESS] . "</span>";
-                } else  {
-                    $result = "<span class='label label-warning'>" . $statuses[Watcher::STATUS_PRICE_CONFIRMED] . "</span>";
-                }
-                return $result;
-            }
-        ])->addActionColumn('Actions', [
-            'buttons' => ['view', 'edit', 'delete'],
-            'label' => $this->translator->trans('l.actions'),
-        ])->addFilter([
-            'fields' => [
-                ['type' => 'text', 'name' => 'title', 'placeholder' => $this->translator->trans('l.title')],
-                ['type' => 'select', 'name' => 'status', 'placeholder' => $this->translator->trans('l.status'), 'options' => $statuses],
-                ['type' => 'text', 'name' => 'user', 'placeholder' => $this->translator->trans('l.user')]
-            ]
-        ]);
+
+
+        $this->addToGridView($grid);
 
         $products = $grid->getGridData();
 
@@ -254,5 +226,50 @@ class TrackerController extends MainController
         }
 
         throw new NotFoundHttpException();
+    }
+
+    private function addToGridView(GridView $grid)
+    {
+        $statuses = [
+            Watcher::STATUS_SUCCESS => $this->translator->trans('l.completed'),
+            Watcher::STATUS_PRICE_CONFIRMED => $this->translator->trans('l.tracked')
+        ];
+
+        $grid->addColumn('id', [
+            'sort' => false,
+        ])->addColumn('title', [
+            'sort' => true,
+            'label' => $this->translator->trans('l.title')
+        ])->addColumn('status', [
+            'label' => $this->translator->trans('l.status'),
+            'sort' => true,
+            'raw' => true,
+            'callback' => function($model) use ($statuses) {
+                if ($model['status'] == Watcher::STATUS_SUCCESS) {
+                    $result = "<span class='label label-success'>" . $statuses[Watcher::STATUS_SUCCESS] . "</span>";
+                } else  {
+                    $result = "<span class='label label-warning'>" . $statuses[Watcher::STATUS_PRICE_CONFIRMED] . "</span>";
+                }
+                return $result;
+            }
+        ])->addActionColumn('Actions', [
+            'buttons' => ['view', 'edit', 'delete'],
+            'label' => $this->translator->trans('l.actions'),
+        ]);
+
+        $this->addFilter($grid, $statuses);
+    }
+
+    private function addFilter(GridView $grid, $statuses)
+    {
+        if ($this->getUser()->isAdmin()) {
+            $grid->addFilter([
+                'fields' => [
+                    ['type' => 'text', 'name' => 'title', 'placeholder' => $this->translator->trans('l.title')],
+                    ['type' => 'select', 'name' => 'status', 'placeholder' => $this->translator->trans('l.status'), 'options' => $statuses],
+                    ['type' => 'text', 'name' => 'user', 'placeholder' => $this->translator->trans('l.user')]
+                ]
+            ]);
+        }
     }
 }

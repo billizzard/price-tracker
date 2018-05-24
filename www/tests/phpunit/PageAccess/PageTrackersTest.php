@@ -51,6 +51,32 @@ class PageTrackersTest extends BaseTestCase
     }
 
     /*
+     *  --------------------------  FILTER
+     */
+
+    /**
+     * Простой пользователь не должен видеть фильтр
+     */
+    public function testUser1CountFilter()
+    {
+        $crawler = self::$client1->request('GET', $this->url);
+        $count = $crawler->filter('.filter-header')->count();
+
+        $this->assertEquals(0, $count);
+    }
+
+    /**
+     * Администратор должен видеть фильтр
+     */
+    public function testAdminCountFilter()
+    {
+        $crawler = self::$clientAdmin->request('GET', $this->url);
+        $count = $crawler->filter('.filter-header')->count();
+
+        $this->assertEquals(1, $count);
+    }
+
+    /*
      *  --------------------------  LIST
      */
 

@@ -45,7 +45,7 @@ class WatcherRepository extends ServiceEntityRepository
         
 
 
-        $this->getFiltered($qb)->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
+        $this->getFiltered($qb, $request)->getNotDeleted($qb)->andWhereUserOwner($qb, $user);
         $qb->addOrderBy($sortColumn, $sortDirection);
         
         //$query = $qb->getQuery();
@@ -53,19 +53,31 @@ class WatcherRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    private function getFiltered(QueryBuilder &$qb)
+    private function getFiltered(QueryBuilder &$qb, $request)
     {
-        if (isset($_GET['title'])) {
-            $qb->andWhere("w.title LIKE :title")->setParameter(':title', $_GET['title'] . '%');
+        if ($request->get('title')) {
+            $qb->andWhere("w.title LIKE :title")->setParameter(':title', $request->get('title') . '%');
 
         }
 
-        if (isset($_GET['status']) && $status = $_GET['status']) {
+        if ($status = $request->get('status')) {
             if ($status == Watcher::STATUS_PRICE_CONFIRMED) {
                 $qb->andWhere('w.status IN (' . Watcher::STATUS_PRICE_CONFIRMED . ',' . Watcher::STATUS_NEW . ')');
             } else {
                 $qb->andWhere('w.status = ' . (int)$status);
             }
+        }
+
+        if ($user = $request->get('user')) {
+            $user = explode(',', $user);
+
+            $user = array_map(function($val) {
+                return (int)$val;
+            }, $user);
+
+            $user = array_unique($user);
+
+            $qb->andWhere('w.user IN (' . implode(',', $user) . ')');
         }
         return $this;
     }

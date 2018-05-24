@@ -16,6 +16,7 @@ class BaseTestCase extends WebTestCase
 {
     /** @var EntityManager entityManager */
     protected static $entityManager;
+    private static $uniq = 1;
 
     public static function getKernelClass()
     {
@@ -87,7 +88,7 @@ class BaseTestCase extends WebTestCase
     protected static function createHost()
     {
         $host = new Host();
-        $host->setHost('http://test.te');
+        $host->setHost('http://test' . self::getUniq() . '.te');
         self::$entityManager->persist($host);
         self::$entityManager->flush();
         return $host;
@@ -107,7 +108,7 @@ class BaseTestCase extends WebTestCase
     {
         $product = new Product();
         $product->setHost($host);
-        $product->setUrl('http://test.te');
+        $product->setUrl('http://test' . self::getUniq() . '.te');
         $product->setCurrentPrice(100);
         self::$entityManager->persist($product);
         self::$entityManager->flush();
@@ -118,7 +119,7 @@ class BaseTestCase extends WebTestCase
     {
         $message = new Message();
         $message->setMessage('message');
-        $message->setTitle('title');
+        $message->setTitle('title' . self::getUniq());
         $message->setUser($user);
         self::$entityManager->persist($message);
         self::$entityManager->flush();
@@ -130,11 +131,18 @@ class BaseTestCase extends WebTestCase
         $watcher = new Watcher();
         $watcher->setUser($user);
         $watcher->setProduct($product);
-        $watcher->setTitle('title');
+        $watcher->setTitle('title' . self::getUniq());
         $watcher->setStartPrice(100);
         $watcher->setPercent(10);
         self::$entityManager->persist($watcher);
         self::$entityManager->flush();
         return $watcher;
     }
+
+    private static function getUniq()
+    {
+        self::$uniq++;
+        return self::$uniq;
+    }
+
 }

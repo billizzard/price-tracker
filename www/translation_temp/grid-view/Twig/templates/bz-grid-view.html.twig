@@ -3,26 +3,28 @@
 {% if models.filter and models.filter.fields %}
 
 <div class="box box-default js-col-box {{ app.request.cookies.get('isOpen') ? '' : 'collapsed-box' }}">
-    
-    <div class="box-header with-border ">
+
+    <div class="box-header with-border js-h-collapse filter-header"  data-widget="collapse">
         <h3 class="box-title">{{ "l.filter"|trans }}</h3>
 
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool js-filter-collapse" data-widget="collapse"><i class="fa fa-{{ app.request.cookies.get('isOpen') ? 'minus' : 'plus' }}"></i>
+            <button type="button" class="btn btn-box-tool js-filter-collapse"><i class="fa fa-{{ app.request.cookies.get('isOpen') ? 'minus' : 'plus' }}"></i>
             </button>
         </div>
     </div>
 
     <div class="box-body" style="display: {{ app.request.cookies.get('isOpen') ? 'block' : 'none' }};">
         <form action="{{ models.filter.url }}" method="{{ models.filter.method }}">
-            {% for field in models.filter.fields %}
-                <div class="form-group col-sm-6">
-                    {% include 'fields/' ~  field.type  ~'.html.twig' with field %}
-                </div>
-            {% endfor %}
+            <div class="row">
+                {% for field in models.filter.fields %}
+                    <div class="form-group col-sm-6">
+                        {% include 'fields/' ~  field.type  ~'.html.twig' with field %}
+                    </div>
+                {% endfor %}
 
-            <div style="text-align: right;">
-                <button type="submit" class="btn btn-success" style="margin-right: 15px;">{{ "l.search"|trans }}</button>
+                <div class="col-sm-12" style="text-align: right;">
+                    <button type="submit" class="btn btn-success">{{ "l.search"|trans }}</button>
+                </div>
             </div>
         </form>
     </div>
@@ -172,6 +174,7 @@
         let filterCollapse = document.querySelector('.js-filter-collapse');
         let filterColBox = document.querySelector('.js-col-box');
         if (filterCollapse && filterColBox) {
+
             filterCollapse.addEventListener('click', function() {
                 if (filterColBox.classList.contains('collapsed-box')) {
                     document.cookie = "isOpen=1";
@@ -185,12 +188,17 @@
         }
     };
 
-
-
     document.addEventListener("DOMContentLoaded", tableInit);
 
 </script>
 <style>
+    .filter-header {
+        cursor: pointer;
+        transition: 0.3;
+    }
+    .filter-header:hover {
+        background-color: #f9f9f9;
+    }
     .btn.btn-action {
         border-radius: 3px;
         position: relative;

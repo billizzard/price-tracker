@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\HVF\PriceChecker\PriceParsers\OnlinerBaraholkaParser;
 use App\HVF\PriceChecker\PriceParsers\OnlinerCatalogParser;
 use App\HVF\PriceChecker\PriceParsers\PriceParser;
 use App\HVF\PriceChecker\SiteParsers\FileGetContentParser;
@@ -77,6 +78,7 @@ class Host
     {
         switch($this->getHost()) {
             case 'catalog.onliner.by': return new OnlinerCatalogParser(new FileGetContentParser());
+            case 'baraholka.onliner.by': return new OnlinerBaraholkaParser(new FileGetContentParser());
         }
 
         return null;

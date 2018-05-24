@@ -46,9 +46,6 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
     public function __construct(EntityManagerInterface $em, LoggerInterface $logger, TranslatorInterface $translator, HostRepository $hr, $name = null)
     {
         parent::__construct($name);
-
-
-        //$logger1 = $this->get('monolog.logger.profiler');
         $this->logger = $logger;
         $this->translator = $translator;
         $this->hostRepository = $hr;
