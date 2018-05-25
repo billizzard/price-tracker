@@ -57,7 +57,6 @@ class WatcherRepository extends ServiceEntityRepository
     {
         if ($request->get('title')) {
             $qb->andWhere("w.title LIKE :title")->setParameter(':title', $request->get('title') . '%');
-
         }
 
         if ($status = $request->get('status')) {

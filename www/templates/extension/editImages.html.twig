@@ -1,0 +1,39 @@
+<div class="form-group editImage">
+    <div style="display: inline-block;">
+        {% for image in images %}
+            <div class="img-item">
+                <a href="#" class="fa fa-remove delete"></a>
+                <img src="{{ image.src }}" >
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<style>
+    .editImage .img-item {
+        position:relative;
+        display:inline-block;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        border: 5px solid #fff;
+    }
+    .editImage .img-item img {
+        max-width: 200px;
+        max-height: 150px;
+
+    }
+    .editImage .img-item .delete {
+        position: absolute;
+        right: 0;
+        top:0;
+        padding: 5px;
+        color: #fff;
+        background-color: #000;
+        opacity: 0.3;
+        transition: 0.3s;
+    }
+    .editImage .img-item .delete:hover {
+        opacity: 0.7;
+    }
+</style>

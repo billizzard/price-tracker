@@ -10,11 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HostRepository")
  */
-class Host
+class Host extends Base
 {
     /**
      * @ORM\Id
@@ -33,6 +34,31 @@ class Host
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="host")
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     */
+    private $logo = false;
+
+    /**
+     * @var string $image
+     * @Assert\Image(
+     *     minWidth = 200,
+     *     maxWidth = 400,
+     *     minHeight = 200,
+     *     maxHeight = 400,
+     *     allowLandscape = false,
+     *     allowPortrait = false,
+     *     maxSize = "2M"
+     *     )
+     */
+    private $logoFile;
 
     /**
      * @return Collection|Product[]
@@ -72,6 +98,46 @@ class Host
     public function setHost($host)
     {
         $this->host = $host;
+    }
+
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+    }
+
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    public function setLogoFile($logoFile)
+    {
+        $this->logoFile = $logoFile;
+    }
+
+    public function getLogoFile()
+    {
+        return $this->logoFile;
+    }
+
+    public function getLogoUrl()
+    {
+        if ($this->getLogo()) {
+            return '/uploads/host/' . $this->getLogo();
+        }
+
+        return '';
+    }
+
+    public function getSaveDir()
+    {
+        return __DIR__ . '/../../public/uploads/host/';
+    }
+
+
+    public function delete()
+    {
+        $this->isDeleted = true;
     }
 
     public function getParser(): ?PriceParser

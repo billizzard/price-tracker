@@ -1,0 +1,23 @@
+{% extends 'profile.html.twig' %}
+
+{% block contentTitle %}
+    {{ 'l.host'|trans }}
+{% endblock %}
+
+{% block breadcrumbAfter %}
+    <li class="active">{{ 'l.host'|trans }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        {{ grid_view(products) }}
+    </div>
+    <div class="col-xs-12" style="text-align:right;">
+        <a href="{{ path('tracker_add') }}" class="btn btn-success">{{ 'l.add'|trans }}</a>
+    </div>
+</div>
+
+{% endblock %}
+
+

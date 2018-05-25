@@ -215,6 +215,10 @@
                 <source>l.user</source>
                 <target>User</target>
             </trans-unit>
+            <trans-unit id="l.host">
+                <source>l.host</source>
+                <target>Host</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->

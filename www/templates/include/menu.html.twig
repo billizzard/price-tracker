@@ -1,0 +1,63 @@
+<ul class="sidebar-menu" data-widget="tree" data-active="{% if activeMenu is defined %}{{ activeMenu }}{% endif %}">
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-line-chart"></i> <span>{{ 'l.trackers'|trans }}</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li id="trackers-list"><a href="{{ path('tracker_list') }}"><i
+                            class="fa fa-circle-o"></i>{{ 'l.list'|trans }}</a></li>
+            <li id="trackers-add"><a href="{{ path('tracker_add') }}"><i class="fa fa-circle-o"></i>{{ 'l.add'|trans }}
+                </a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-envelope"></i> <span>{{ 'l.messages'|trans }}</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li id="messages-list">
+                <a href="{{ path('message_list') }}">
+                    <i class="fa fa-circle-o"></i>
+                    {{ 'l.inbox'|trans }}
+                </a>
+            </li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li id="errors-list">
+                    <a href="{{ path('error_list') }}">
+                        <i class="fa fa-circle-o"></i>
+                        {{ 'l.errors'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+            {#<li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>#}
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-globe"></i> <span>{{ 'l.host'|trans }}</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li id="host-list">
+                <a href="{{ path('host_list') }}">
+                    <i class="fa fa-circle-o"></i>
+                    {{ 'l.list'|trans }}
+                </a>
+            </li>
+            <li id="host-add">
+                <a href="{{ path('host_add') }}">
+                    <i class="fa fa-circle-o"></i>
+                    {{ 'l.add'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

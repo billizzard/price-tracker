@@ -3,6 +3,7 @@
 parameters:
     locale: 'en'
     app.locales: en|ru
+    host_images_directory: '%kernel.project_dir%/public/uploads/host'
 
 services:
     # default configuration for services in *this* file
@@ -53,6 +54,9 @@ services:
                 - "@security.http_utils"
                 - []
 
+    App\Service\FileUploader:
+            arguments:
+                $targetDirectory: '%host_images_directory%'
 #    App\Command\CronCheckerPriceCommand:
 #        arguments:
 #            $logger: '@monolog.logger.profiler'

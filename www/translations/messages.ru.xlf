@@ -170,6 +170,10 @@
                 <source>l.user</source>
                 <target>Пользователь</target>
             </trans-unit>
+            <trans-unit id="l.host">
+                <source>l.host</source>
+                <target>Хост</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

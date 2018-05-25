@@ -205,7 +205,8 @@ class TrackerController extends MainController
                 'product' => $product,
                 'watcher' => $watcher,
                 'jsonPrice' => json_encode($jsonPrice),
-                'addData' => $addData
+                'addData' => $addData,
+                'activeMenu' => 'trackers-list'
             ]);
 
         }

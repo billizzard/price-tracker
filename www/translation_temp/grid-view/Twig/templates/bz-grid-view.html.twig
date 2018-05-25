@@ -23,7 +23,7 @@
                 {% endfor %}
 
                 <div class="col-sm-12" style="text-align: right;">
-                    <button type="submit" class="btn btn-success">{{ "l.search"|trans }}</button>
+                    <button type="submit"  class="btn btn-success">{{ "l.search"|trans }}</button>
                 </div>
             </div>
         </form>
@@ -49,8 +49,8 @@
                             colspan="1"
                             data-sorturl="{{ column.sortUrl }}"
                             aria-sort="ascending"
-                            aria-label="Rendering engine: activate to sort column descending"
-                            style="width: 231px;">{{ column.label|trans }}
+                            aria-label="Rendering engine: activate to sort column descending">
+                            {{ column.label|trans }}
                         </th>
                         {% endfor %}
                         {% if models.actionColumn %}
@@ -68,14 +68,25 @@
                     {% for id, rows in models.data %}
                         <tr role="row" class="odd">
                             {% for row in rows %}
-                                {% if row.raw %}
-                                    <td>{{ row.value|raw }}</td>
-                                {% else %}
-                                    <td>{{ row.value }}</td>
-                                {% endif %}
+                                <td
+                                    {% if (row.colOptions.style is defined) %}
+                                        style="{{ row.colOptions.style }}"
+                                    {% endif %}
+                                >
+                                    {% if row.raw %}
+                                        {{ row.value|raw }}
+                                    {% else %}
+                                        {{ row.value }}
+                                    {% endif %}
+                                </td>
                             {% endfor %}
+
                             {% if models.actionColumn and models.actionColumn.options.buttons %}
-                            <td class="td-actions">
+                            <td class="td-actions"
+                                {% if (models.actionColumn.options.colOptions.style is defined) %}
+                                    style="{{ models.actionColumn.options.colOptions.style }}"
+                                {% endif %}
+                            >
                                 {% for button in models.actionColumn.options.buttons %}
                                     {% if button == 'edit' %}
                                         <a href="{{ id }}/edit/" class="btn btn-action" title="{{ 'l.edit'|trans }}">

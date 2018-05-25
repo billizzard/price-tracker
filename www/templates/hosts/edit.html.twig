@@ -1,0 +1,20 @@
+{% extends 'profile.html.twig' %}
+
+{% block contentTitle %}
+    {{ 'l.edit'|trans }}
+{% endblock %}
+
+{% block breadcrumbAfter %}
+    <li class="active">{{ 'l.edit'|trans }}</li>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_row(form.host, { 'label': 'l.host'|trans}) }}
+        {{ form_row(form.logoFile) }}
+        {{ editImages(model.id, model.logoUrl) }}
+        <button type="submit" class="btn btn-primary">{{ 'l.edit'|trans }}</button>
+    {{ form_end(form) }}
+
+{% endblock %}
+

@@ -1,0 +1,26 @@
+host_list:
+    path: /hosts/
+    controller: App\Controller\Admin\HostController::listAction
+
+host_add:
+    path: /hosts/add/
+    controller: App\Controller\Admin\HostController::addAction
+
+host_edit:
+    path: /hosts/{id}/edit/
+    requirements:
+      id: '\d+'
+    controller: App\Controller\Admin\HostController::editAction
+#
+#tracker_view:
+#    path: /trackers/{id}/view/
+#    requirements:
+#      id: '\d+'
+#    controller: App\Controller\Admin\TrackerController::viewAction
+#
+#tracker_delete:
+#    path: /trackers/{id}/delete/
+#    requirements:
+#      id: '\d+'
+#    controller: App\Controller\Admin\TrackerController::deleteAction
+
