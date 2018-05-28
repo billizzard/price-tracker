@@ -15,8 +15,9 @@ use Symfony\Component\HttpFoundation\File\File;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HostRepository")
  */
-class Host extends Base
+class Host extends Base implements Uploadable
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -41,12 +42,6 @@ class Host extends Base
     private $isDeleted = false;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *
-     */
-    private $logo = false;
-
-    /**
      * @var string $image
      * @Assert\Image(
      *     minWidth = 200,
@@ -59,6 +54,11 @@ class Host extends Base
      *     )
      */
     private $logoFile;
+
+    public function getEntityType()
+    {
+        return self::HOST_TYPE;
+    }
 
     /**
      * @return Collection|Product[]
@@ -100,16 +100,6 @@ class Host extends Base
         $this->host = $host;
     }
 
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
-    }
-
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
     public function setLogoFile($logoFile)
     {
         $this->logoFile = $logoFile;
@@ -119,21 +109,6 @@ class Host extends Base
     {
         return $this->logoFile;
     }
-
-    public function getLogoUrl()
-    {
-        if ($this->getLogo()) {
-            return '/uploads/host/' . $this->getLogo();
-        }
-
-        return '';
-    }
-
-    public function getSaveDir()
-    {
-        return __DIR__ . '/../../public/uploads/host/';
-    }
-
 
     public function delete()
     {

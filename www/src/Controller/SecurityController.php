@@ -17,6 +17,10 @@ class SecurityController extends FrontendController
 {
     public function loginAction(Request $request, AuthenticationUtils $helper): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('tracker_list');
+        }
+
         if ($error = $helper->getLastAuthenticationError()) {
             $this->addFlash('error', 'e.login_invalid');
         }
@@ -36,6 +40,10 @@ class SecurityController extends FrontendController
 
     public function registrationAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('tracker_list');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
 

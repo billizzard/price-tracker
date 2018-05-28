@@ -1,6 +1,7 @@
 <?php
 namespace App\Twig;
 
+use App\Entity\File;
 use App\HVF\Helper\UrlBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,22 +29,23 @@ class EditImagesExtension extends \Twig_Extension
         );
     }
 
-    public function editImagesFunction(\Twig_Environment $environment, $idModel, $urls = [], $options = [])
+    public function editImagesFunction(\Twig_Environment $environment, array $files, array $options = [])
     {
         $images = [];
 
-        if (is_array($urls)) {
-            foreach ($urls as $key => $url) {
-                $images[] = [
-                    'src' => $url,
-                ];
+        if (is_array($files)) {
+            /** @var File $file */
+            foreach ($files as $file) {
+                if ($file) {
+                    $images[] = [
+                        'id' => $file->getId(),
+                        'src' => $file->getSrc(),
+                    ];
+                }
             }
-        } else if (is_string($urls)) {
-            $images[] = ['src' => $urls];
         }
 
         $data = [
-            'id' => $idModel,
             'images' => $images,
             'options' => $options,
         ];

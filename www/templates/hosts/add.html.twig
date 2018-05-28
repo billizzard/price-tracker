@@ -11,7 +11,7 @@
 {% block content %}
     {{ form_start(form) }}
         {{ form_row(form.host, { 'label': 'l.host'|trans}) }}
-        {{ form_row(form.logo) }}
+        {{ form_row(form.logoFile) }}
         <button type="submit" class="btn btn-primary">{{ 'l.add'|trans }}</button>
     {{ form_end(form) }}
 

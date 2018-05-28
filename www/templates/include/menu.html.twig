@@ -38,6 +38,8 @@
             {#<li><a href="compose.html">{{ 'l.outbox'|trans }}</a></li>#}
         </ul>
     </li>
+
+    {% if is_granted('ROLE_ADMIN') %}
     <li class="treeview">
         <a href="#">
             <i class="fa fa-globe"></i> <span>{{ 'l.host'|trans }}</span>
@@ -60,4 +62,6 @@
             </li>
         </ul>
     </li>
+    {% endif %}
+
 </ul>

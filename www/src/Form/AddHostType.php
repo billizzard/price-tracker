@@ -15,7 +15,6 @@ class AddHostType extends AbstractType
     {
         $builder
             ->add('host', TextType::class)
-            ->add('logo', TextType::class)
             ->add('logoFile', FileType::class);
     }
 

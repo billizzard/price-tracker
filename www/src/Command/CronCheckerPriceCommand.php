@@ -71,7 +71,7 @@ class CronCheckerPriceCommand extends ContainerAwareCommand
         $this->profiler = new ProfilerLogger($this->getContainer()->get('monolog.logger.profiling'));
 
         $this->doctrine = $this->getContainer()->get('doctrine');
-        $hosts = $this->hostRepository->findAll();
+        $hosts = $this->hostRepository->getAll();
         if ($hosts) {
             /** @var Host $host */
             foreach ($hosts as $host) {

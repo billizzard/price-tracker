@@ -1,13 +1,10 @@
 <div class="form-group editImage">
-    <div style="display: inline-block;">
         {% for image in images %}
-            <div class="img-item">
-                <a href="#" class="fa fa-remove delete"></a>
+            <div class="img-item" data-id="{{ image.id }}">
+                <a href="#" class="fa fa-remove delete js-delete"></a>
                 <img src="{{ image.src }}" >
             </div>
         {% endfor %}
-
-    </div>
 </div>
 
 <style>
@@ -17,6 +14,7 @@
         text-align: center;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
         border: 5px solid #fff;
+        margin: 5px;
     }
     .editImage .img-item img {
         max-width: 200px;

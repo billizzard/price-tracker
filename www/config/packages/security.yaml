@@ -72,6 +72,7 @@ security:
     access_control:
         # this is a catch-all for the admin area
         # additional security lives in the controllers
+        - { path: '^/(%app.locales%)/profile/hosts', roles: [ROLE_ADMIN] }
         - { path: '^/(%app.locales%)/profile/errors', roles: [ROLE_ADMIN] }
         - { path: '^/(%app.locales%)/profile', roles: [ROLE_USER]}
 

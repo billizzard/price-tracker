@@ -21,6 +21,7 @@ $(function () {
     new ProfileUserForm(message);
     new SelectAvatar(message);
     new TrackerGraph();
+    new EditHostPage();
 
     if ($('#login-form').length) new LoginForm(message);
     if ($('#registration-form').length) new RegistrationForm(message);
@@ -122,6 +123,37 @@ LoginForm = function(message) {
     };
 
     init(message);
+};
+
+EditHostPage = function() {
+
+    var init = function() {
+        this.page = $('#edit-host-page');
+        if (this.page.length) {
+            this.deletedField = this.page.find('#edit_host_deleted');
+            addEvents();
+        }
+    };
+
+    var addEvents = function() {
+        $('.js-delete').on('click', function() {
+             changeDeletedId($(this));
+             removeImage($(this));
+        });
+    };
+
+    var removeImage = function(link) {
+        link.closest('.img-item').remove();
+    };
+
+    var changeDeletedId = function(link) {
+        var id = link.closest('.img-item').data('id');
+        var val = this.deletedField.val();
+        val = val ? (val + ',' + id) : id;
+        this.deletedField.val(val);
+    };
+
+    init();
 };
 
 RegistrationForm = function(message) {

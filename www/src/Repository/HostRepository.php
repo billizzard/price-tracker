@@ -23,6 +23,13 @@ class HostRepository extends ServiceEntityRepository
         return 'h';
     }
 
+    public function getAll()
+    {
+        $qb = $this->createQueryBuilder($this->getAlias());
+        $this->getNotDeleted($qb);
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByRequestQueryBuilder(Request $request, User $user)
     {
         $qb = $this->createQueryBuilder($this->getAlias());

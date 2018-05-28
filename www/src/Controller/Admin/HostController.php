@@ -11,36 +11,21 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Domain;
 use App\Entity\Host;
-use App\Entity\Message;
-use App\Entity\PriceTracker;
-use App\Entity\Product;
 use App\Entity\Watcher;
 use App\Form\AddHostType;
-use App\Form\AddProductType;
-use App\Form\AddWatcherType;
 use App\Form\EditHostType;
-use App\Form\EditWatcherType;
+use App\Repository\FileRepository;
 use App\Repository\HostRepository;
-use App\Repository\MessageRepository;
 use App\Repository\PriceTrackerRepository;
-use App\Repository\ProductRepository;
 use App\Repository\WatcherRepository;
 
 use App\Service\FileUploader;
-use Billizzard\GridView\BillizzardGridViewBundle;
 use Billizzard\GridView\GridView;
-use Doctrine\ORM\EntityManager;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Controller used to manage blog contents in the backend.
@@ -78,14 +63,19 @@ class HostController extends MainController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $file */
-            $file = $model->getLogo();
-            $fileName = $fileUploader->upload($file);
-            $model->setLogo($fileName);
-
             $entityManager = $this->getDoctrine()->getManager();
+
+            /** @var UploadedFile $logoFile */
+            $logoFile = $model->getLogoFile();
             $entityManager->persist($model);
             $entityManager->flush();
+
+            if ($logoFile) {
+                $file = $fileUploader->upload($model, $logoFile, $this->getUser());
+
+                $entityManager->persist($file);
+                $entityManager->flush();
+            }
 
             $this->addFlash('success', 's.data_added');
 
@@ -103,29 +93,50 @@ class HostController extends MainController
         ]);
     }
 
-    public function editAction(Request $request, HostRepository $repository, FileUploader $fileUploader)
+    public function editAction(Request $request, HostRepository $repository, FileRepository $fileRepository, FileUploader $fileUploader)
     {
         /** @var Host $model */
         $model = $repository->getOneById($request->get('id'));
-        if ($model) {
-            $model->setLogoFile(
-                new File($model->getSaveDir() . $model->getLogo())
-            );
 
+        if ($model) {
+            /** @var \App\Entity\File $oldFile */
+            $oldFile = $fileRepository->getFileByEntity($model, $this->getUser());
+            $oldFile = file_exists($oldFile->getFullSrc()) ? $oldFile : null;
+
+            if ($oldFile) {
+                $model->setLogoFile(new File($oldFile->getFullSrc()));
+            }
 
             $form = $this->createForm(EditHostType::class, $model, ['attr' => ['novalidate' => 'novalidate']]);
-            //$form->get('url')->setData($watcher->getProduct()->getUrl());
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                /** @var UploadedFile $file */
-                $file = $model->getLogoFile();
-                if ($file) {
-                    $fileName = $fileUploader->upload($file);
-                    $model->setLogo($fileName);
-                }
+                /** @var UploadedFile $logoFile */
+                $logoFile = $model->getLogoFile();
 
                 $entityManager = $this->getDoctrine()->getManager();
+
+                if ($logoFile) {
+
+                    if ($oldFile) {
+                        $oldFile->delete();
+                        $entityManager->persist($oldFile);
+                    }
+
+                    $newFile = $fileUploader->upload($model, $logoFile, $this->getUser());
+                    $entityManager->persist($newFile);
+                } else {
+                    if ($deleted = $form->get('deleted')->getData()) {
+                        $deleted = explode(',', $deleted);
+                        foreach ($deleted as $id) {
+                            if ($id == $oldFile->getId()) {
+                                $oldFile->delete();
+                                $entityManager->persist($oldFile);
+                            }
+                        }
+                    }
+                }
+
                 $entityManager->persist($model);
                 $entityManager->flush();
 
@@ -141,67 +152,31 @@ class HostController extends MainController
             return $this->render('hosts/edit.html.twig', [
                 'form' => $form->createView(),
                 'model' => $model,
-                'activeMenu' => 'trackers-add',
+                'files' => [$oldFile],
+                'activeMenu' => 'host-add',
             ]);
         }
         
         throw new NotFoundHttpException();
     }
 
-    public function viewAction(Request $request, WatcherRepository $watcherRepository, PriceTrackerRepository $priceTrackerRepository)
+    public function deleteAction(Request $request, HostRepository $repository, FileRepository $fileRepository)
     {
-        $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
-        $dateStop = 0;
-        if ($graphTo = $request->get('graphTo')) {
-            $dateStop = strtotime($graphTo) ? strtotime($graphTo) + 86300 : 0;
-        }
+        /** @var Host $model */
+        $model = $repository->getOneById($request->get('id'));
 
-        if ($watcher) {
-            $product = $watcher->getProduct();
-            $this->denyAccessUnlessGranted('view', $watcher, 'Access denied.');
-            $addData = [];
-
-            $jsonPrice = $priceTrackerRepository->getGraphDataForProduct($product, 0, $dateStop);
-            $addData['graph'] = [
-                'startDate' => $jsonPrice['startDate'],
-                'dateMinus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) - 2592000),
-                'datePlus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) + 2592000),
-                'stopDate' => $jsonPrice['stopDate']
-            ];
-            if ($watcher->getStatus() == Watcher::STATUS_SUCCESS) {
-                $addData['status'] = [
-                    'class' => 'green',
-                    'label' => $this->translator->trans('l.completed')
-                ];
-            } else {
-                $addData['status'] = [
-                    'class' => 'yellow',
-                    'label' => $this->translator->trans('l.tracked')
-                ];
-            }
-
-            return $this->render('trackers/view.html.twig', [
-                'product' => $product,
-                'watcher' => $watcher,
-                'jsonPrice' => json_encode($jsonPrice),
-                'addData' => $addData
-            ]);
-
-        }
-        throw new NotFoundHttpException();
-    }
-
-    public function deleteAction(Request $request, WatcherRepository $watcherRepository)
-    {
-        /** @var Watcher $watcher */
-        $watcher = $watcherRepository->getOneVisibleByIdAndUser($request->get('id'), $this->getUser());
-
-        if ($watcher) {
-            $watcher->delete();
+        if ($model) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($watcher);
+            $model->delete();
+            /** @var \App\Entity\File $oldFile */
+            $oldFile = $fileRepository->getFileByEntity($model, $this->getUser());
+            if ($oldFile) {
+                $oldFile->delete();
+                $entityManager->persist($oldFile);
+            }
+            $entityManager->persist($model);
             $entityManager->flush();
-            return $this->redirectToRoute('tracker_list');
+            return $this->redirectToRoute('host_list');
         }
 
         throw new NotFoundHttpException();
@@ -218,10 +193,10 @@ class HostController extends MainController
             'sort' => true,
             'label' => $this->translator->trans('l.host')
         ])->addActionColumn('Actions', [
-            'buttons' => ['view', 'edit', 'delete'],
+            'buttons' => ['edit', 'delete'],
             'label' => $this->translator->trans('l.actions'),
             'colOptions' => [
-                'style' => 'width:100px; text-align:center;'
+                'style' => 'width:70px; text-align:center;'
             ]
         ]);
 
