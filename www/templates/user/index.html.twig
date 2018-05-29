@@ -22,24 +22,23 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
+                    <div class="box-profile_avatar">
                     <a href="{{ path('user_avatars') }}">
                         <img class="profile-user-img img-responsive img-circle" src="{{ app.user.avatarFull }}" alt="User profile picture">
                     </a>
+                    </div>
 
                     <h3 class="profile-username text-center">{{ app.user.nickname }}</h3>
 
                     {#<p class="text-muted text-center">Software Engineer</p>#}
 
-                    <ul class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <b>v.Успешно отслежено</b> <a class="pull-right">0</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>v.Сэкономлено</b> <a class="pull-right">0</a>
-                        </li>
-                    </ul>
+                    {#<ul class="list-group list-group-unbordered">#}
+                        {#<li class="list-group-item">#}
+                            {#<b>{{ 'l.success_tracked'|trans }}</b> <a class="pull-right">0</a>#}
+                        {#</li>#}
+                    {#</ul>#}
 
-                    <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                    {#<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>#}
                 </div>
                 <!-- /.box-body -->
             </div>

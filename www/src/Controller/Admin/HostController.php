@@ -101,7 +101,7 @@ class HostController extends MainController
         if ($model) {
             /** @var \App\Entity\File $oldFile */
             $oldFile = $fileRepository->getFileByEntity($model, $this->getUser());
-            $oldFile = file_exists($oldFile->getFullSrc()) ? $oldFile : null;
+            $oldFile = $oldFile && file_exists($oldFile->getFullSrc()) ? $oldFile : null;
 
             if ($oldFile) {
                 $model->setLogoFile(new File($oldFile->getFullSrc()));

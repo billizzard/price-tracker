@@ -219,6 +219,10 @@
                 <source>l.host</source>
                 <target>Host</target>
             </trans-unit>
+            <trans-unit id="l.success_tracked">
+                <source>l.success_tracked</source>
+                <target>Successfully completed</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->
