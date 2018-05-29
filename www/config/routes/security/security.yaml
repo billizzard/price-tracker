@@ -9,3 +9,7 @@ security_registration:
 security_logout:
     path: /logout/
     controller: App\Controller\SecurityController::logoutAction
+
+security_confirm:
+    path: /confirm/{code}/
+    controller: App\Controller\SecurityController::confirmAction

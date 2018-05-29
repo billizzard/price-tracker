@@ -178,6 +178,10 @@
                 <source>l.success_tracked</source>
                 <target>Успешно отслежено</target>
             </trans-unit>
+            <trans-unit id="l.registration_confirm">
+                <source>l.registration_confirm</source>
+                <target>Подтверждение регистрации</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">

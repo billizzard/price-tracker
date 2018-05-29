@@ -106,6 +106,21 @@ class User implements UserInterface
      */
     private $messages;
 
+    /**
+     * @ORM\Column(type="string", length=32, unique=true)
+     */
+    private $confirmCode;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isConfirmed = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
+
     public function getId(): int
     {
         return $this->id;
@@ -179,6 +194,26 @@ class User implements UserInterface
         $this->password = $password;
     }
 
+    public function getConfirmCode(): string
+    {
+        return $this->confirmCode;
+    }
+
+    public function setConfirmCode(string $confirmCode)
+    {
+        $this->confirmCode = $confirmCode;
+    }
+
+    public function getIsConfirmed(): bool
+    {
+        return $this->isConfirmed;
+    }
+
+    public function setIsConfirmed(bool $isConfirmed): void
+    {
+        $this->isConfirmed = $isConfirmed;
+    }
+
     /**
      * Returns the roles or permissions granted to the user for security.
      */
@@ -231,6 +266,11 @@ class User implements UserInterface
         // the salt value is built-in and you don't have to generate one
 
         return null;
+    }
+
+    public function generateConfirmCode(): string
+    {
+        return md5(uniqid(rand(), true));
     }
 
     /**
@@ -322,5 +362,10 @@ class User implements UserInterface
     public function onPreRemove()
     {
         //$this->deletedAt = new \DateTime("now");
+    }
+
+    public function delete(): void
+    {
+        $this->isDeleted = true;
     }
 }

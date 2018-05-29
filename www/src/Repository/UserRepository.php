@@ -27,6 +27,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    use TraitRepository;
+
+    public function getAlias(): string
+    {
+        return 'u';
+    }
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -49,5 +56,14 @@ class UserRepository extends ServiceEntityRepository
             array_shift($avatars);
         }
         return $avatars;
+    }
+
+    public function findByConfirmCode(string $code)
+    {
+        $qb = $this->createQueryBuilder($this->getAlias());
+        $qb->andWhere('u.confirmCode = :code AND u.isConfirmed = :isConfirmed')
+            ->setParameters([':code' => $code, ':isConfirmed' => false]);
+        $this->getNotDeleted($qb);
+        return $qb->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 }

@@ -12,6 +12,7 @@
 namespace App\Controller\Admin;
 
 
+use App\Controller\BaseController;
 use App\Entity\Error;
 use App\Entity\Message;
 use App\Entity\User;
@@ -29,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Controller used to manage blog contents in the backend.
@@ -42,17 +44,8 @@ use Symfony\Component\Validator\Constraints\Length;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class MainController extends AbstractController
+class MainController extends BaseController
 {
-    protected $logger;
-    protected $translator;
-
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        $this->translator = $translator;
-    }
-
     public function getMessages()
     {
         /** @var MessageRepository $repository */

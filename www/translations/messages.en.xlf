@@ -223,6 +223,10 @@
                 <source>l.success_tracked</source>
                 <target>Successfully completed</target>
             </trans-unit>
+            <trans-unit id="l.registration_confirm">
+                <source>l.registration_confirm</source>
+                <target>Confirmation of registration</target>
+            </trans-unit>
 
 
                                              <!-- e: errors -->

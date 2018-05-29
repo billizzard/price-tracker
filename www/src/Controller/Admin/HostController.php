@@ -41,8 +41,56 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class HostController extends MainController
 {
-    public function listAction(Request $request, HostRepository $repository)
+    public function listAction(Request $request, HostRepository $repository, \Swift_Mailer $mailer)
     {
+        $locale = $request->getLocale();
+        echo "<pre>";
+        var_dump($locale);
+        echo "</pre>";
+        die();
+        $this->sendEmail('','', '', '');
+        die('dfdf');
+
+
+        $random_hash = md5(uniqid(rand(), true));
+        echo "<pre>";
+        var_dump($random_hash);
+        echo "</pre>";
+        die();
+        
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('88billizzard88@gmail.com')
+            ->setTo('billizzard@mail.ru')
+            ->setBody(
+                $this->renderView(
+                // templates/emails/registration.html.twig
+                    'emails/registration.html.twig',
+                    array('name' => 'Vladimir')
+                ),
+                'text/html'
+            )
+            /*
+             * If you also want to include a plaintext version of the message
+            ->addPart(
+                $this->renderView(
+                    'emails/registration.txt.twig',
+                    array('name' => $name)
+                ),
+                'text/plain'
+            )
+            */
+        ;
+
+
+        $a = $mailer->send($message);
+        echo "<pre>";
+        var_dump($a);
+        echo "</pre>";
+        die();
+        die('dfdf');
+
+
+
         $qb = $repository->findByRequestQueryBuilder($request, $this->getUser());
         $grid = new GridView($request, $qb, ['perPage' => 10]);
 

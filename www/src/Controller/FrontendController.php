@@ -30,16 +30,10 @@ use Symfony\Component\Translation\TranslatorInterface;
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 
-class FrontendController extends Controller
+class FrontendController extends BaseController
 {
     protected $logger;
     protected $translator;
-
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        $this->translator = $translator;
-    }
 
     public function render(string $view, array $parameters = array(), Response $response = null): Response
     {

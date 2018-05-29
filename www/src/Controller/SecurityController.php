@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Translation\Translator;
@@ -20,10 +22,12 @@ class SecurityController extends FrontendController
         if ($this->getUser()) {
             return $this->redirectToRoute('tracker_list');
         }
+        
 
         if ($error = $helper->getLastAuthenticationError()) {
             $this->addFlash('error', 'e.login_invalid');
         }
+
         return $this->render('security/login.html.twig', [
             // last username entered by the user (if any)
             'last_username' => $helper->getLastUsername(),
@@ -36,6 +40,15 @@ class SecurityController extends FrontendController
     {
         // До сюда никогда не должно дойти
         throw new \Exception('Logout');
+    }
+
+    public function confirmAction(Request $request, UserRepository $repository): void
+    {
+        $user = $repository->findByConfirmCode($request->get('code'));
+        echo "<pre>";
+        var_dump($user);
+        echo "</pre>";
+        die();
     }
 
     public function registrationAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
@@ -55,11 +68,13 @@ class SecurityController extends FrontendController
                     // 3) Encode the password (you could also do this via Doctrine listener)
                     $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
                     $user->setPassword($password);
+                    $user->setConfirmCode($user->generateConfirmCode());
 
                     // 4) save the User!
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($user);
                     $entityManager->flush();
+                    $this->sendRegistrationEmail($user->getEmail(), ['link' => $this->generateUrl('security_confirm', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
                     $response = $this->getJsonSuccessResponse(['url' => $this->generateUrl('security_login')]);
 
                     return $this->json($response);
