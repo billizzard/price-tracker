@@ -329,7 +329,7 @@ class User implements UserInterface
         [$this->id, $this->nickName, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         if (in_array(self::USER_ROLE_ADMIN, $this->getRoles())) {
             return true;

@@ -227,7 +227,22 @@
                 <source>l.registration_confirm</source>
                 <target>Confirmation of registration</target>
             </trans-unit>
-
+            <trans-unit id="l.reg_success_confirm">
+                <source>l.reg_success_confirm</source>
+                <target>Registrations successfully confirmed</target>
+            </trans-unit>
+            <trans-unit id="l.password_recovery">
+                <source>l.password_recovery</source>
+                <target>Password recovery</target>
+            </trans-unit>
+            <trans-unit id="l.send">
+                <source>l.send</source>
+                <target>Send</target>
+            </trans-unit>
+            <trans-unit id="l.change_password">
+                <source>l.change_password</source>
+                <target>Change password</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">
@@ -262,6 +277,10 @@
                 <source>e.number_invalid</source>
                 <target>Invalid number</target>
             </trans-unit>
+            <trans-unit id="e.user_not_found">
+                <source>e.user_not_found</source>
+                <target>User not found</target>
+            </trans-unit>
 
                                              <!-- s: success -->
             <trans-unit id="s.data_updated">
@@ -271,6 +290,14 @@
             <trans-unit id="s.data_added">
                 <source>s.data_added</source>
                 <target>Data successfully added</target>
+            </trans-unit>
+            <trans-unit id="s.forgot">
+                <source>s.forgot</source>
+                <target>You have sent an email with a link to reset your password</target>
+            </trans-unit>
+            <trans-unit id="s.password_changed">
+                <source>s.password_changed</source>
+                <target>Password changed successfully</target>
             </trans-unit>
 
                                              <!-- m: message -->

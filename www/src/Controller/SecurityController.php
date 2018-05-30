@@ -3,17 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChangeType;
+use App\Form\ForgotType;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SecurityController extends FrontendController
 {
@@ -22,7 +29,6 @@ class SecurityController extends FrontendController
         if ($this->getUser()) {
             return $this->redirectToRoute('tracker_list');
         }
-        
 
         if ($error = $helper->getLastAuthenticationError()) {
             $this->addFlash('error', 'e.login_invalid');
@@ -42,13 +48,87 @@ class SecurityController extends FrontendController
         throw new \Exception('Logout');
     }
 
-    public function confirmAction(Request $request, UserRepository $repository): void
+    public function confirmAction(Request $request, UserRepository $repository)
     {
         $user = $repository->findByConfirmCode($request->get('code'));
-        echo "<pre>";
-        var_dump($user);
-        echo "</pre>";
-        die();
+        if ($user) {
+            $user->setIsConfirmed(true);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'l.reg_success_confirm');
+            return $this->redirectToRoute('security_login');
+        }
+
+        throw new NotFoundHttpException();
+    }
+
+    public function forgotAction(Request $request, UserRepository $repository)
+    {
+        $form = $this->createForm(ForgotType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $repository->findByEmail($email);
+            if ($user) {
+                $user->setIsConfirmed(false);
+                $user->setConfirmCode($user->getConfirmCode());
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->sendForgotEmail($email, ['link' => $this->generateUrl('security_change', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
+                $this->addFlash('success', $this->translator->trans('s.forgot'));
+            } else {
+                $this->addFlash('error', $this->translator->trans('e.user_not_found'));
+            }
+        }
+
+        foreach ($form->getErrors(true, true) as $error) {
+            $this->addFlash('error', $error->getMessage());
+            break;
+        }
+
+        return $this->render('security/forgot.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    public function changeAction(Request $request, UserRepository $repository, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = $repository->findByConfirmCode($request->get('code'));
+
+        if ($user) {
+            $form = $this->createForm(ChangeType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+                $user->setIsConfirmed(true);
+
+                // 4) save the User!
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', $this->translator->trans('s.password_changed'));
+
+                return $this->redirectToRoute('security_login');
+            }
+
+            foreach ($form->getErrors(true, true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+                break;
+            }
+
+            return $this->render('security/change.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+
+        throw new NotFoundHttpException();
     }
 
     public function registrationAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
@@ -62,24 +142,20 @@ class SecurityController extends FrontendController
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            if ( $form->isValid()) {
-                if ($request->isXmlHttpRequest()) {
-                    // 3) Encode the password (you could also do this via Doctrine listener)
-                    $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-                    $user->setPassword($password);
-                    $user->setConfirmCode($user->generateConfirmCode());
+        if ($form->isSubmitted() && $form->isValid() && $request->isXmlHttpRequest()) {
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            $user->setConfirmCode($user->generateConfirmCode());
 
-                    // 4) save the User!
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-                    $this->sendRegistrationEmail($user->getEmail(), ['link' => $this->generateUrl('security_confirm', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
-                    $response = $this->getJsonSuccessResponse(['url' => $this->generateUrl('security_login')]);
+            // 4) save the User!
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->sendRegistrationEmail($user->getEmail(), ['link' => $this->generateUrl('security_confirm', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
+            $response = $this->getJsonSuccessResponse(['url' => $this->generateUrl('security_login')]);
 
-                    return $this->json($response);
-                }
-            }
+            return $this->json($response);
         }
 
         foreach ($form->getErrors(true, true) as $error) {

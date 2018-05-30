@@ -99,30 +99,30 @@ TrackerGraph = function() {
 
 LoginForm = function(message) {
 
-    var init = function() {
-        this.form = $('#login-form');
-        if (this.form.length) {
-            this.message = message;
-            addEvents();
-        }
-    };
-
-    var addEvents = function() {
-        var self = this;
-        this.form.on('submit', function() {
-            var data = self.form.serialize();
-            $.post(self.form.attr('action'), data, function(res) {
-                if (res.authenticated) {
-                    window.location = res.url;
-                } else {
-                    self.message.errorMessage(res.error);
-                }
-            });
-            return false;
-        });
-    };
-
-    init(message);
+    // var init = function() {
+    //     this.form = $('#login-form');
+    //     if (this.form.length) {
+    //         this.message = message;
+    //         addEvents();
+    //     }
+    // };
+    //
+    // var addEvents = function() {
+    //     var self = this;
+    //     this.form.on('submit', function() {
+    //         var data = self.form.serialize();
+    //         $.post(self.form.attr('action'), data, function(res) {
+    //             if (res.authenticated) {
+    //                 window.location = res.url;
+    //             } else {
+    //                 self.message.errorMessage(res.error);
+    //             }
+    //         });
+    //         return false;
+    //     });
+    // };
+    //
+    // init(message);
 };
 
 EditHostPage = function() {

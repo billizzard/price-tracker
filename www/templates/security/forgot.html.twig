@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form, { 'attr': {'novalidate': 'novalidate', 'id': 'forgot-form'} }) }}
+
+    <div class="homepage-hero-module" style="margin-top: 50px;">
+
+        <div class="login-box">
+            <div class="login-box-body">
+                <p class="login-box-msg login-title" id="t-forgot">{{ 'l.password_recovery'|trans }}</p>
+                <div class="form-group has-feedback">
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'l.email'|trans }}) }}
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" id="t-regSubmit" class="btn login-button btn-block ">{{ 'l.send'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="video-container">
+            <div class="filter"></div>
+            <video autoplay loop class="fillWidth" poster="/build/video/Dc3.jpg" preload>
+                <source src="/build/video/Dc3.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="/build/video/Dc3.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+            <div class="poster hidden">
+                <img src="/build/video/Dc.jpg" alt="">
+            </div>
+
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
+{% endblock %}

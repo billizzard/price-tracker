@@ -15,7 +15,7 @@ security:
             database_users:
                 entity:
                     class: App\Entity\User
-                    property: email
+                    #property: email
                     #property: email
 
     firewalls:

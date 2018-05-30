@@ -13,3 +13,11 @@ security_logout:
 security_confirm:
     path: /confirm/{code}/
     controller: App\Controller\SecurityController::confirmAction
+
+security_forgot:
+    path: /forgot/
+    controller: App\Controller\SecurityController::forgotAction
+
+security_change:
+    path: /change/{code}/
+    controller: App\Controller\SecurityController::changeAction
