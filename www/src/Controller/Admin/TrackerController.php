@@ -132,10 +132,7 @@ class TrackerController extends MainController
             return $this->redirectToRoute('tracker_list');
         }
 
-        foreach ($form->getErrors(true, true) as $error) {
-            $this->addFlash('error', $error->getMessage());
-            break;
-        }
+        $this->setFlashFormError($form);
 
         return $this->render('trackers/add.html.twig', [
             'form' => $form->createView(),

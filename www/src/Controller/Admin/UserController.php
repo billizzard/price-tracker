@@ -151,16 +151,6 @@ class UserController extends MainController
                     ]),
                 ),
             ])
-            ->add('oldPassword', PasswordType::class)
-            ->add('newPassword', PasswordType::class, [
-                'constraints' => array(
-                    new Length([
-                        'min' => 6,
-                        'max' => 50
-                    ]),
-                )
-            ])
-            ->add('repeatPassword', PasswordType::class)
             ->getForm();
     }
 }

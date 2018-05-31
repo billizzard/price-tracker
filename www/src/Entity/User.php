@@ -107,9 +107,9 @@ class User implements UserInterface
     private $messages;
 
     /**
-     * @ORM\Column(type="string", length=32, unique=true)
+     * @ORM\Column(type="string", length=32)
      */
-    private $confirmCode;
+    private $confirmCode = '';
 
     /**
      * @ORM\Column(type="boolean")
@@ -293,24 +293,8 @@ class User implements UserInterface
         return serialize([$this->id, $this->nickName, $this->password]);
     }
 
-    public function changeByData(array $data, UserPasswordEncoderInterface $encoder)
+    public function changeByData(array $data)
     {
-        if ($data['newPassword'] || $data['oldPassword'] || $data['repeatPassword']) {
-            if ($data['newPassword'] && $data['oldPassword'] && $data['repeatPassword']) {
-                if ($data['newPassword'] == $data['repeatPassword']) {
-                    if ($encoder->isPasswordValid($this, $data['oldPassword'])) {
-                        $this->setPassword($encoder->encodePassword($this, $data['newPassword']));
-                    } else {
-                        throw new \Exception('e.change_password');
-                    }
-                } else {
-                    throw new \Exception('e.change_password');
-                }
-            } else {
-                throw new \Exception('e.change_password');
-            }
-        }
-
         $this->setEmail($data['email']);
         $this->setNickName($data['nickName']);
     }

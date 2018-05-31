@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 
@@ -45,5 +46,13 @@ class BaseController extends Controller
     protected function sendForgotEmail($to, $params = [], $locale = 'en')
     {
         $this->sendEmail($this->translator->trans('l.change_password'), $to, $locale . '_forgot.html.twig', $params);
+    }
+
+    protected function setFlashFormError(FormInterface $form)
+    {
+        foreach ($form->getErrors(true, true) as $error) {
+            $this->addFlash('error', $error->getMessage());
+            break;
+        }
     }
 }

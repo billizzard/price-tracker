@@ -84,10 +84,7 @@ class SecurityController extends FrontendController
             }
         }
 
-        foreach ($form->getErrors(true, true) as $error) {
-            $this->addFlash('error', $error->getMessage());
-            break;
-        }
+        $this->setFlashFormError($form);
 
         return $this->render('security/forgot.html.twig', [
             'form' => $form->createView()
@@ -118,10 +115,7 @@ class SecurityController extends FrontendController
                 return $this->redirectToRoute('security_login');
             }
 
-            foreach ($form->getErrors(true, true) as $error) {
-                $this->addFlash('error', $error->getMessage());
-                break;
-            }
+            $this->setFlashFormError($form);
 
             return $this->render('security/change.html.twig', [
                 'form' => $form->createView()
