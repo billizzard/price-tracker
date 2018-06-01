@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="email", message="e.email_taken")
  * @ORM\HasLifecycleCallbacks()
  */
-class User implements UserInterface
+class User extends Base implements UserInterface
 {
     const USER_STATUS_DEFAULT = 1;
 
@@ -121,6 +121,16 @@ class User implements UserInterface
      */
     private $isDeleted = false;
 
+    /**
+     * @ORM\Column(type="integer", options={"unsigned":true})
+     */
+    private $lastLogin = 0;
+
+    /**
+     * @ORM\Column(type="integer", options={"unsigned":true})
+     */
+    private $lastConfirmCode = 0;
+
     public function getId(): int
     {
         return $this->id;
@@ -189,9 +199,10 @@ class User implements UserInterface
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword($password): self
     {
         $this->password = $password;
+        return $this;
     }
 
     public function getConfirmCode(): string
@@ -199,9 +210,10 @@ class User implements UserInterface
         return $this->confirmCode;
     }
 
-    public function setConfirmCode(string $confirmCode)
+    public function setConfirmCode(string $confirmCode): self
     {
         $this->confirmCode = $confirmCode;
+        return $this;
     }
 
     public function getIsConfirmed(): bool
@@ -209,9 +221,43 @@ class User implements UserInterface
         return $this->isConfirmed;
     }
 
-    public function setIsConfirmed(bool $isConfirmed): void
+    public function setIsConfirmed(bool $isConfirmed): self
     {
         $this->isConfirmed = $isConfirmed;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastLogin(): int
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param mixed $lastLogin
+     */
+    public function setLastLogin($lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastConfirmCode(): int
+    {
+        return $this->lastConfirmCode;
+    }
+
+    /**
+     * @param mixed $lastConfirmCode
+     */
+    public function setLastConfirmCode($lastConfirmCode): self
+    {
+        $this->lastConfirmCode = $lastConfirmCode;
+        return $this;
     }
 
     /**

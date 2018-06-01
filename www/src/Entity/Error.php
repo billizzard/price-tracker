@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ErrorRepository")
  */
-class Error
+class Error extends Base
 {
     const TYPE_CRON = 1;
 

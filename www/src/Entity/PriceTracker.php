@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\PriceTrackerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class PriceTracker
+class PriceTracker extends Base
 {
     /**
      * @ORM\Id

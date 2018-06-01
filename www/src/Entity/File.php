@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
  */
-class File
+class File extends Base
 {
     /**
      * @ORM\Id()

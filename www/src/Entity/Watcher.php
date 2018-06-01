@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\WatcherRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Watcher
+class Watcher extends Base
 {
     const STATUS_NEW = 1; // Новый ватчер
     const STATUS_PRICE_CONFIRMED = 3; // После нового статуса присваивается этот, значит вотчер отслеживается

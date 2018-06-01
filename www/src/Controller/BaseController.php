@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Base;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -36,6 +37,13 @@ class BaseController extends Controller
             )
         ;
         $mailer->send($message);
+    }
+
+    protected function save(Base $entity)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($entity);
+        $entityManager->flush();
     }
 
     protected function sendRegistrationEmail($to, $params = [], $locale = 'en')

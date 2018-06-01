@@ -12,7 +12,7 @@ use App\Annotations\HVFGrid;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
-class Product
+class Product extends Base
 {
     const STATUS_TRACKED = 2; // отслеживается, есть парсер, есть dfnxths
     const STATUS_NOT_TRACKED = 1; // не отслеживается, т.е. у продукта нету ватчеров

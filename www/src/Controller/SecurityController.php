@@ -26,7 +26,10 @@ class SecurityController extends FrontendController
 {
     public function loginAction(Request $request, AuthenticationUtils $helper): Response
     {
-        if ($this->getUser()) {
+        /** @var User $user */
+        if ($user = $this->getUser()) {
+            $user->setLastLogin(time());
+            $this->save($user);
             return $this->redirectToRoute('tracker_list');
         }
 
@@ -53,9 +56,7 @@ class SecurityController extends FrontendController
         $user = $repository->findByConfirmCode($request->get('code'));
         if ($user) {
             $user->setIsConfirmed(true);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->save($user);
             $this->addFlash('success', 'l.reg_success_confirm');
             return $this->redirectToRoute('security_login');
         }
@@ -72,11 +73,9 @@ class SecurityController extends FrontendController
             $email = $form->get('email')->getData();
             $user = $repository->findByEmail($email);
             if ($user) {
-                $user->setIsConfirmed(false);
-                $user->setConfirmCode($user->getConfirmCode());
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $user->setIsConfirmed(false)->setConfirmCode($user->getConfirmCode())->setLastConfirmCode(time());
+                $this->save($user);
+
                 $this->sendForgotEmail($email, ['link' => $this->generateUrl('security_change', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
                 $this->addFlash('success', $this->translator->trans('s.forgot'));
             } else {
@@ -102,13 +101,8 @@ class SecurityController extends FrontendController
             if ($form->isSubmitted() && $form->isValid()) {
 
                 $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-                $user->setPassword($password);
-                $user->setIsConfirmed(true);
-
-                // 4) save the User!
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $user->setPassword($password)->setIsConfirmed(true);
+                $this->save($user);
 
                 $this->addFlash('success', $this->translator->trans('s.password_changed'));
 
@@ -139,13 +133,9 @@ class SecurityController extends FrontendController
         if ($form->isSubmitted() && $form->isValid() && $request->isXmlHttpRequest()) {
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setConfirmCode($user->generateConfirmCode());
+            $user->setPassword($password)->setConfirmCode($user->generateConfirmCode());
+            $this->save($user);
 
-            // 4) save the User!
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
             $this->sendRegistrationEmail($user->getEmail(), ['link' => $this->generateUrl('security_confirm', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
             $response = $this->getJsonSuccessResponse(['url' => $this->generateUrl('security_login')]);
 

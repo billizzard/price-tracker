@@ -9,7 +9,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Message
+class Message extends Base
 {
     const STATUS_NOT_READ = 1;
     const STATUS_READ = 3;

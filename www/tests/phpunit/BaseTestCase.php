@@ -44,7 +44,8 @@ class BaseTestCase extends WebTestCase
 
     private static function clearTables()
     {
-        $sql = 'DELETE FROM watcher; DELETE FROM message; DELETE FROM price_tracker; DELETE FROM product; DELETE FROM `host`; DELETE FROM `user`;';
+        $sql = 'DELETE FROM watcher; DELETE FROM message; DELETE FROM price_tracker; DELETE FROM product; 
+DELETE FROM `host`; DELETE FROM `user`; DELETE FROM `error`; DELETE FROM `file`;';
         $stmt = static::$entityManager->getConnection()->prepare($sql);
         $stmt->execute();
     }
@@ -54,6 +55,7 @@ class BaseTestCase extends WebTestCase
         $user = new User();
         $user->setEmail('test@test.com');
         $user->setRoles('ROLE_USER');
+        $user->setIsConfirmed(true);
         $user->setPassword('$2y$12$A1comgHtNSnZwjz09PIWhuD2DOt2iV8rwG74pZ9t9apQzkwdpYByC');
         $user->setNickName('User_Test');
         self::$entityManager->persist($user);
@@ -68,6 +70,7 @@ class BaseTestCase extends WebTestCase
         $user->setRoles('ROLE_USER');
         $user->setPassword('$2y$12$A1comgHtNSnZwjz09PIWhuD2DOt2iV8rwG74pZ9t9apQzkwdpYByC');
         $user->setNickName('User_Test2');
+        $user->setIsConfirmed(true);
         self::$entityManager->persist($user);
         self::$entityManager->flush();
         return $user;
@@ -80,6 +83,7 @@ class BaseTestCase extends WebTestCase
         $user->setRoles('ROLE_ADMIN');
         $user->setPassword('$2y$12$A1comgHtNSnZwjz09PIWhuD2DOt2iV8rwG74pZ9t9apQzkwdpYByC');
         $user->setNickName('User_Admin');
+        $user->setIsConfirmed(true);
         self::$entityManager->persist($user);
         self::$entityManager->flush();
         return $user;
