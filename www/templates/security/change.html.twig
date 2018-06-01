@@ -13,7 +13,7 @@
             <div class="login-box-body">
                 <p class="login-box-msg login-title" id="t-change">{{ 'l.password_recovery'|trans }}</p>
                 <div class="form-group has-feedback">
-                    {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'l.password'|trans }}) }}
+                    {{ form_widget(form.plainPassword.first, {'attr': {'placeholder': 'l.newPassword'|trans }}) }}
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <button type="submit" id="t-regSubmit" class="btn login-button btn-block ">{{ 'l.change_password'|trans }}</button>
+                        <button type="submit" id="submit" class="btn login-button btn-block ">{{ 'l.change'|trans }}</button>
                     </div>
                 </div>
             </div>

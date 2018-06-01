@@ -398,4 +398,13 @@ class User extends Base implements UserInterface
     {
         $this->isDeleted = true;
     }
+
+    public function canChangeConfirmCode(): bool
+    {
+        if ((time() - $this->getLastConfirmCode()) > (60 * 5)) {
+            return true;
+        }
+
+        return false;
+    }
 }

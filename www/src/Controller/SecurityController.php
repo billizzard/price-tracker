@@ -73,11 +73,15 @@ class SecurityController extends FrontendController
             $email = $form->get('email')->getData();
             $user = $repository->findByEmail($email);
             if ($user) {
-                $user->setIsConfirmed(false)->setConfirmCode($user->getConfirmCode())->setLastConfirmCode(time());
-                $this->save($user);
+                if ($user->canChangeConfirmCode()) {
+                    $user->setIsConfirmed(false)->setConfirmCode($user->getConfirmCode())->setLastConfirmCode(time());
+                    $this->save($user);
 
-                $this->sendForgotEmail($email, ['link' => $this->generateUrl('security_change', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
-                $this->addFlash('success', $this->translator->trans('s.forgot'));
+                    $this->sendForgotEmail($email, ['link' => $this->generateUrl('security_change', ['code' => $user->getConfirmCode()], UrlGeneratorInterface::ABSOLUTE_URL)], $request->getLocale());
+                    $this->addFlash('success', $this->translator->trans('s.forgot'));
+                } else {
+                    $this->addFlash('error', $this->translator->trans('e.often_forget'));
+                }
             } else {
                 $this->addFlash('error', $this->translator->trans('e.user_not_found'));
             }

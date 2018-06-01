@@ -243,6 +243,10 @@
                 <source>l.change_password</source>
                 <target>Change password</target>
             </trans-unit>
+            <trans-unit id="l.change">
+                <source>l.change</source>
+                <target>Change</target>
+            </trans-unit>
 
                                              <!-- e: errors -->
             <trans-unit id="e.pass_confirm">
@@ -280,6 +284,10 @@
             <trans-unit id="e.user_not_found">
                 <source>e.user_not_found</source>
                 <target>User not found</target>
+            </trans-unit>
+            <trans-unit id="e.often_forget">
+                <source>e.often_forget</source>
+                <target>Request for reset password you can send once every 5 minutes</target>
             </trans-unit>
 
                                              <!-- s: success -->
