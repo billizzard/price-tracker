@@ -180,13 +180,7 @@
 /* end view tracker */
 
 /* user profile */
-.box-profile_avatar {
-  text-align:center;
-}
-.box-profile_avatar a {
-  display:inline-block;
-}
-.box-profile_avatar .profile-user-img:hover {
-  border-color: #f49b13;
+.profile-avatar img:hover {
+  border: 2px solid #989898;
 }
 /* end user profile */

@@ -17,7 +17,7 @@ class PriceTrackerRepository extends ServiceEntityRepository
     public function getGraphDataForProduct(Product $product, $dateStart = 0, $dateStop = 0)
     {
         $jsonPrice = [];
-        $dateStop = $dateStop && $dateStop <= $product->getLastTrackedDate() ? $dateStop : $product->getLastTrackedDate();
+        $dateStop = $dateStop ? $dateStop : $product->getLastTrackedDate();
         $dateStart = $dateStart ? $dateStart : $dateStop - (60*60*24*30);
         $trackers = $this->getTrackersBetweenDate($product->getId(), $dateStart, $dateStop);
         $jsonPrice['startDate'] = date('d.m.Y', $dateStart);
@@ -38,13 +38,13 @@ class PriceTrackerRepository extends ServiceEntityRepository
                     if ($trackerDay != $dayStart) {
                         if ($beforePrice) {
                             $jsonPrice['data'][] = [$i, $beforePrice];
-                            $jsonPrice['labels'][] = [$i, date('d.m', $dateStart)];
+                            $jsonPrice['labels'][] = [$i, date('d/m', $dateStart)];
                         }
                         $dateStart = $dateStart + 60*60*24;
                     } else {
                         $beforePrice = $tracker->getPrice();
                         $jsonPrice['data'][] = [$i, $tracker->getPrice()];
-                        $jsonPrice['labels'][] = [$i, date('d.m', $tracker->getDate())];
+                        $jsonPrice['labels'][] = [$i, date('d/m', $tracker->getDate())];
                         $dateStart = $dateStart + 60*60*24;
                         break;
                     }
@@ -54,7 +54,7 @@ class PriceTrackerRepository extends ServiceEntityRepository
             while ($dateStart <= $dateStop) {
                 $i++;
                 $jsonPrice['data'][] = [$i, $beforePrice];
-                $jsonPrice['labels'][] = [$i, date('d.m', $dateStart)];
+                $jsonPrice['labels'][] = [$i, date('d/m', $dateStart)];
                 $dateStart = $dateStart + 60 * 60 * 24;
             }
         }

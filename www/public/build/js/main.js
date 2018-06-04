@@ -307,7 +307,12 @@ $(function () {
                         show: true
                     }
                 },
-                xaxis: {ticks: jsonPrice.labels}
+                xaxis: {ticks: jsonPrice.labels},
+                yaxis:
+                    {
+                        scaleLabel : "<%=555%>",
+                    }
+
             })
         } else {
             $('#line-chart').html('<div style="text-align:center">' + $('#line-chart').data('notfound') + '</div>');

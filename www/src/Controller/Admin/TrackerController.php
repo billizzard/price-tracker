@@ -52,19 +52,8 @@ class TrackerController extends MainController
 {
     public function listAction(Request $request, WatcherRepository $wr)
     {
-//        $repository = $this->getDoctrine()->getRepository(Message::class);
-//        $messages = $repository->getUnreadMessagesByUser($this->getUser(), 5);
-//        echo "<pre>";
-//        var_dump($messages);
-//        die();
-        //$logger->error('Cannot find price', ['product_id' => 1]);
-
         $qb = $wr->findByRequestQueryBuilder($request, $this->getUser());
-        //$grid = new HVFGridView($request, $qb, ['perPage' => 1]);
         $grid = new GridView($request, $qb, ['perPage' => 10]);
-       // $grid = new GridViewBundle($request, $qb, ['perPage' => 1]);
-
-
 
         $this->addToGridView($grid);
 
@@ -180,12 +169,14 @@ class TrackerController extends MainController
             $addData = [];
 
             $jsonPrice = $priceTrackerRepository->getGraphDataForProduct($product, 0, $dateStop);
+
             $addData['graph'] = [
                 'startDate' => $jsonPrice['startDate'],
                 'dateMinus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) - 2592000),
                 'datePlus30' => date('d.m.Y', strtotime($jsonPrice['stopDate']) + 2592000),
                 'stopDate' => $jsonPrice['stopDate']
             ];
+
             if ($watcher->getStatus() == Watcher::STATUS_SUCCESS) {
                 $addData['status'] = [
                     'class' => 'green',

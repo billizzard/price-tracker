@@ -67,6 +67,7 @@
                         <i class="fa fa-bar-chart-o"></i>
                         <h3 class="box-title">{{ 'l.schedule'|trans }}</h3>
                     </div>
+                    {% if (addData.graph is defined) %}
                     <div class="graph-datepicker">
                         <form id="graph-range">
                             <a href="?graphTo={{ addData.graph.dateMinus30 }}" class="graph-auto-btn">
@@ -98,6 +99,7 @@
                             </div>
                         </form>
                     </div>
+                    {% endif %}
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i

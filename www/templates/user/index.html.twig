@@ -7,9 +7,11 @@
     <div class="box box-widget widget-user-2">
         <!-- Add the bg color to the header using any of the bg-* classes -->
         <div class="widget-user-header bg-yellow">
-            <div class="widget-user-image">
-                <img class="img-circle" src="{{ app.user.avatarFull }}" alt="User Avatar">
-            </div>
+            <a href="{{ path('user_avatars') }}" class="profile-avatar">
+                <div class="widget-user-image">
+                    <img class="img-circle" src="{{ app.user.avatarFull }}" alt="User Avatar">
+                </div>
+            </a>
             <!-- /.widget-user-image -->
             <h3 class="widget-user-username">{{ app.user.nickname }}</h3>
             <h5 class="widget-user-desc">{{ app.user.email }}</h5>
@@ -17,36 +19,8 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3">
-
-            <!-- Profile Image -->
-            <div class="box box-primary">
-                <div class="box-body box-profile">
-                    <div class="box-profile_avatar">
-                    <a href="{{ path('user_avatars') }}">
-                        <img class="profile-user-img img-responsive img-circle" src="{{ app.user.avatarFull }}" alt="User profile picture">
-                    </a>
-                    </div>
-
-                    <h3 class="profile-username text-center">{{ app.user.nickname }}</h3>
-
-                    {#<p class="text-muted text-center">Software Engineer</p>#}
-
-                    {#<ul class="list-group list-group-unbordered">#}
-                        {#<li class="list-group-item">#}
-                            {#<b>{{ 'l.success_tracked'|trans }}</b> <a class="pull-right">0</a>#}
-                        {#</li>#}
-                    {#</ul>#}
-
-                    {#<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>#}
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-
-        </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#settings" data-toggle="tab" aria-expanded="true">{{ 'l.settings'|trans }}</a></li>
