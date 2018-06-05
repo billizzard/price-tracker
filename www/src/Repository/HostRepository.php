@@ -64,6 +64,18 @@ class HostRepository extends ServiceEntityRepository
         $qb->addOrderBy($sortColumn, $sortDirection);
     }
 
+    /**
+     * Получает хосты для отображения на главной страцице
+     * @return mixed
+     */
+    public function getForHomepage()
+    {
+        $qb = $this->createQueryBuilder($this->getAlias());
+        $this->getNotDeleted($qb);
+        $qb->setMaxResults(10);
+        return $qb->getQuery()->getResult();
+    }
+
     public function getOneById(int $id)
     {
         $qb = $this->createQueryBuilder($this->getAlias());

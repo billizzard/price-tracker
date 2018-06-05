@@ -22,6 +22,7 @@ $(function () {
     new SelectAvatar(message);
     new TrackerGraph();
     new EditHostPage();
+    new HomePageAnimation();
 
     if ($('#login-form').length) new LoginForm(message);
     if ($('#registration-form').length) new RegistrationForm(message);
@@ -33,11 +34,56 @@ $(function () {
             format: "dd.mm.yyyy"
         })
     }
+
+    $(document).on('ready', function() {
+        $(window).trigger('scroll');
+    });
     // $('#demo').datetimepicker({
     //     inline:true,
     // });
 
 });
+
+HomePageAnimation = function() {
+
+    var that = this;
+
+    var init = function() {
+        if ($('#homepage').length) {
+            that.classStartAnimation = 'hvf-animate';
+            that.classEndAnimation = 'fade-in-element';
+            that.elements = [];
+            getElements();
+            addEvents();
+        }
+    };
+
+    var addEvents = function() {
+        console.log(that.elements);
+        $(window).on('scroll load', function() {
+            for (var i = 0; i < that.elements.length; i++) {
+                if (that.elements[i].top - getScrollPosition() <= 0) {
+                    that.elements[i].element.removeClass(that.classStartAnimation).addClass(that.classEndAnimation);
+                }
+            }
+        })
+    };
+
+    var getScrollPosition = function() {
+        return window.innerHeight + $(window).scrollTop();
+    };
+
+    var getElements = function() {
+        $('.' + that.classStartAnimation).each(function() {
+            that.elements.push({
+                top: $(this)[0].getBoundingClientRect().top,
+                element: $(this)
+            });
+        });
+    };
+
+    init();
+};
 
 /**
  * Управляет всплывающими сообщениями пользователей

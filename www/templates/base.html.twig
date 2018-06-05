@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="{{ asset('build/css/AdminLTE.min.css') }}">
         <link rel="stylesheet" href="{{ asset('build/css/skin-blue.min.css') }}">
         <link rel="stylesheet" href="{{ asset('build/css/dataTables.bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/css/landing.lazy.css') }}">
         <link rel="stylesheet" href="{{ asset('build/css/main.css?v=2') }}">
     {% endblock %}
 
@@ -66,17 +65,15 @@
     {% endblock %}
 
 
-        {% block body %}
-    <div class="container body-container">
+    {% block body %}
+        <div class="container body-container">
             <div class="row">
                 <div id="main" class="col-sm-12">
-                    {#{{ include('default/_flash_messages.html.twig') }}#}
-
                     {% block main %}{% endblock %}
                 </div>
             </div>
-    </div>
-        {% endblock %}
+        </div>
+    {% endblock %}
 
     {% block flash %}
         {% for label, messages in app.flashes %}
@@ -91,7 +88,6 @@
 
     {% block javascripts %}
         <script src="{{ asset('build/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('build/js/landing.lazy.js') }}"></script>
         <script src="{{ asset('build/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('build/js/main.js') }}"></script>
     {% endblock %}

@@ -16,14 +16,12 @@ tracker:
     defaults:
         _locale: '%locale%'
 
-frontend_index:
+root:
     path: /
-    controller: App\Controller\FrontendController::indexAction
-    requirements:
-        _locale: '%app.locales%'
     defaults:
-        template: index/index.html.twig
-        _locale: '%locale%'
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /%locale%/
+        permanent: true
 
 homepage:
     path: /{_locale}/
@@ -39,24 +37,3 @@ cron:
     type: directory
     prefix: /cron/
 
-#security_login:
-#    path: /login
-#    controller: App\Controller\SecurityController::loginAction
-
-
-#path:      /blog/{page}
-#    controller: App\Controller\BlogController::list
-#    defaults:
-#        page: 1
-#    requirements:
-#        page: '\d+'
-
-#article_show:
-#  path:     /articles/{_locale}/{year}/{slug}.{_format}
-#  controller: App\Controller\ArticleController::show
-#  defaults:
-#      _format: html
-#  requirements:
-#      _locale:  en|fr
-#      _format:  html|rss
-#      year:     \d+

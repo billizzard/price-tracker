@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Repository\FileRepository;
+use App\Repository\HostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends FrontendController
 {
-    public function indexAction()
+    public function indexAction(HostRepository $hostRepository, FileRepository $fileRepository)
     {
+        $hosts = $hostRepository->getForHomepage();
+
         return $this->render('index/index.html.twig');
     }
 
